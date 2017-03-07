@@ -388,8 +388,6 @@ define([
                  * @returns {Promise}
                  */
                 fetch: function () {
-                    this.trigger('beforeFetche');
-
                     return new Promise(function (resolve, reject) {
                         this.fetchXHR = Ajax.send(Helpers.extend(this.getFetchSettings(), {
                             url: this.url,
