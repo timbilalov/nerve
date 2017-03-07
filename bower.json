@@ -1,0 +1,31 @@
+{
+  "name": "nervejs",
+  "version": "0.0.1",
+  "homepage": "https://github.com/nervejs/nerve",
+  "authors": [
+    "denis.yarkeev@gmail.com"
+  ],
+  "description": "A framework for creating fast and scalable web applications.",
+  "moduleType": [
+    "amd"
+  ],
+  "keywords": [
+    "framework",
+    "mvc",
+    "client-side",
+    "browser"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "requirejs": "https://github.com/yarkeev/requirejs.git#9759cb93617d0fb6ba6d01319b7398a75dcd3b03",
+    "jquery": "~2.1.4",
+    "Cookies": "~1.2.2"
+  }
+}
