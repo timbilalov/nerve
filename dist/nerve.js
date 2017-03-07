@@ -3318,7 +3318,7 @@ define('model',[
                                     this.set(this.adapter(response));
 
                                     this.isFetchedState = true;
-                                    if (Helpers.isFunction(this._onFetched)) {
+                                    if (Helpers.isFunction(this.onFetched)) {
                                         this.onFetched();
                                     }
                                     this.trigger('fetched');
