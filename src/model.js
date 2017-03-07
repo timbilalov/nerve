@@ -407,7 +407,7 @@ define([
 
                                     this.isFetchedState = true;
                                     if (Helpers.isFunction(this.onFetched)) {
-                                        this.onFetched();
+                                        this.onFetched(response);
                                     }
                                     this.trigger('fetched');
 
