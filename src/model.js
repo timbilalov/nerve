@@ -391,10 +391,12 @@ define([
                     this.trigger('beforeFetche');
 
                     return new Promise(function (resolve, reject) {
-                        Ajax.send(Helpers.extend(this.getFetchSettings(), {
+                        this.fetchXHR = Ajax.send(Helpers.extend(this.getFetchSettings(), {
                             url: this.url,
                             data: this.getFetchParams()
-                        }))
+                        }));
+
+                        this.fetchXHR
                             .success(function (response) {
                                 if (!this.isDestroyed) {
                                     if (Helpers.isString(response)) {
@@ -523,6 +525,20 @@ define([
                 },
 
                 /**
+                 * Отмена текущей загрузки
+                 *
+                 * @returns {Model}
+                 */
+                abort: function () {
+                    if (this.fetchXHR) {
+                        this.fetchXHR.abort();
+                        this.trigger('aborted');
+                    }
+
+                    return this;
+                },
+
+                /**
                  * Метод, позволяющий выполнить некторое действие только после того, как данные с сервера будут получены
                  *
                  * @returns {Promise}
@@ -575,6 +591,15 @@ define([
                  */
                 isRemoveReady: function () {
                     return !!this.get(this.uniqueKey);
+                },
+
+                /**
+                 * Проверка состояния текущей загрузки
+                 *
+                 * @returns {Boolean}
+                 */
+                isPending: function () {
+                    return this.fetchXHR && this.fetchXHR.state() === 'pending';
                 }
             },
 
