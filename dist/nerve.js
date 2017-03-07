@@ -3319,7 +3319,7 @@ define('model',[
 
                                     this.isFetchedState = true;
                                     if (Helpers.isFunction(this._onFetched)) {
-                                        this._onFetched();
+                                        this.onFetched();
                                     }
                                     this.trigger('fetched');
 
