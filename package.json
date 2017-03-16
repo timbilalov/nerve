@@ -1,6 +1,6 @@
 {
   "name": "nervejs",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A framework for creating fast and scalable web applications.",
   "main": "index.js",
   "scripts": {
@@ -33,6 +33,7 @@
     "socket.io": "^1.7.3"
   },
   "dependencies": {
-    "commander": "^2.8.1"
+    "commander": "^2.8.1",
+    "socket.io": "^1.7.3"
   }
 }
