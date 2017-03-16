@@ -4,14 +4,16 @@ define([
     'view',
     'router',
     'collection',
-    'page'
+    'page',
+    'config'
 ], function (
     Event,
     Model,
     View,
     Router,
     Collection,
-    Page
+    Page,
+    CONFIG
 ) {
     'use strict';
 
@@ -21,6 +23,7 @@ define([
         View: View,
         Router: Router,
         Collection: Collection,
-        Page: Page
+        Page: Page,
+        CONFIG: CONFIG
     };
 });

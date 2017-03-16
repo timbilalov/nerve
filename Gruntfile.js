@@ -5,26 +5,42 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-jslint');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-concat');
 
     grunt.initConfig({
         requirejs: {
-            compile: {
+            options: {
+                mainConfigFile: 'grunt/config/build.js',
+                baseUrl: 'src/',
+                name: 'main',
+                wrap: {
+                    startFile: 'components/requirejs/require.js',
+                    endFile: 'src/init.js'
+                },
+                optimize: 'none'
+            },
+
+            prod: {
                 options: {
-                    mainConfigFile: 'grunt/config/build.js',
-                    baseUrl: 'src/',
-                    name: 'main',
-                    wrap: {
-                        startFile: 'components/requirejs/require.js',
-                        endFile: 'src/init.js'
-                    },
+                    out: 'dist/nerve.js',
                     paths: {
-                        'nerve/utils': 'utils/'
-                    },
-                    optimize: 'none',
-                    out: 'dist/nerve.js'
+                        'nerve/utils': 'utils/',
+                        'config': 'config/prod'
+                    }
+                }
+            },
+
+            dev: {
+                options: {
+                    out: 'dist/nerve.dev.js',
+                    paths: {
+                        'nerve/utils': 'utils/',
+                        'config': 'config/dev'
+                    }
                 }
             }
         },
+
         jslint: {
             main: {
                 src: [
@@ -43,6 +59,7 @@ module.exports = function (grunt) {
                 }
             }
         },
+
         watch: {
             js: {
                 files: ['src/**/*.js'],
@@ -52,6 +69,7 @@ module.exports = function (grunt) {
                 }
             }
         },
+
         uglify: {
             js: {
                 files: [
@@ -61,12 +79,29 @@ module.exports = function (grunt) {
                     }
                 ]
             }
+        },
+
+        concat: {
+            js: {
+                src: [
+                    'dist/nerve.dev.js',
+                    'src/dev/**/*.js'
+                ],
+                dest: 'dist/nerve.dev.js'
+            }
         }
     });
 
     grunt.registerTask('default', [
         'jslint',
         'requirejs',
+        'uglify'
+    ]);
+
+    grunt.registerTask('dev', [
+        'jslint',
+        'requirejs:dev',
+        'concat',
         'uglify'
     ]);
 };

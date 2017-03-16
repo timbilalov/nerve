@@ -5732,20 +5732,29 @@ define('page',[
     return Page;
 
 });
+define('config',[],function () {
+    'use strict';
+
+    return {
+        env: 'dev'
+    };
+});
 define('main',[
     'event',
     'model',
     'view',
     'router',
     'collection',
-    'page'
+    'page',
+    'config'
 ], function (
     Event,
     Model,
     View,
     Router,
     Collection,
-    Page
+    Page,
+    CONFIG
 ) {
     'use strict';
 
@@ -5755,7 +5764,8 @@ define('main',[
         View: View,
         Router: Router,
         Collection: Collection,
-        Page: Page
+        Page: Page,
+        CONFIG: CONFIG
     };
 });
 (function () {
@@ -5766,108 +5776,6 @@ define('main',[
     ], function (Nerve) {
         return Nerve;
     });
-}());
-/*jslint regexp: true */
-
-(function () {
-    'use strict';
-
-    window.requirejs(['//127.0.0.1:4344/socket.io/socket.io.js'], function (io) {
-        var socket = io('https://127.0.0.1:4344');
-
-        socket.on('changeCss', function (data) {
-            var links = document.querySelectorAll('link[href*="' + data.path + '"]');
-
-            Array.prototype.forEach.call(links, function (link) {
-                var tmp = link.href;
-
-                link.href = tmp;
-            });
-        });
-
-        socket.on('changeJs', function (data) {
-            var scripts = document.querySelectorAll('script[src*="' + data.path + '"]');
-
-            Array.prototype.forEach.call(scripts, function (script) {
-                var tmp = script.src;
-
-                script.src = tmp.replace(/\.js.*/, '.js?' + Math.random());
-            });
-        });
-    });
-
-}());
-/*jslint regexp: true */
-
-(function () {
-    'use strict';
-
-    window.requirejs(['//127.0.0.1:4344/socket.io/socket.io.js'], function (io) {
-        var socket = io('https://127.0.0.1:4344');
-
-        socket.on('changeCss', function (data) {
-            var links = document.querySelectorAll('link[href*="' + data.path + '"]');
-
-            Array.prototype.forEach.call(links, function (link) {
-                var tmp = link.href;
-
-                link.href = tmp;
-            });
-        });
-
-        socket.on('changeJs', function (data) {
-            var scripts = document.querySelectorAll('script[src*="' + data.path + '"]'),
-                moduleName = data.path;
-
-            Array.prototype.forEach.call(scripts, function (script) {
-                var tmp = script.src;
-
-                window.requirejs([tmp.replace(/\.js.*/, '.js?' + Math.random())], function (Module) {
-                    window.require.undef(moduleName);
-                    define(moduleName, [], function () {
-                        return Module;
-                    });
-                });
-            });
-        });
-    });
-
-}());
-/*jslint regexp: true */
-
-(function () {
-    'use strict';
-
-    window.requirejs(['//127.0.0.1:4344/socket.io/socket.io.js'], function (io) {
-        var socket = io('https://127.0.0.1:4344');
-
-        socket.on('changeCss', function (data) {
-            var links = document.querySelectorAll('link[href*="' + data.path + '"]');
-
-            Array.prototype.forEach.call(links, function (link) {
-                var tmp = link.href;
-
-                link.href = tmp;
-            });
-        });
-
-        socket.on('changeJs', function (data) {
-            var scripts = document.querySelectorAll('script[src*="' + data.path + '"]'),
-                moduleName = data.path;
-
-            Array.prototype.forEach.call(scripts, function (script) {
-                var tmp = script.src;
-
-                window.requirejs([tmp.replace(/\.js.*/, '.js?' + Math.random())], function (Module) {
-                    window.require.undef(moduleName);
-                    define(moduleName, [], function () {
-                        return Module;
-                    });
-                });
-            });
-        });
-    });
-
 }());
 /*jslint regexp: true */
 
