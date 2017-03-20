@@ -1,4 +1,5 @@
-const io = require('socket.io')(),
+const path = require('path'),
+    io = require('socket.io')(),
     http = require('http'),
     watcher = require('../watcher/watcher');
 
@@ -16,9 +17,9 @@ module.exports = {
 
         watcher.watch({
             path: options.watchCssPath,
-            callback: function (path) {
-                let pathCss = path
-                    .replace(options.watchCssPath, '')
+            callback: function (pathFile) {
+                let pathCss = path.resolve(pathFile)
+                    .replace(path.resolve(options.watchCssPath), '')
                     .replace(/\.css$/, '');
 
                 io.emit('changeCss', {
@@ -29,9 +30,9 @@ module.exports = {
 
         watcher.watch({
             path: options.watchJsPath,
-            callback: function (path) {
-                let pathJs = path
-                    .replace(options.watchJsPath, '')
+            callback: function (pathFile) {
+                let pathJs = path.resolve(pathFile)
+                    .replace(path.resolve(options.watchJsPath), '')
                     .replace(/(^\/)|(\.js$)/g, '');
 
                 io.emit('changeJs', {

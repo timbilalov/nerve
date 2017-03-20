@@ -236,6 +236,10 @@ define([
                 proto.create.apply(this, arguments);
             }
 
+            if (Helpers.isFunction(proto._constructor)) {
+                proto._constructor.apply(this, arguments);
+            }
+
             if (proto.autoInit && !Child.instance) {
                 this.autoInit = proto.autoInit;
 
