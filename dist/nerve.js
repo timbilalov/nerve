@@ -2229,6 +2229,11 @@ define('utils/event',[
     Event.prototype = {
 
         on: function (name, data, handler) {
+            if (typeof data === 'function' && handler === undefined) {
+                handler = data;
+                data = undefined;
+            }
+
             if (!Helpers.isArray(this.listeners[name])) {
                 this.listeners[name] = [];
             }
