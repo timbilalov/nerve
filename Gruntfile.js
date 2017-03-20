@@ -94,7 +94,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('default', [
         'jslint',
-        'requirejs',
+        'requirejs:prod',
         'uglify'
     ]);
 
