@@ -2428,13 +2428,15 @@ define('event',[
          */
         this.options = Helpers.extend(true, {}, this.defaultOptions, options);
 
-        /**
-         * Объект, реализующий работу с событиями
-         *
-         * @type {Event}
-         * @protected
-         */
-        this._event = new Event();
+        if (!this._event) {
+            /**
+             * Объект, реализующий работу с событиями
+             *
+             * @type {Event}
+             * @protected
+             */
+            this._event = new Event();
+        }
 
         this
             .initVars()
@@ -2637,12 +2639,12 @@ define('event',[
         Child = function () {
             Parent.apply(this, arguments);
 
-            if (Helpers.isFunction(proto.create)) {
-                proto.create.apply(this, arguments);
-            }
-
             if (Helpers.isFunction(proto._constructor)) {
                 proto._constructor.apply(this, arguments);
+            }
+
+            if (Helpers.isFunction(proto.create)) {
+                proto.create.apply(this, arguments);
             }
 
             if (proto.autoInit && !Child.instance) {
