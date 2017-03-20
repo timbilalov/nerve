@@ -2228,7 +2228,7 @@ define('utils/event',[
 
     Event.prototype = {
 
-        on: function (name, handler) {
+        on: function (name, data, handler) {
             if (!Helpers.isArray(this.listeners[name])) {
                 this.listeners[name] = [];
             }
@@ -2428,15 +2428,13 @@ define('event',[
          */
         this.options = Helpers.extend(true, {}, this.defaultOptions, options);
 
-        if (!this._event) {
-            /**
-             * Объект, реализующий работу с событиями
-             *
-             * @type {Event}
-             * @protected
-             */
-            this._event = new Event();
-        }
+        /**
+         * Объект, реализующий работу с событиями
+         *
+         * @type {Event}
+         * @protected
+         */
+        this._event = new Event();
 
         this
             .initVars()
@@ -2638,10 +2636,6 @@ define('event',[
 
         Child = function () {
             Parent.apply(this, arguments);
-
-            if (Helpers.isFunction(proto._constructor)) {
-                proto._constructor.apply(this, arguments);
-            }
 
             if (Helpers.isFunction(proto.create)) {
                 proto.create.apply(this, arguments);

@@ -11,7 +11,7 @@ define([
 
     Event.prototype = {
 
-        on: function (name, handler) {
+        on: function (name, data, handler) {
             if (!Helpers.isArray(this.listeners[name])) {
                 this.listeners[name] = [];
             }
