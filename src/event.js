@@ -143,7 +143,7 @@ define([
                             }
                             resolve.apply(this, arguments);
                         }
-                    }.bind(this));
+                    }.bind(this), reject);
                 }.bind(this));
             } else {
                 module.forEach(function (item) {
@@ -154,7 +154,7 @@ define([
                         window.requirejs([moduleName], function (Module) {
                             modules[moduleName] = Module;
                             resolve();
-                        });
+                        }, reject);
                     }.bind(this)));
                 }.bind(this));
 
