@@ -3330,8 +3330,18 @@ define('model',[
                                 }
                             }.bind(this))
 
-                            .error(function () {
-                                this.trigger('fetched');
+                            .error(function (xhr) {
+                                var status;
+
+                                xhr = xhr || {};
+                                if (Helpers.isFunction(xhr.statusCode)) {
+                                    status = xhr.statusCode().status;
+                                }
+
+                                this.trigger('fetched', {
+                                    status: status,
+                                    text: xhr.statusText
+                                });
                                 reject();
                             }.bind(this));
 
