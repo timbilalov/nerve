@@ -1,6 +1,6 @@
 {
   "name": "nervejs",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A framework for creating fast and scalable web applications.",
   "main": "index.js",
   "scripts": {

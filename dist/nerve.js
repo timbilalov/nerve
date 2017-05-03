@@ -3673,6 +3673,35 @@ define('model',[
                         url: this.getUrl(),
                         type: 'post'
                     };
+                },
+
+                /**
+                 * Получение объекта "ответа" от сервера по xhr объекту
+                 *
+                 * @protected
+                 * @param {jqXHR} xhr
+                 * @returns {Object}
+                 */
+                getResponeObjectByXhr: function (xhr) {
+                    var status,
+                        response;
+
+                    xhr = xhr || {};
+
+                    if (Helpers.isFunction(xhr.statusCode)) {
+                        status = xhr.statusCode().status;
+                    }
+
+                    try {
+                        response = JSON.parse(xhr.responseText);
+                    } catch (err) {
+                        response = xhr.responseText;
+                    }
+
+                    return {
+                        status: status,
+                        response: response
+                    };
                 }
 
             }

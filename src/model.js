@@ -395,7 +395,9 @@ define([
                         }));
 
                         this.fetchXHR
-                            .success(function (response) {
+                            .success(function (response, textStatus, xhr) {
+                                var responseObj = this.getResponeObjectByXhr(xhr);
+
                                 if (!this.isDestroyed) {
                                     if (Helpers.isString(response)) {
                                         response = JSON.parse(response);
@@ -407,25 +409,17 @@ define([
                                     if (Helpers.isFunction(this.onFetched)) {
                                         this.onFetched(response);
                                     }
-                                    this.trigger('fetched');
+                                    this.trigger('fetched', responseObj);
 
-                                    resolve(response);
+                                    resolve(response, responseObj);
                                 }
                             }.bind(this))
 
                             .error(function (xhr) {
-                                var status;
+                                var responseObj = this.getResponeObjectByXhr(xhr);
 
-                                xhr = xhr || {};
-                                if (Helpers.isFunction(xhr.statusCode)) {
-                                    status = xhr.statusCode().status;
-                                }
-
-                                this.trigger('fetched', {
-                                    status: status,
-                                    text: xhr.statusText
-                                });
-                                reject();
+                                this.trigger('fetched', responseObj);
+                                reject(responseObj);
                             }.bind(this));
 
                     }.bind(this));
@@ -755,6 +749,35 @@ define([
                     return {
                         url: this.getUrl(),
                         type: 'post'
+                    };
+                },
+
+                /**
+                 * Получение объекта "ответа" от сервера по xhr объекту
+                 *
+                 * @protected
+                 * @param {jqXHR} xhr
+                 * @returns {Object}
+                 */
+                getResponeObjectByXhr: function (xhr) {
+                    var status,
+                        response;
+
+                    xhr = xhr || {};
+
+                    if (Helpers.isFunction(xhr.statusCode)) {
+                        status = xhr.statusCode().status;
+                    }
+
+                    try {
+                        response = JSON.parse(xhr.responseText);
+                    } catch (err) {
+                        response = xhr.responseText;
+                    }
+
+                    return {
+                        status: status,
+                        response: response
                     };
                 }
 
