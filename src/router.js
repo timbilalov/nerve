@@ -85,7 +85,7 @@ define([
                         .replace(/:\w+/g, '([^\/]+)')
                         .replace(/\*\w+/g, '(.*?)');
 
-                    if (routeUrl !== 'default') {
+                    if (['default', 'error404', 'error500'].indexOf(routeUrl) === -1) {
                         routeUrl = '^' + routeUrl + '$';
                     }
 
@@ -136,6 +136,10 @@ define([
                 if (!isFound && this.routes.default) {
                     this.proccessingRoute(this.routes.default, {}, query, load, response);
                 }
+            },
+
+            error404: function (load, response) {
+                this.proccessingRoute(this.routes.error404, {}, {}, load, response);
             },
 
             proccessingRoute: function (route, params, query, load, response) {
@@ -326,6 +330,14 @@ define([
                 }
 
                 this.instance.checkRoutes(state, load, response);
+            },
+
+            error404: function (load, response) {
+                if (!this.instance) {
+                    this.instance = new this();
+                }
+
+                this.instance.error404(load, response);
             },
 
             update: function () {

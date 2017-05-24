@@ -2228,7 +2228,12 @@ define('utils/event',[
 
     Event.prototype = {
 
-        on: function (name, handler) {
+        on: function (name, data, handler) {
+            if (typeof data === 'function' && handler === undefined) {
+                handler = data;
+                data = undefined;
+            }
+
             if (!Helpers.isArray(this.listeners[name])) {
                 this.listeners[name] = [];
             }
@@ -2548,7 +2553,7 @@ define('event',[
                             }
                             resolve.apply(this, arguments);
                         }
-                    }.bind(this));
+                    }.bind(this), reject);
                 }.bind(this));
             } else {
                 module.forEach(function (item) {
@@ -2559,7 +2564,7 @@ define('event',[
                         window.requirejs([moduleName], function (Module) {
                             modules[moduleName] = Module;
                             resolve();
-                        });
+                        }, reject);
                     }.bind(this)));
                 }.bind(this));
 
@@ -3307,7 +3312,9 @@ define('model',[
                         }));
 
                         this.fetchXHR
-                            .success(function (response) {
+                            .success(function (response, textStatus, xhr) {
+                                var responseObj = this.getResponeObjectByXhr(xhr);
+
                                 if (!this.isDestroyed) {
                                     if (Helpers.isString(response)) {
                                         response = JSON.parse(response);
@@ -3319,15 +3326,17 @@ define('model',[
                                     if (Helpers.isFunction(this.onFetched)) {
                                         this.onFetched(response);
                                     }
-                                    this.trigger('fetched');
+                                    this.trigger('fetched', responseObj);
 
-                                    resolve(response);
+                                    resolve(response, responseObj);
                                 }
                             }.bind(this))
 
-                            .error(function () {
-                                this.trigger('fetched');
-                                reject();
+                            .error(function (xhr) {
+                                var responseObj = this.getResponeObjectByXhr(xhr);
+
+                                this.trigger('fetched', responseObj);
+                                reject(responseObj);
                             }.bind(this));
 
                     }.bind(this));
@@ -3657,6 +3666,35 @@ define('model',[
                     return {
                         url: this.getUrl(),
                         type: 'post'
+                    };
+                },
+
+                /**
+                 * Получение объекта "ответа" от сервера по xhr объекту
+                 *
+                 * @protected
+                 * @param {jqXHR} xhr
+                 * @returns {Object}
+                 */
+                getResponeObjectByXhr: function (xhr) {
+                    var status,
+                        response;
+
+                    xhr = xhr || {};
+
+                    if (Helpers.isFunction(xhr.statusCode)) {
+                        status = xhr.statusCode().status;
+                    }
+
+                    try {
+                        response = JSON.parse(xhr.responseText);
+                    } catch (err) {
+                        response = xhr.responseText;
+                    }
+
+                    return {
+                        status: status,
+                        response: response
                     };
                 }
 
@@ -4519,7 +4557,7 @@ define('router',[
                         .replace(/:\w+/g, '([^\/]+)')
                         .replace(/\*\w+/g, '(.*?)');
 
-                    if (routeUrl !== 'default') {
+                    if (['default', 'error404', 'error500'].indexOf(routeUrl) === -1) {
                         routeUrl = '^' + routeUrl + '$';
                     }
 
@@ -4570,6 +4608,10 @@ define('router',[
                 if (!isFound && this.routes.default) {
                     this.proccessingRoute(this.routes.default, {}, query, load, response);
                 }
+            },
+
+            error404: function (load, response) {
+                this.proccessingRoute(this.routes.error404, {}, {}, load, response);
             },
 
             proccessingRoute: function (route, params, query, load, response) {
@@ -4760,6 +4802,14 @@ define('router',[
                 }
 
                 this.instance.checkRoutes(state, load, response);
+            },
+
+            error404: function (load, response) {
+                if (!this.instance) {
+                    this.instance = new this();
+                }
+
+                this.instance.error404(load, response);
             },
 
             update: function () {

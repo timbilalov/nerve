@@ -3312,7 +3312,9 @@ define('model',[
                         }));
 
                         this.fetchXHR
-                            .success(function (response) {
+                            .success(function (response, textStatus, xhr) {
+                                var responseObj = this.getResponeObjectByXhr(xhr);
+
                                 if (!this.isDestroyed) {
                                     if (Helpers.isString(response)) {
                                         response = JSON.parse(response);
@@ -3324,25 +3326,17 @@ define('model',[
                                     if (Helpers.isFunction(this.onFetched)) {
                                         this.onFetched(response);
                                     }
-                                    this.trigger('fetched');
+                                    this.trigger('fetched', responseObj);
 
-                                    resolve(response);
+                                    resolve(response, responseObj);
                                 }
                             }.bind(this))
 
                             .error(function (xhr) {
-                                var status;
+                                var responseObj = this.getResponeObjectByXhr(xhr);
 
-                                xhr = xhr || {};
-                                if (Helpers.isFunction(xhr.statusCode)) {
-                                    status = xhr.statusCode().status;
-                                }
-
-                                this.trigger('fetched', {
-                                    status: status,
-                                    text: xhr.statusText
-                                });
-                                reject();
+                                this.trigger('fetched', responseObj);
+                                reject(responseObj);
                             }.bind(this));
 
                     }.bind(this));
@@ -4563,7 +4557,7 @@ define('router',[
                         .replace(/:\w+/g, '([^\/]+)')
                         .replace(/\*\w+/g, '(.*?)');
 
-                    if (routeUrl !== 'default') {
+                    if (['default', 'error404', 'error500'].indexOf(routeUrl) === -1) {
                         routeUrl = '^' + routeUrl + '$';
                     }
 
@@ -4614,6 +4608,10 @@ define('router',[
                 if (!isFound && this.routes.default) {
                     this.proccessingRoute(this.routes.default, {}, query, load, response);
                 }
+            },
+
+            error404: function (load, response) {
+                this.proccessingRoute(this.routes.error404, {}, {}, load, response);
             },
 
             proccessingRoute: function (route, params, query, load, response) {
@@ -4804,6 +4802,14 @@ define('router',[
                 }
 
                 this.instance.checkRoutes(state, load, response);
+            },
+
+            error404: function (load, response) {
+                if (!this.instance) {
+                    this.instance = new this();
+                }
+
+                this.instance.error404(load, response);
             },
 
             update: function () {
