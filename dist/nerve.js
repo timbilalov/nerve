@@ -1843,14 +1843,15 @@ var requirejs, require, define;
         var node = config.xhtml ?
                 document.createElementNS('http://www.w3.org/1999/xhtml', 'html:script') :
                 document.createElement('script'),
-                baseHost = config.baseUrl.match(/^(https?:)?\/\/[\w\d\.]+/)[0],
-                matched = url.match(/^(https?:)?\/\/[\w\d\.]+/),
-                urlHost = matched && matched[0];
+                matchedHost = config.baseUrl.match(/^(https?:)?\/\/[\w\d\.]+/),
+                baseHost = matchedHost && matchedHost[0],
+                matchedUrl = url.match(/^(https?:)?\/\/[\w\d\.]+/),
+                urlHost = matchedUrl && matchedUrl[0];
 
         node.type = config.scriptType || 'text/javascript';
         node.charset = 'utf-8';
         node.async = true;
-        if (window.isCrossOriginEnabled && urlHost && url.replace(urlHost, '').indexOf(config.baseUrl.replace(baseHost, '')) === 0) {
+        if (window.isCrossOriginEnabled && urlHost && baseHost && url.replace(urlHost, '').indexOf(config.baseUrl.replace(baseHost, '')) === 0) {
             node.crossOrigin = 'anonymous';
         }
         return node;
