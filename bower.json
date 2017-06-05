@@ -24,7 +24,7 @@
     "tests"
   ],
   "dependencies": {
-    "requirejs": "https://github.com/yarkeev/requirejs.git#9759cb93617d0fb6ba6d01319b7398a75dcd3b03",
+    "requirejs": "https://github.com/yarkeev/requirejs.git#637247a8c251af9bfece392459859a9ba43754c3",
     "jquery": "~2.1.4",
     "Cookies": "~1.2.2"
   }

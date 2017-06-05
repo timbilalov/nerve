@@ -1774,7 +1774,7 @@ var requirejs, require, define;
      * that have a better solution than setTimeout.
      * @param  {Function} fn function to execute later.
      */
-    if (msieVersion <= 8) {
+    if (msieVersion <= 9) {
         req.nextTick = typeof setTimeout !== 'undefined' ? function (fn) {
             setTimeout(fn, 4);
         } : function (fn) { fn(); };
@@ -1842,10 +1842,16 @@ var requirejs, require, define;
     req.createNode = function (config, moduleName, url) {
         var node = config.xhtml ?
                 document.createElementNS('http://www.w3.org/1999/xhtml', 'html:script') :
-                document.createElement('script');
+                document.createElement('script'),
+                baseHost = config.baseUrl.match(/^(https?:)?\/\/[\w\d\.]+/)[0],
+                urlHost = url.match(/^(https?:)?\/\/[\w\d\.]+/)[0];
+
         node.type = config.scriptType || 'text/javascript';
         node.charset = 'utf-8';
         node.async = true;
+        if (window.isCrossOriginEnabled && url.replace(urlHost, '').indexOf(config.baseUrl.replace(baseHost, '')) === 0) {
+            node.crossOrigin = 'anonymous';
+        }
         return node;
     };
 
