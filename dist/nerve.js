@@ -4465,10 +4465,10 @@ define('view',[
 
                                     views.push(this.createRunTime(viewOptions, element));
                                     element = element.nextSibling;
+                                }
 
-                                    if (Helpers.isFunction(options.onViewsCreated)) {
-                                        options.onViewsCreated(views);
-                                    }
+                                if (Helpers.isFunction(options.onViewsCreated)) {
+                                    options.onViewsCreated(views);
                                 }
                             }
                         }
