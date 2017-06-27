@@ -748,7 +748,7 @@ define([
                                         viewOptions.model = options.models[i++];
                                     }
 
-                                    views.push(this.createRunTime(viewOptions, element));
+                                    views.push(this.createRunTime(Helpers.isArray(viewOptions) ? viewOptions[i] : viewOptions, element));
                                     element = element.nextSibling;
                                 }
 
