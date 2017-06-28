@@ -4460,11 +4460,12 @@ define('view',[
 
                                 while (element) {
                                     if (options.models) {
-                                        viewOptions.model = options.models[i++];
+                                        viewOptions.model = options.models[i];
                                     }
 
                                     views.push(this.createRunTime(Helpers.isArray(viewOptions) ? viewOptions[i] : viewOptions, element));
                                     element = element.nextSibling;
+                                    i++;
                                 }
 
                                 if (Helpers.isFunction(options.onViewsCreated)) {
