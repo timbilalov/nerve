@@ -11,11 +11,10 @@ module.exports = function (grunt) {
         requirejs: {
             options: {
                 mainConfigFile: 'grunt/config/build.js',
-                baseUrl: 'src/',
-                name: 'main',
+                baseUrl: 'tmp/js/es5',
+                name: 'nerve',
                 wrap: {
-                    startFile: 'components/requirejs/require.js',
-                    endFile: 'src/init.js'
+                    startFile: 'components/requirejs/require.js'
                 },
                 optimize: 'none'
             },
@@ -93,7 +92,6 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('default', [
-        'jslint',
         'requirejs:prod',
         'uglify'
     ]);

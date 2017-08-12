@@ -1,5 +1,6 @@
 require.config({
     paths: {
-        components: '../components/'
+        components: '../components/',
+        axios: '../../../node_modules/axios/dist/axios'
     }
 });

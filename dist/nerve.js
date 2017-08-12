@@ -2101,2038 +2101,2934 @@ var requirejs, require, define;
     //Set up with config info.
     req(cfg);
 }(this));
-define('jquery',[], function () {
-    'use strict';
 
-    return window.jQuery;
-});
-define('nerve/utils/helpers',[
-    'jquery'
-], function ($) {
-    'use strict';
 
-    return {
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-        /**
-         * Проверка является ли переменная массивом
-         *
-         * @param {mixed} any
-         * @returns {boolean}
-         */
-        isArray : function (any) {
-            return Array.isArray(any);
-        },
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-        /**
-         * Перевод в строковый тип
-         *
-         * @param {mixed} any
-         * @returns {string}
-         */
-        toString : function (any) {
-            return Object.prototype.toString.call(any);
-        },
+define('utils/helpers',["require", "exports"], function (require, exports) {
+    "use strict";
 
-        /**
-         * Проверка является ли переменная функцией
-         *
-         * @param {mixed} any
-         * @returns {boolean}
-         */
-        isFunction : function (any) {
-            return this.toString(any) === '[object Function]';
-        },
+    Object.defineProperty(exports, "__esModule", { value: true });
 
-        /**
-         * Проверка является ли переменная dom-элементом
-         *
-         * @param {mixed} any
-         * @returns {boolean}
-         */
-        isNode : function (any) {
-            return (any && any.nodeType) || this.isNodeList(any);
-        },
+    var Helpers = function () {
+        function Helpers() {
+            _classCallCheck(this, Helpers);
+        }
 
-        /**
-         * Проверка является ли переменная списком dom-элементов
-         *
-         * @param {mixed} any
-         * @returns {boolean}
-         */
-        isNodeList : function (any) {
-            return !this.isjQueryObject(any) && any && any[0] && any[0].nodeType;
-        },
-
-        /**
-         * Проверка является ли переменная jQuery-элементом
-         *
-         * @param {mixed} any
-         * @returns {boolean}
-         */
-        isjQueryObject : function (any) {
-            return any instanceof $;
-        },
-
-        /**
-         * Проверка является ли переменная объектом
-         *
-         * @param {mixed} any
-         * @returns {boolean}
-         */
-        isObject : function (any) {
-            var result = false;
-            if (window.Object) {
-                result = any === window.Object(any) && !this.isNode(any) && !this.isFunction(any) && !this.isjQueryObject(any);
-            } else {
-                result = any && $.toString(any) === '[object Object]' && !this.isNode(any) && !this.isFunction(any) && !this.isjQueryObject(any);
+        _createClass(Helpers, null, [{
+            key: "isArray",
+            value: function isArray(any) {
+                return Array.isArray(any);
             }
-            return result;
-        },
-
-        /**
-         * Проверка является ли переменная простым объектом
-         *
-         * @param {mixed} any
-         * @returns {boolean}
-         */
-        isPlainObject : function (any) {
-            return this.isObject(any) && $.isPlainObject(any);
-        },
-
-        /**
-         * Проверка является ли переменная строкой
-         *
-         * @param {mixed} any
-         * @returns {boolean}
-         */
-        isString : function (any) {
-            return this.toString(any) === '[object String]';
-        },
-
-        /**
-         * Преобразование первого символа строки к верхнему регистру
-         *
-         * @param {string} str
-         * @returns {string}
-         */
-        capitalize : function (str) {
-            return str.charAt(0).toUpperCase() + str.substr(1);
-        },
-
-        extend: $.extend
-
-    };
-});
-define('utils/event',[
-    'nerve/utils/helpers'
-], function (
-    Helpers
-) {
-    'use strict';
-
-    function Event() {
-        this.listeners = {};
-    }
-
-    Event.prototype = {
-
-        on: function (name, data, handler) {
-            if (typeof data === 'function' && handler === undefined) {
-                handler = data;
-                data = undefined;
+        }, {
+            key: "toString",
+            value: function toString(any) {
+                return Object.prototype.toString.call(any);
             }
-
-            if (!Helpers.isArray(this.listeners[name])) {
-                this.listeners[name] = [];
+        }, {
+            key: "isFunction",
+            value: function isFunction(any) {
+                return this.toString(any) === '[object Function]';
             }
-
-            if (Helpers.isFunction(handler)) {
-                this.listeners[name].push(handler);
+        }, {
+            key: "isNode",
+            value: function isNode(any) {
+                return any && any.nodeType || this.isNodeList(any);
             }
-
-            return this;
-        },
-
-        one: function (name, handler) {
-            if (Helpers.isFunction(handler)) {
-                handler.isOne = true;
-
-                this.on(name, handler);
+        }, {
+            key: "isNodeList",
+            value: function isNodeList(any) {
+                return !this.isjQueryObject(any) && any && any[0] && any[0].nodeType;
             }
-
-            return this;
-        },
-
-        off: function (name, handler) {
-            if (Helpers.isArray(this.listeners[name])) {
-                if (Helpers.isFunction(handler)) {
-                    this.listeners[name].forEach(function (item, index) {
-                        if (item === handler) {
-                            this.listeners[name].splice(index, 1);
-                        }
-                    }.bind(this));
+        }, {
+            key: "isjQueryObject",
+            value: function isjQueryObject(any) {
+                return false;
+            }
+        }, {
+            key: "isObject",
+            value: function isObject(any) {
+                var result = false;
+                if (window.Object) {
+                    result = any === window.Object(any) && !this.isNode(any) && !this.isFunction(any) && !this.isjQueryObject(any);
                 } else {
+                    result = any && Helpers.toString(any) === '[object Object]' && !this.isNode(any) && !this.isFunction(any) && !this.isjQueryObject(any);
+                }
+                return result;
+            }
+        }, {
+            key: "isPlainObject",
+            value: function isPlainObject(any) {
+                return this.isObject(any);
+            }
+        }, {
+            key: "isString",
+            value: function isString(any) {
+                return this.toString(any) === '[object String]';
+            }
+        }, {
+            key: "capitalize",
+            value: function capitalize(str) {
+                return str.charAt(0).toUpperCase() + str.substr(1);
+            }
+        }, {
+            key: "extend",
+            value: function extend() {
+                return Object.assign.apply(Object, arguments);
+            }
+        }]);
+
+        return Helpers;
+    }();
+
+    exports.Helpers = Helpers;
+});
+//# sourceMappingURL=helpers.js.map;
+/* axios v0.16.2 | (c) 2017 by Matt Zabriskie */
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define('axios',[], factory);
+	else if(typeof exports === 'object')
+		exports["axios"] = factory();
+	else
+		root["axios"] = factory();
+})(this, function() {
+return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+/******/
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(1);
+
+/***/ },
+/* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var utils = __webpack_require__(2);
+	var bind = __webpack_require__(3);
+	var Axios = __webpack_require__(5);
+	var defaults = __webpack_require__(6);
+	
+	/**
+	 * Create an instance of Axios
+	 *
+	 * @param {Object} defaultConfig The default config for the instance
+	 * @return {Axios} A new instance of Axios
+	 */
+	function createInstance(defaultConfig) {
+	  var context = new Axios(defaultConfig);
+	  var instance = bind(Axios.prototype.request, context);
+	
+	  // Copy axios.prototype to instance
+	  utils.extend(instance, Axios.prototype, context);
+	
+	  // Copy context to instance
+	  utils.extend(instance, context);
+	
+	  return instance;
+	}
+	
+	// Create the default instance to be exported
+	var axios = createInstance(defaults);
+	
+	// Expose Axios class to allow class inheritance
+	axios.Axios = Axios;
+	
+	// Factory for creating new instances
+	axios.create = function create(instanceConfig) {
+	  return createInstance(utils.merge(defaults, instanceConfig));
+	};
+	
+	// Expose Cancel & CancelToken
+	axios.Cancel = __webpack_require__(23);
+	axios.CancelToken = __webpack_require__(24);
+	axios.isCancel = __webpack_require__(20);
+	
+	// Expose all/spread
+	axios.all = function all(promises) {
+	  return Promise.all(promises);
+	};
+	axios.spread = __webpack_require__(25);
+	
+	module.exports = axios;
+	
+	// Allow use of default import syntax in TypeScript
+	module.exports.default = axios;
+
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var bind = __webpack_require__(3);
+	var isBuffer = __webpack_require__(4);
+	
+	/*global toString:true*/
+	
+	// utils is a library of generic helper functions non-specific to axios
+	
+	var toString = Object.prototype.toString;
+	
+	/**
+	 * Determine if a value is an Array
+	 *
+	 * @param {Object} val The value to test
+	 * @returns {boolean} True if value is an Array, otherwise false
+	 */
+	function isArray(val) {
+	  return toString.call(val) === '[object Array]';
+	}
+	
+	/**
+	 * Determine if a value is an ArrayBuffer
+	 *
+	 * @param {Object} val The value to test
+	 * @returns {boolean} True if value is an ArrayBuffer, otherwise false
+	 */
+	function isArrayBuffer(val) {
+	  return toString.call(val) === '[object ArrayBuffer]';
+	}
+	
+	/**
+	 * Determine if a value is a FormData
+	 *
+	 * @param {Object} val The value to test
+	 * @returns {boolean} True if value is an FormData, otherwise false
+	 */
+	function isFormData(val) {
+	  return (typeof FormData !== 'undefined') && (val instanceof FormData);
+	}
+	
+	/**
+	 * Determine if a value is a view on an ArrayBuffer
+	 *
+	 * @param {Object} val The value to test
+	 * @returns {boolean} True if value is a view on an ArrayBuffer, otherwise false
+	 */
+	function isArrayBufferView(val) {
+	  var result;
+	  if ((typeof ArrayBuffer !== 'undefined') && (ArrayBuffer.isView)) {
+	    result = ArrayBuffer.isView(val);
+	  } else {
+	    result = (val) && (val.buffer) && (val.buffer instanceof ArrayBuffer);
+	  }
+	  return result;
+	}
+	
+	/**
+	 * Determine if a value is a String
+	 *
+	 * @param {Object} val The value to test
+	 * @returns {boolean} True if value is a String, otherwise false
+	 */
+	function isString(val) {
+	  return typeof val === 'string';
+	}
+	
+	/**
+	 * Determine if a value is a Number
+	 *
+	 * @param {Object} val The value to test
+	 * @returns {boolean} True if value is a Number, otherwise false
+	 */
+	function isNumber(val) {
+	  return typeof val === 'number';
+	}
+	
+	/**
+	 * Determine if a value is undefined
+	 *
+	 * @param {Object} val The value to test
+	 * @returns {boolean} True if the value is undefined, otherwise false
+	 */
+	function isUndefined(val) {
+	  return typeof val === 'undefined';
+	}
+	
+	/**
+	 * Determine if a value is an Object
+	 *
+	 * @param {Object} val The value to test
+	 * @returns {boolean} True if value is an Object, otherwise false
+	 */
+	function isObject(val) {
+	  return val !== null && typeof val === 'object';
+	}
+	
+	/**
+	 * Determine if a value is a Date
+	 *
+	 * @param {Object} val The value to test
+	 * @returns {boolean} True if value is a Date, otherwise false
+	 */
+	function isDate(val) {
+	  return toString.call(val) === '[object Date]';
+	}
+	
+	/**
+	 * Determine if a value is a File
+	 *
+	 * @param {Object} val The value to test
+	 * @returns {boolean} True if value is a File, otherwise false
+	 */
+	function isFile(val) {
+	  return toString.call(val) === '[object File]';
+	}
+	
+	/**
+	 * Determine if a value is a Blob
+	 *
+	 * @param {Object} val The value to test
+	 * @returns {boolean} True if value is a Blob, otherwise false
+	 */
+	function isBlob(val) {
+	  return toString.call(val) === '[object Blob]';
+	}
+	
+	/**
+	 * Determine if a value is a Function
+	 *
+	 * @param {Object} val The value to test
+	 * @returns {boolean} True if value is a Function, otherwise false
+	 */
+	function isFunction(val) {
+	  return toString.call(val) === '[object Function]';
+	}
+	
+	/**
+	 * Determine if a value is a Stream
+	 *
+	 * @param {Object} val The value to test
+	 * @returns {boolean} True if value is a Stream, otherwise false
+	 */
+	function isStream(val) {
+	  return isObject(val) && isFunction(val.pipe);
+	}
+	
+	/**
+	 * Determine if a value is a URLSearchParams object
+	 *
+	 * @param {Object} val The value to test
+	 * @returns {boolean} True if value is a URLSearchParams object, otherwise false
+	 */
+	function isURLSearchParams(val) {
+	  return typeof URLSearchParams !== 'undefined' && val instanceof URLSearchParams;
+	}
+	
+	/**
+	 * Trim excess whitespace off the beginning and end of a string
+	 *
+	 * @param {String} str The String to trim
+	 * @returns {String} The String freed of excess whitespace
+	 */
+	function trim(str) {
+	  return str.replace(/^\s*/, '').replace(/\s*$/, '');
+	}
+	
+	/**
+	 * Determine if we're running in a standard browser environment
+	 *
+	 * This allows axios to run in a web worker, and react-native.
+	 * Both environments support XMLHttpRequest, but not fully standard globals.
+	 *
+	 * web workers:
+	 *  typeof window -> undefined
+	 *  typeof document -> undefined
+	 *
+	 * react-native:
+	 *  navigator.product -> 'ReactNative'
+	 */
+	function isStandardBrowserEnv() {
+	  if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
+	    return false;
+	  }
+	  return (
+	    typeof window !== 'undefined' &&
+	    typeof document !== 'undefined'
+	  );
+	}
+	
+	/**
+	 * Iterate over an Array or an Object invoking a function for each item.
+	 *
+	 * If `obj` is an Array callback will be called passing
+	 * the value, index, and complete array for each item.
+	 *
+	 * If 'obj' is an Object callback will be called passing
+	 * the value, key, and complete object for each property.
+	 *
+	 * @param {Object|Array} obj The object to iterate
+	 * @param {Function} fn The callback to invoke for each item
+	 */
+	function forEach(obj, fn) {
+	  // Don't bother if no value provided
+	  if (obj === null || typeof obj === 'undefined') {
+	    return;
+	  }
+	
+	  // Force an array if not already something iterable
+	  if (typeof obj !== 'object' && !isArray(obj)) {
+	    /*eslint no-param-reassign:0*/
+	    obj = [obj];
+	  }
+	
+	  if (isArray(obj)) {
+	    // Iterate over array values
+	    for (var i = 0, l = obj.length; i < l; i++) {
+	      fn.call(null, obj[i], i, obj);
+	    }
+	  } else {
+	    // Iterate over object keys
+	    for (var key in obj) {
+	      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+	        fn.call(null, obj[key], key, obj);
+	      }
+	    }
+	  }
+	}
+	
+	/**
+	 * Accepts varargs expecting each argument to be an object, then
+	 * immutably merges the properties of each object and returns result.
+	 *
+	 * When multiple objects contain the same key the later object in
+	 * the arguments list will take precedence.
+	 *
+	 * Example:
+	 *
+	 * ```js
+	 * var result = merge({foo: 123}, {foo: 456});
+	 * console.log(result.foo); // outputs 456
+	 * ```
+	 *
+	 * @param {Object} obj1 Object to merge
+	 * @returns {Object} Result of all merge properties
+	 */
+	function merge(/* obj1, obj2, obj3, ... */) {
+	  var result = {};
+	  function assignValue(val, key) {
+	    if (typeof result[key] === 'object' && typeof val === 'object') {
+	      result[key] = merge(result[key], val);
+	    } else {
+	      result[key] = val;
+	    }
+	  }
+	
+	  for (var i = 0, l = arguments.length; i < l; i++) {
+	    forEach(arguments[i], assignValue);
+	  }
+	  return result;
+	}
+	
+	/**
+	 * Extends object a by mutably adding to it the properties of object b.
+	 *
+	 * @param {Object} a The object to be extended
+	 * @param {Object} b The object to copy properties from
+	 * @param {Object} thisArg The object to bind function to
+	 * @return {Object} The resulting value of object a
+	 */
+	function extend(a, b, thisArg) {
+	  forEach(b, function assignValue(val, key) {
+	    if (thisArg && typeof val === 'function') {
+	      a[key] = bind(val, thisArg);
+	    } else {
+	      a[key] = val;
+	    }
+	  });
+	  return a;
+	}
+	
+	module.exports = {
+	  isArray: isArray,
+	  isArrayBuffer: isArrayBuffer,
+	  isBuffer: isBuffer,
+	  isFormData: isFormData,
+	  isArrayBufferView: isArrayBufferView,
+	  isString: isString,
+	  isNumber: isNumber,
+	  isObject: isObject,
+	  isUndefined: isUndefined,
+	  isDate: isDate,
+	  isFile: isFile,
+	  isBlob: isBlob,
+	  isFunction: isFunction,
+	  isStream: isStream,
+	  isURLSearchParams: isURLSearchParams,
+	  isStandardBrowserEnv: isStandardBrowserEnv,
+	  forEach: forEach,
+	  merge: merge,
+	  extend: extend,
+	  trim: trim
+	};
+
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	module.exports = function bind(fn, thisArg) {
+	  return function wrap() {
+	    var args = new Array(arguments.length);
+	    for (var i = 0; i < args.length; i++) {
+	      args[i] = arguments[i];
+	    }
+	    return fn.apply(thisArg, args);
+	  };
+	};
+
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	/*!
+	 * Determine if an object is a Buffer
+	 *
+	 * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
+	 * @license  MIT
+	 */
+	
+	// The _isBuffer check is for Safari 5-7 support, because it's missing
+	// Object.prototype.constructor. Remove this eventually
+	module.exports = function (obj) {
+	  return obj != null && (isBuffer(obj) || isSlowBuffer(obj) || !!obj._isBuffer)
+	}
+	
+	function isBuffer (obj) {
+	  return !!obj.constructor && typeof obj.constructor.isBuffer === 'function' && obj.constructor.isBuffer(obj)
+	}
+	
+	// For Node v0.10 support. Remove this eventually.
+	function isSlowBuffer (obj) {
+	  return typeof obj.readFloatLE === 'function' && typeof obj.slice === 'function' && isBuffer(obj.slice(0, 0))
+	}
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var defaults = __webpack_require__(6);
+	var utils = __webpack_require__(2);
+	var InterceptorManager = __webpack_require__(17);
+	var dispatchRequest = __webpack_require__(18);
+	var isAbsoluteURL = __webpack_require__(21);
+	var combineURLs = __webpack_require__(22);
+	
+	/**
+	 * Create a new instance of Axios
+	 *
+	 * @param {Object} instanceConfig The default config for the instance
+	 */
+	function Axios(instanceConfig) {
+	  this.defaults = instanceConfig;
+	  this.interceptors = {
+	    request: new InterceptorManager(),
+	    response: new InterceptorManager()
+	  };
+	}
+	
+	/**
+	 * Dispatch a request
+	 *
+	 * @param {Object} config The config specific for this request (merged with this.defaults)
+	 */
+	Axios.prototype.request = function request(config) {
+	  /*eslint no-param-reassign:0*/
+	  // Allow for axios('example/url'[, config]) a la fetch API
+	  if (typeof config === 'string') {
+	    config = utils.merge({
+	      url: arguments[0]
+	    }, arguments[1]);
+	  }
+	
+	  config = utils.merge(defaults, this.defaults, { method: 'get' }, config);
+	  config.method = config.method.toLowerCase();
+	
+	  // Support baseURL config
+	  if (config.baseURL && !isAbsoluteURL(config.url)) {
+	    config.url = combineURLs(config.baseURL, config.url);
+	  }
+	
+	  // Hook up interceptors middleware
+	  var chain = [dispatchRequest, undefined];
+	  var promise = Promise.resolve(config);
+	
+	  this.interceptors.request.forEach(function unshiftRequestInterceptors(interceptor) {
+	    chain.unshift(interceptor.fulfilled, interceptor.rejected);
+	  });
+	
+	  this.interceptors.response.forEach(function pushResponseInterceptors(interceptor) {
+	    chain.push(interceptor.fulfilled, interceptor.rejected);
+	  });
+	
+	  while (chain.length) {
+	    promise = promise.then(chain.shift(), chain.shift());
+	  }
+	
+	  return promise;
+	};
+	
+	// Provide aliases for supported request methods
+	utils.forEach(['delete', 'get', 'head', 'options'], function forEachMethodNoData(method) {
+	  /*eslint func-names:0*/
+	  Axios.prototype[method] = function(url, config) {
+	    return this.request(utils.merge(config || {}, {
+	      method: method,
+	      url: url
+	    }));
+	  };
+	});
+	
+	utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
+	  /*eslint func-names:0*/
+	  Axios.prototype[method] = function(url, data, config) {
+	    return this.request(utils.merge(config || {}, {
+	      method: method,
+	      url: url,
+	      data: data
+	    }));
+	  };
+	});
+	
+	module.exports = Axios;
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var utils = __webpack_require__(2);
+	var normalizeHeaderName = __webpack_require__(7);
+	
+	var DEFAULT_CONTENT_TYPE = {
+	  'Content-Type': 'application/x-www-form-urlencoded'
+	};
+	
+	function setContentTypeIfUnset(headers, value) {
+	  if (!utils.isUndefined(headers) && utils.isUndefined(headers['Content-Type'])) {
+	    headers['Content-Type'] = value;
+	  }
+	}
+	
+	function getDefaultAdapter() {
+	  var adapter;
+	  if (typeof XMLHttpRequest !== 'undefined') {
+	    // For browsers use XHR adapter
+	    adapter = __webpack_require__(8);
+	  } else if (typeof process !== 'undefined') {
+	    // For node use HTTP adapter
+	    adapter = __webpack_require__(8);
+	  }
+	  return adapter;
+	}
+	
+	var defaults = {
+	  adapter: getDefaultAdapter(),
+	
+	  transformRequest: [function transformRequest(data, headers) {
+	    normalizeHeaderName(headers, 'Content-Type');
+	    if (utils.isFormData(data) ||
+	      utils.isArrayBuffer(data) ||
+	      utils.isBuffer(data) ||
+	      utils.isStream(data) ||
+	      utils.isFile(data) ||
+	      utils.isBlob(data)
+	    ) {
+	      return data;
+	    }
+	    if (utils.isArrayBufferView(data)) {
+	      return data.buffer;
+	    }
+	    if (utils.isURLSearchParams(data)) {
+	      setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
+	      return data.toString();
+	    }
+	    if (utils.isObject(data)) {
+	      setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
+	      return JSON.stringify(data);
+	    }
+	    return data;
+	  }],
+	
+	  transformResponse: [function transformResponse(data) {
+	    /*eslint no-param-reassign:0*/
+	    if (typeof data === 'string') {
+	      try {
+	        data = JSON.parse(data);
+	      } catch (e) { /* Ignore */ }
+	    }
+	    return data;
+	  }],
+	
+	  timeout: 0,
+	
+	  xsrfCookieName: 'XSRF-TOKEN',
+	  xsrfHeaderName: 'X-XSRF-TOKEN',
+	
+	  maxContentLength: -1,
+	
+	  validateStatus: function validateStatus(status) {
+	    return status >= 200 && status < 300;
+	  }
+	};
+	
+	defaults.headers = {
+	  common: {
+	    'Accept': 'application/json, text/plain, */*'
+	  }
+	};
+	
+	utils.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
+	  defaults.headers[method] = {};
+	});
+	
+	utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
+	  defaults.headers[method] = utils.merge(DEFAULT_CONTENT_TYPE);
+	});
+	
+	module.exports = defaults;
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var utils = __webpack_require__(2);
+	
+	module.exports = function normalizeHeaderName(headers, normalizedName) {
+	  utils.forEach(headers, function processHeader(value, name) {
+	    if (name !== normalizedName && name.toUpperCase() === normalizedName.toUpperCase()) {
+	      headers[normalizedName] = value;
+	      delete headers[name];
+	    }
+	  });
+	};
+
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var utils = __webpack_require__(2);
+	var settle = __webpack_require__(9);
+	var buildURL = __webpack_require__(12);
+	var parseHeaders = __webpack_require__(13);
+	var isURLSameOrigin = __webpack_require__(14);
+	var createError = __webpack_require__(10);
+	var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(15);
+	
+	module.exports = function xhrAdapter(config) {
+	  return new Promise(function dispatchXhrRequest(resolve, reject) {
+	    var requestData = config.data;
+	    var requestHeaders = config.headers;
+	
+	    if (utils.isFormData(requestData)) {
+	      delete requestHeaders['Content-Type']; // Let the browser set it
+	    }
+	
+	    var request = new XMLHttpRequest();
+	    var loadEvent = 'onreadystatechange';
+	    var xDomain = false;
+	
+	    // For IE 8/9 CORS support
+	    // Only supports POST and GET calls and doesn't returns the response headers.
+	    // DON'T do this for testing b/c XMLHttpRequest is mocked, not XDomainRequest.
+	    if (("production") !== 'test' &&
+	        typeof window !== 'undefined' &&
+	        window.XDomainRequest && !('withCredentials' in request) &&
+	        !isURLSameOrigin(config.url)) {
+	      request = new window.XDomainRequest();
+	      loadEvent = 'onload';
+	      xDomain = true;
+	      request.onprogress = function handleProgress() {};
+	      request.ontimeout = function handleTimeout() {};
+	    }
+	
+	    // HTTP basic authentication
+	    if (config.auth) {
+	      var username = config.auth.username || '';
+	      var password = config.auth.password || '';
+	      requestHeaders.Authorization = 'Basic ' + btoa(username + ':' + password);
+	    }
+	
+	    request.open(config.method.toUpperCase(), buildURL(config.url, config.params, config.paramsSerializer), true);
+	
+	    // Set the request timeout in MS
+	    request.timeout = config.timeout;
+	
+	    // Listen for ready state
+	    request[loadEvent] = function handleLoad() {
+	      if (!request || (request.readyState !== 4 && !xDomain)) {
+	        return;
+	      }
+	
+	      // The request errored out and we didn't get a response, this will be
+	      // handled by onerror instead
+	      // With one exception: request that using file: protocol, most browsers
+	      // will return status as 0 even though it's a successful request
+	      if (request.status === 0 && !(request.responseURL && request.responseURL.indexOf('file:') === 0)) {
+	        return;
+	      }
+	
+	      // Prepare the response
+	      var responseHeaders = 'getAllResponseHeaders' in request ? parseHeaders(request.getAllResponseHeaders()) : null;
+	      var responseData = !config.responseType || config.responseType === 'text' ? request.responseText : request.response;
+	      var response = {
+	        data: responseData,
+	        // IE sends 1223 instead of 204 (https://github.com/mzabriskie/axios/issues/201)
+	        status: request.status === 1223 ? 204 : request.status,
+	        statusText: request.status === 1223 ? 'No Content' : request.statusText,
+	        headers: responseHeaders,
+	        config: config,
+	        request: request
+	      };
+	
+	      settle(resolve, reject, response);
+	
+	      // Clean up request
+	      request = null;
+	    };
+	
+	    // Handle low level network errors
+	    request.onerror = function handleError() {
+	      // Real errors are hidden from us by the browser
+	      // onerror should only fire if it's a network error
+	      reject(createError('Network Error', config, null, request));
+	
+	      // Clean up request
+	      request = null;
+	    };
+	
+	    // Handle timeout
+	    request.ontimeout = function handleTimeout() {
+	      reject(createError('timeout of ' + config.timeout + 'ms exceeded', config, 'ECONNABORTED',
+	        request));
+	
+	      // Clean up request
+	      request = null;
+	    };
+	
+	    // Add xsrf header
+	    // This is only done if running in a standard browser environment.
+	    // Specifically not if we're in a web worker, or react-native.
+	    if (utils.isStandardBrowserEnv()) {
+	      var cookies = __webpack_require__(16);
+	
+	      // Add xsrf header
+	      var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
+	          cookies.read(config.xsrfCookieName) :
+	          undefined;
+	
+	      if (xsrfValue) {
+	        requestHeaders[config.xsrfHeaderName] = xsrfValue;
+	      }
+	    }
+	
+	    // Add headers to the request
+	    if ('setRequestHeader' in request) {
+	      utils.forEach(requestHeaders, function setRequestHeader(val, key) {
+	        if (typeof requestData === 'undefined' && key.toLowerCase() === 'content-type') {
+	          // Remove Content-Type if data is undefined
+	          delete requestHeaders[key];
+	        } else {
+	          // Otherwise add header to the request
+	          request.setRequestHeader(key, val);
+	        }
+	      });
+	    }
+	
+	    // Add withCredentials to request if needed
+	    if (config.withCredentials) {
+	      request.withCredentials = true;
+	    }
+	
+	    // Add responseType to request if needed
+	    if (config.responseType) {
+	      try {
+	        request.responseType = config.responseType;
+	      } catch (e) {
+	        // Expected DOMException thrown by browsers not compatible XMLHttpRequest Level 2.
+	        // But, this can be suppressed for 'json' type as it can be parsed by default 'transformResponse' function.
+	        if (config.responseType !== 'json') {
+	          throw e;
+	        }
+	      }
+	    }
+	
+	    // Handle progress if needed
+	    if (typeof config.onDownloadProgress === 'function') {
+	      request.addEventListener('progress', config.onDownloadProgress);
+	    }
+	
+	    // Not all browsers support upload events
+	    if (typeof config.onUploadProgress === 'function' && request.upload) {
+	      request.upload.addEventListener('progress', config.onUploadProgress);
+	    }
+	
+	    if (config.cancelToken) {
+	      // Handle cancellation
+	      config.cancelToken.promise.then(function onCanceled(cancel) {
+	        if (!request) {
+	          return;
+	        }
+	
+	        request.abort();
+	        reject(cancel);
+	        // Clean up request
+	        request = null;
+	      });
+	    }
+	
+	    if (requestData === undefined) {
+	      requestData = null;
+	    }
+	
+	    // Send the request
+	    request.send(requestData);
+	  });
+	};
+
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var createError = __webpack_require__(10);
+	
+	/**
+	 * Resolve or reject a Promise based on response status.
+	 *
+	 * @param {Function} resolve A function that resolves the promise.
+	 * @param {Function} reject A function that rejects the promise.
+	 * @param {object} response The response.
+	 */
+	module.exports = function settle(resolve, reject, response) {
+	  var validateStatus = response.config.validateStatus;
+	  // Note: status is not exposed by XDomainRequest
+	  if (!response.status || !validateStatus || validateStatus(response.status)) {
+	    resolve(response);
+	  } else {
+	    reject(createError(
+	      'Request failed with status code ' + response.status,
+	      response.config,
+	      null,
+	      response.request,
+	      response
+	    ));
+	  }
+	};
+
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var enhanceError = __webpack_require__(11);
+	
+	/**
+	 * Create an Error with the specified message, config, error code, request and response.
+	 *
+	 * @param {string} message The error message.
+	 * @param {Object} config The config.
+	 * @param {string} [code] The error code (for example, 'ECONNABORTED').
+	 * @param {Object} [request] The request.
+	 * @param {Object} [response] The response.
+	 * @returns {Error} The created error.
+	 */
+	module.exports = function createError(message, config, code, request, response) {
+	  var error = new Error(message);
+	  return enhanceError(error, config, code, request, response);
+	};
+
+
+/***/ },
+/* 11 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	/**
+	 * Update an Error with the specified config, error code, and response.
+	 *
+	 * @param {Error} error The error to update.
+	 * @param {Object} config The config.
+	 * @param {string} [code] The error code (for example, 'ECONNABORTED').
+	 * @param {Object} [request] The request.
+	 * @param {Object} [response] The response.
+	 * @returns {Error} The error.
+	 */
+	module.exports = function enhanceError(error, config, code, request, response) {
+	  error.config = config;
+	  if (code) {
+	    error.code = code;
+	  }
+	  error.request = request;
+	  error.response = response;
+	  return error;
+	};
+
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var utils = __webpack_require__(2);
+	
+	function encode(val) {
+	  return encodeURIComponent(val).
+	    replace(/%40/gi, '@').
+	    replace(/%3A/gi, ':').
+	    replace(/%24/g, '$').
+	    replace(/%2C/gi, ',').
+	    replace(/%20/g, '+').
+	    replace(/%5B/gi, '[').
+	    replace(/%5D/gi, ']');
+	}
+	
+	/**
+	 * Build a URL by appending params to the end
+	 *
+	 * @param {string} url The base of the url (e.g., http://www.google.com)
+	 * @param {object} [params] The params to be appended
+	 * @returns {string} The formatted url
+	 */
+	module.exports = function buildURL(url, params, paramsSerializer) {
+	  /*eslint no-param-reassign:0*/
+	  if (!params) {
+	    return url;
+	  }
+	
+	  var serializedParams;
+	  if (paramsSerializer) {
+	    serializedParams = paramsSerializer(params);
+	  } else if (utils.isURLSearchParams(params)) {
+	    serializedParams = params.toString();
+	  } else {
+	    var parts = [];
+	
+	    utils.forEach(params, function serialize(val, key) {
+	      if (val === null || typeof val === 'undefined') {
+	        return;
+	      }
+	
+	      if (utils.isArray(val)) {
+	        key = key + '[]';
+	      }
+	
+	      if (!utils.isArray(val)) {
+	        val = [val];
+	      }
+	
+	      utils.forEach(val, function parseValue(v) {
+	        if (utils.isDate(v)) {
+	          v = v.toISOString();
+	        } else if (utils.isObject(v)) {
+	          v = JSON.stringify(v);
+	        }
+	        parts.push(encode(key) + '=' + encode(v));
+	      });
+	    });
+	
+	    serializedParams = parts.join('&');
+	  }
+	
+	  if (serializedParams) {
+	    url += (url.indexOf('?') === -1 ? '?' : '&') + serializedParams;
+	  }
+	
+	  return url;
+	};
+
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var utils = __webpack_require__(2);
+	
+	/**
+	 * Parse headers into an object
+	 *
+	 * ```
+	 * Date: Wed, 27 Aug 2014 08:58:49 GMT
+	 * Content-Type: application/json
+	 * Connection: keep-alive
+	 * Transfer-Encoding: chunked
+	 * ```
+	 *
+	 * @param {String} headers Headers needing to be parsed
+	 * @returns {Object} Headers parsed into an object
+	 */
+	module.exports = function parseHeaders(headers) {
+	  var parsed = {};
+	  var key;
+	  var val;
+	  var i;
+	
+	  if (!headers) { return parsed; }
+	
+	  utils.forEach(headers.split('\n'), function parser(line) {
+	    i = line.indexOf(':');
+	    key = utils.trim(line.substr(0, i)).toLowerCase();
+	    val = utils.trim(line.substr(i + 1));
+	
+	    if (key) {
+	      parsed[key] = parsed[key] ? parsed[key] + ', ' + val : val;
+	    }
+	  });
+	
+	  return parsed;
+	};
+
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var utils = __webpack_require__(2);
+	
+	module.exports = (
+	  utils.isStandardBrowserEnv() ?
+	
+	  // Standard browser envs have full support of the APIs needed to test
+	  // whether the request URL is of the same origin as current location.
+	  (function standardBrowserEnv() {
+	    var msie = /(msie|trident)/i.test(navigator.userAgent);
+	    var urlParsingNode = document.createElement('a');
+	    var originURL;
+	
+	    /**
+	    * Parse a URL to discover it's components
+	    *
+	    * @param {String} url The URL to be parsed
+	    * @returns {Object}
+	    */
+	    function resolveURL(url) {
+	      var href = url;
+	
+	      if (msie) {
+	        // IE needs attribute set twice to normalize properties
+	        urlParsingNode.setAttribute('href', href);
+	        href = urlParsingNode.href;
+	      }
+	
+	      urlParsingNode.setAttribute('href', href);
+	
+	      // urlParsingNode provides the UrlUtils interface - http://url.spec.whatwg.org/#urlutils
+	      return {
+	        href: urlParsingNode.href,
+	        protocol: urlParsingNode.protocol ? urlParsingNode.protocol.replace(/:$/, '') : '',
+	        host: urlParsingNode.host,
+	        search: urlParsingNode.search ? urlParsingNode.search.replace(/^\?/, '') : '',
+	        hash: urlParsingNode.hash ? urlParsingNode.hash.replace(/^#/, '') : '',
+	        hostname: urlParsingNode.hostname,
+	        port: urlParsingNode.port,
+	        pathname: (urlParsingNode.pathname.charAt(0) === '/') ?
+	                  urlParsingNode.pathname :
+	                  '/' + urlParsingNode.pathname
+	      };
+	    }
+	
+	    originURL = resolveURL(window.location.href);
+	
+	    /**
+	    * Determine if a URL shares the same origin as the current location
+	    *
+	    * @param {String} requestURL The URL to test
+	    * @returns {boolean} True if URL shares the same origin, otherwise false
+	    */
+	    return function isURLSameOrigin(requestURL) {
+	      var parsed = (utils.isString(requestURL)) ? resolveURL(requestURL) : requestURL;
+	      return (parsed.protocol === originURL.protocol &&
+	            parsed.host === originURL.host);
+	    };
+	  })() :
+	
+	  // Non standard browser envs (web workers, react-native) lack needed support.
+	  (function nonStandardBrowserEnv() {
+	    return function isURLSameOrigin() {
+	      return true;
+	    };
+	  })()
+	);
+
+
+/***/ },
+/* 15 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	// btoa polyfill for IE<10 courtesy https://github.com/davidchambers/Base64.js
+	
+	var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+	
+	function E() {
+	  this.message = 'String contains an invalid character';
+	}
+	E.prototype = new Error;
+	E.prototype.code = 5;
+	E.prototype.name = 'InvalidCharacterError';
+	
+	function btoa(input) {
+	  var str = String(input);
+	  var output = '';
+	  for (
+	    // initialize result and counter
+	    var block, charCode, idx = 0, map = chars;
+	    // if the next str index does not exist:
+	    //   change the mapping table to "="
+	    //   check if d has no fractional digits
+	    str.charAt(idx | 0) || (map = '=', idx % 1);
+	    // "8 - idx % 1 * 8" generates the sequence 2, 4, 6, 8
+	    output += map.charAt(63 & block >> 8 - idx % 1 * 8)
+	  ) {
+	    charCode = str.charCodeAt(idx += 3 / 4);
+	    if (charCode > 0xFF) {
+	      throw new E();
+	    }
+	    block = block << 8 | charCode;
+	  }
+	  return output;
+	}
+	
+	module.exports = btoa;
+
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var utils = __webpack_require__(2);
+	
+	module.exports = (
+	  utils.isStandardBrowserEnv() ?
+	
+	  // Standard browser envs support document.cookie
+	  (function standardBrowserEnv() {
+	    return {
+	      write: function write(name, value, expires, path, domain, secure) {
+	        var cookie = [];
+	        cookie.push(name + '=' + encodeURIComponent(value));
+	
+	        if (utils.isNumber(expires)) {
+	          cookie.push('expires=' + new Date(expires).toGMTString());
+	        }
+	
+	        if (utils.isString(path)) {
+	          cookie.push('path=' + path);
+	        }
+	
+	        if (utils.isString(domain)) {
+	          cookie.push('domain=' + domain);
+	        }
+	
+	        if (secure === true) {
+	          cookie.push('secure');
+	        }
+	
+	        document.cookie = cookie.join('; ');
+	      },
+	
+	      read: function read(name) {
+	        var match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
+	        return (match ? decodeURIComponent(match[3]) : null);
+	      },
+	
+	      remove: function remove(name) {
+	        this.write(name, '', Date.now() - 86400000);
+	      }
+	    };
+	  })() :
+	
+	  // Non standard browser env (web workers, react-native) lack needed support.
+	  (function nonStandardBrowserEnv() {
+	    return {
+	      write: function write() {},
+	      read: function read() { return null; },
+	      remove: function remove() {}
+	    };
+	  })()
+	);
+
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var utils = __webpack_require__(2);
+	
+	function InterceptorManager() {
+	  this.handlers = [];
+	}
+	
+	/**
+	 * Add a new interceptor to the stack
+	 *
+	 * @param {Function} fulfilled The function to handle `then` for a `Promise`
+	 * @param {Function} rejected The function to handle `reject` for a `Promise`
+	 *
+	 * @return {Number} An ID used to remove interceptor later
+	 */
+	InterceptorManager.prototype.use = function use(fulfilled, rejected) {
+	  this.handlers.push({
+	    fulfilled: fulfilled,
+	    rejected: rejected
+	  });
+	  return this.handlers.length - 1;
+	};
+	
+	/**
+	 * Remove an interceptor from the stack
+	 *
+	 * @param {Number} id The ID that was returned by `use`
+	 */
+	InterceptorManager.prototype.eject = function eject(id) {
+	  if (this.handlers[id]) {
+	    this.handlers[id] = null;
+	  }
+	};
+	
+	/**
+	 * Iterate over all the registered interceptors
+	 *
+	 * This method is particularly useful for skipping over any
+	 * interceptors that may have become `null` calling `eject`.
+	 *
+	 * @param {Function} fn The function to call for each interceptor
+	 */
+	InterceptorManager.prototype.forEach = function forEach(fn) {
+	  utils.forEach(this.handlers, function forEachHandler(h) {
+	    if (h !== null) {
+	      fn(h);
+	    }
+	  });
+	};
+	
+	module.exports = InterceptorManager;
+
+
+/***/ },
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var utils = __webpack_require__(2);
+	var transformData = __webpack_require__(19);
+	var isCancel = __webpack_require__(20);
+	var defaults = __webpack_require__(6);
+	
+	/**
+	 * Throws a `Cancel` if cancellation has been requested.
+	 */
+	function throwIfCancellationRequested(config) {
+	  if (config.cancelToken) {
+	    config.cancelToken.throwIfRequested();
+	  }
+	}
+	
+	/**
+	 * Dispatch a request to the server using the configured adapter.
+	 *
+	 * @param {object} config The config that is to be used for the request
+	 * @returns {Promise} The Promise to be fulfilled
+	 */
+	module.exports = function dispatchRequest(config) {
+	  throwIfCancellationRequested(config);
+	
+	  // Ensure headers exist
+	  config.headers = config.headers || {};
+	
+	  // Transform request data
+	  config.data = transformData(
+	    config.data,
+	    config.headers,
+	    config.transformRequest
+	  );
+	
+	  // Flatten headers
+	  config.headers = utils.merge(
+	    config.headers.common || {},
+	    config.headers[config.method] || {},
+	    config.headers || {}
+	  );
+	
+	  utils.forEach(
+	    ['delete', 'get', 'head', 'post', 'put', 'patch', 'common'],
+	    function cleanHeaderConfig(method) {
+	      delete config.headers[method];
+	    }
+	  );
+	
+	  var adapter = config.adapter || defaults.adapter;
+	
+	  return adapter(config).then(function onAdapterResolution(response) {
+	    throwIfCancellationRequested(config);
+	
+	    // Transform response data
+	    response.data = transformData(
+	      response.data,
+	      response.headers,
+	      config.transformResponse
+	    );
+	
+	    return response;
+	  }, function onAdapterRejection(reason) {
+	    if (!isCancel(reason)) {
+	      throwIfCancellationRequested(config);
+	
+	      // Transform response data
+	      if (reason && reason.response) {
+	        reason.response.data = transformData(
+	          reason.response.data,
+	          reason.response.headers,
+	          config.transformResponse
+	        );
+	      }
+	    }
+	
+	    return Promise.reject(reason);
+	  });
+	};
+
+
+/***/ },
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var utils = __webpack_require__(2);
+	
+	/**
+	 * Transform the data for a request or a response
+	 *
+	 * @param {Object|String} data The data to be transformed
+	 * @param {Array} headers The headers for the request or response
+	 * @param {Array|Function} fns A single function or Array of functions
+	 * @returns {*} The resulting transformed data
+	 */
+	module.exports = function transformData(data, headers, fns) {
+	  /*eslint no-param-reassign:0*/
+	  utils.forEach(fns, function transform(fn) {
+	    data = fn(data, headers);
+	  });
+	
+	  return data;
+	};
+
+
+/***/ },
+/* 20 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	module.exports = function isCancel(value) {
+	  return !!(value && value.__CANCEL__);
+	};
+
+
+/***/ },
+/* 21 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	/**
+	 * Determines whether the specified URL is absolute
+	 *
+	 * @param {string} url The URL to test
+	 * @returns {boolean} True if the specified URL is absolute, otherwise false
+	 */
+	module.exports = function isAbsoluteURL(url) {
+	  // A URL is considered absolute if it begins with "<scheme>://" or "//" (protocol-relative URL).
+	  // RFC 3986 defines scheme name as a sequence of characters beginning with a letter and followed
+	  // by any combination of letters, digits, plus, period, or hyphen.
+	  return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url);
+	};
+
+
+/***/ },
+/* 22 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	/**
+	 * Creates a new URL by combining the specified URLs
+	 *
+	 * @param {string} baseURL The base URL
+	 * @param {string} relativeURL The relative URL
+	 * @returns {string} The combined URL
+	 */
+	module.exports = function combineURLs(baseURL, relativeURL) {
+	  return relativeURL
+	    ? baseURL.replace(/\/+$/, '') + '/' + relativeURL.replace(/^\/+/, '')
+	    : baseURL;
+	};
+
+
+/***/ },
+/* 23 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	/**
+	 * A `Cancel` is an object that is thrown when an operation is canceled.
+	 *
+	 * @class
+	 * @param {string=} message The message.
+	 */
+	function Cancel(message) {
+	  this.message = message;
+	}
+	
+	Cancel.prototype.toString = function toString() {
+	  return 'Cancel' + (this.message ? ': ' + this.message : '');
+	};
+	
+	Cancel.prototype.__CANCEL__ = true;
+	
+	module.exports = Cancel;
+
+
+/***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var Cancel = __webpack_require__(23);
+	
+	/**
+	 * A `CancelToken` is an object that can be used to request cancellation of an operation.
+	 *
+	 * @class
+	 * @param {Function} executor The executor function.
+	 */
+	function CancelToken(executor) {
+	  if (typeof executor !== 'function') {
+	    throw new TypeError('executor must be a function.');
+	  }
+	
+	  var resolvePromise;
+	  this.promise = new Promise(function promiseExecutor(resolve) {
+	    resolvePromise = resolve;
+	  });
+	
+	  var token = this;
+	  executor(function cancel(message) {
+	    if (token.reason) {
+	      // Cancellation has already been requested
+	      return;
+	    }
+	
+	    token.reason = new Cancel(message);
+	    resolvePromise(token.reason);
+	  });
+	}
+	
+	/**
+	 * Throws a `Cancel` if cancellation has been requested.
+	 */
+	CancelToken.prototype.throwIfRequested = function throwIfRequested() {
+	  if (this.reason) {
+	    throw this.reason;
+	  }
+	};
+	
+	/**
+	 * Returns an object that contains a new `CancelToken` and a function that, when called,
+	 * cancels the `CancelToken`.
+	 */
+	CancelToken.source = function source() {
+	  var cancel;
+	  var token = new CancelToken(function executor(c) {
+	    cancel = c;
+	  });
+	  return {
+	    token: token,
+	    cancel: cancel
+	  };
+	};
+	
+	module.exports = CancelToken;
+
+
+/***/ },
+/* 25 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	/**
+	 * Syntactic sugar for invoking a function and expanding an array for arguments.
+	 *
+	 * Common use case would be to use `Function.prototype.apply`.
+	 *
+	 *  ```js
+	 *  function f(x, y, z) {}
+	 *  var args = [1, 2, 3];
+	 *  f.apply(null, args);
+	 *  ```
+	 *
+	 * With `spread` this example can be re-written.
+	 *
+	 *  ```js
+	 *  spread(function(x, y, z) {})([1, 2, 3]);
+	 *  ```
+	 *
+	 * @param {Function} callback
+	 * @returns {Function}
+	 */
+	module.exports = function spread(callback) {
+	  return function wrap(arr) {
+	    return callback.apply(null, arr);
+	  };
+	};
+
+
+/***/ }
+/******/ ])
+});
+;
+//# sourceMappingURL=axios.map;
+
+
+define('utils/http',["require", "exports", "axios"], function (require, exports, axios_1) {
+    "use strict";
+
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Http = axios_1.default;
+});
+//# sourceMappingURL=http.js.map;
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+define('utils/event',["require", "exports", "./helpers"], function (require, exports, helpers_1) {
+    "use strict";
+
+    Object.defineProperty(exports, "__esModule", { value: true });
+
+    var Event = function () {
+        function Event() {
+            _classCallCheck(this, Event);
+
+            this.listeners = {};
+        }
+
+        _createClass(Event, [{
+            key: "on",
+            value: function on(name, data, handler) {
+                if (typeof data === 'function' && handler === undefined) {
+                    handler = data;
+                    data = undefined;
+                }
+                if (!helpers_1.Helpers.isArray(this.listeners[name])) {
                     this.listeners[name] = [];
                 }
+                if (helpers_1.Helpers.isFunction(handler)) {
+                    this.listeners[name].push(handler);
+                }
+                return this;
             }
-
-            return this;
-        },
-
-        trigger: function (name, data) {
-            if (Helpers.isArray(this.listeners[name])) {
-                this.listeners[name].forEach(function (item) {
-                    item({
-                        type: name
-                    }, data);
-
-                    if (item.isOne) {
-                        this.off(name, item);
+        }, {
+            key: "one",
+            value: function one(name, handler) {
+                if (helpers_1.Helpers.isFunction(handler)) {
+                    handler.isOne = true;
+                    this.on(name, handler);
+                }
+                return this;
+            }
+        }, {
+            key: "off",
+            value: function off(name, handler) {
+                if (helpers_1.Helpers.isArray(this.listeners[name])) {
+                    if (helpers_1.Helpers.isFunction(handler)) {
+                        this.listeners[name].forEach(function (item, index) {
+                            if (item === handler) {
+                                this.listeners[name].splice(index, 1);
+                            }
+                        }.bind(this));
+                    } else {
+                        this.listeners[name] = [];
                     }
+                }
+                return this;
+            }
+        }, {
+            key: "trigger",
+            value: function trigger(name, data) {
+                if (helpers_1.Helpers.isArray(this.listeners[name])) {
+                    this.listeners[name].forEach(function (item) {
+                        item({
+                            type: name
+                        }, data);
+                        if (item.isOne) {
+                            this.off(name, item);
+                        }
+                    });
+                }
+                return this;
+            }
+        }]);
+
+        return Event;
+    }();
+
+    exports.Event = Event;
+});
+//# sourceMappingURL=event.js.map;
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+define('event',["require", "exports", "./utils/helpers", "./utils/event"], function (require, exports, helpers_1, event_1) {
+    "use strict";
+
+    Object.defineProperty(exports, "__esModule", { value: true });
+
+    var EventEmitter = function () {
+        function EventEmitter(options) {
+            _classCallCheck(this, EventEmitter);
+
+            this.defaultOptions = {};
+            this.deferred = {};
+            this.isDestroyed = false;
+            this.options = helpers_1.Helpers.extend({}, this.defaultOptions, options || {});
+            this._event = new event_1.Event();
+            return this;
+        }
+
+        _createClass(EventEmitter, [{
+            key: "destroy",
+            value: function destroy() {
+                if (!this.isDestroyed) {
+                    this.trigger('destroy');
+                    this.off();
+                    delete this.options;
+                    delete this._event;
+                    this.isDestroyed = true;
+                }
+                return this;
+            }
+        }, {
+            key: "on",
+            value: function on(name, handler, isSingle) {
+                if (this._event) {
+                    this._event.on.apply(this._event, arguments);
+                }
+                return this;
+            }
+        }, {
+            key: "off",
+            value: function off() {
+                if (this._event) {
+                    this._event.off.apply(this._event, arguments);
+                }
+                return this;
+            }
+        }, {
+            key: "trigger",
+            value: function trigger(name, data) {
+                if (this._event) {
+                    this._event.trigger.apply(this._event, arguments);
+                }
+                return this;
+            }
+        }, {
+            key: "require",
+            value: function require(module, callback) {
+                var _this = this,
+                    _arguments = arguments;
+
+                var promises = [],
+                    modules = {},
+                    promise = void 0;
+                if (!helpers_1.Helpers.isArray(module)) {
+                    promise = new Promise(function (resolve, reject) {
+                        window.requirejs([_this.deferred[module] || module], function () {
+                            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+                                args[_key] = arguments[_key];
+                            }
+
+                            if (!_this.isDestroyed) {
+                                if (helpers_1.Helpers.isFunction(callback)) {
+                                    callback.apply(undefined, args);
+                                }
+                                resolve.apply(_this, _arguments);
+                            }
+                        }, reject);
+                    });
+                } else {
+                    module.forEach(function (item) {
+                        var moduleName = void 0;
+                        promises.push(new Promise(function (resolve, reject) {
+                            moduleName = _this.deferred[item] || item;
+                            window.requirejs([moduleName], function (Module) {
+                                modules[moduleName] = Module;
+                                resolve();
+                            }, reject);
+                        }));
+                    });
+                    promise = new Promise(function (resolve, reject) {
+                        Promise.all(promises).then(function () {
+                            var deps = [];
+                            module.forEach(function (item) {
+                                var moduleName = _this.deferred[item] || item;
+                                deps.push(modules[moduleName]);
+                            });
+                            if (!_this.isDestroyed) {
+                                resolve.apply(_this, deps);
+                                if (helpers_1.Helpers.isFunction(callback)) {
+                                    callback.apply(_this, deps);
+                                }
+                            }
+                        }).catch(reject);
+                    });
+                }
+                return promise;
+            }
+        }]);
+
+        return EventEmitter;
+    }();
+
+    exports.EventEmitter = EventEmitter;
+});
+//# sourceMappingURL=event.js.map;
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+define('collection',["require", "exports", "./event", "./utils/helpers", "./utils/http"], function (require, exports, event_1, helpers_1, http_1) {
+    "use strict";
+
+    Object.defineProperty(exports, "__esModule", { value: true });
+
+    var Collection = function (_event_1$EventEmitter) {
+        _inherits(Collection, _event_1$EventEmitter);
+
+        function Collection() {
+            _classCallCheck(this, Collection);
+
+            var _this = _possibleConstructorReturn(this, (Collection.__proto__ || Object.getPrototypeOf(Collection)).apply(this, arguments));
+
+            _this.items = [];
+            return _this;
+        }
+
+        _createClass(Collection, [{
+            key: "destroy",
+            value: function destroy() {
+                _get(Collection.prototype.__proto__ || Object.getPrototypeOf(Collection.prototype), "destroy", this).call(this);
+                delete this.items;
+                if (this.fetchXHR) {
+                    this.fetchXHR.abort();
+                    delete this.fetchXHR;
+                }
+                return this;
+            }
+        }, {
+            key: "fetch",
+            value: function fetch() {
+                var _this2 = this;
+
+                return new Promise(function (resolve, reject) {
+                    var settings = _this2.getFetchSettings();
+                    _this2.fetchXHR = http_1.Http.get(settings.url, {
+                        params: _this2.getFetchParams()
+                    }).then(function (response) {
+                        var items = void 0;
+                        if (_this2.isDestroyed) {
+                            return;
+                        }
+                        if (helpers_1.Helpers.isString(response.data)) {
+                            response.data = JSON.parse(response.data);
+                        } else if (!helpers_1.Helpers.isObject(response.data)) {
+                            response.data = {};
+                        }
+                        items = _this2.setResponse(response.data);
+                        _this2.trigger('fetched', {
+                            items: items,
+                            response: response
+                        });
+                        if (items.length === 0) {
+                            _this2.trigger('end');
+                        }
+                        resolve(items);
+                    });
                 });
             }
-
-            return this;
-        }
-
-    };
-
-    return Event;
-});
-define('utils/helpers',[
-    'jquery'
-], function ($) {
-    'use strict';
-
-    return {
-
-        /**
-         * Проверка является ли переменная массивом
-         *
-         * @param {mixed} any
-         * @returns {boolean}
-         */
-        isArray : function (any) {
-            return Array.isArray(any);
-        },
-
-        /**
-         * Перевод в строковый тип
-         *
-         * @param {mixed} any
-         * @returns {string}
-         */
-        toString : function (any) {
-            return Object.prototype.toString.call(any);
-        },
-
-        /**
-         * Проверка является ли переменная функцией
-         *
-         * @param {mixed} any
-         * @returns {boolean}
-         */
-        isFunction : function (any) {
-            return this.toString(any) === '[object Function]';
-        },
-
-        /**
-         * Проверка является ли переменная dom-элементом
-         *
-         * @param {mixed} any
-         * @returns {boolean}
-         */
-        isNode : function (any) {
-            return (any && any.nodeType) || this.isNodeList(any);
-        },
-
-        /**
-         * Проверка является ли переменная списком dom-элементов
-         *
-         * @param {mixed} any
-         * @returns {boolean}
-         */
-        isNodeList : function (any) {
-            return !this.isjQueryObject(any) && any && any[0] && any[0].nodeType;
-        },
-
-        /**
-         * Проверка является ли переменная jQuery-элементом
-         *
-         * @param {mixed} any
-         * @returns {boolean}
-         */
-        isjQueryObject : function (any) {
-            return any instanceof $;
-        },
-
-        /**
-         * Проверка является ли переменная объектом
-         *
-         * @param {mixed} any
-         * @returns {boolean}
-         */
-        isObject : function (any) {
-            var result = false;
-            if (window.Object) {
-                result = any === window.Object(any) && !this.isNode(any) && !this.isFunction(any) && !this.isjQueryObject(any);
-            } else {
-                result = any && $.toString(any) === '[object Object]' && !this.isNode(any) && !this.isFunction(any) && !this.isjQueryObject(any);
-            }
-            return result;
-        },
-
-        /**
-         * Проверка является ли переменная простым объектом
-         *
-         * @param {mixed} any
-         * @returns {boolean}
-         */
-        isPlainObject : function (any) {
-            return this.isObject(any) && $.isPlainObject(any);
-        },
-
-        /**
-         * Проверка является ли переменная строкой
-         *
-         * @param {mixed} any
-         * @returns {boolean}
-         */
-        isString : function (any) {
-            return this.toString(any) === '[object String]';
-        },
-
-        /**
-         * Преобразование первого символа строки к верхнему регистру
-         *
-         * @param {string} str
-         * @returns {string}
-         */
-        capitalize : function (str) {
-            return str.charAt(0).toUpperCase() + str.substr(1);
-        },
-
-        extend: $.extend
-
-    };
-});
-/**
- * Базовый модуль, реализующий событийную модель
- *
- * @class
- * @name Event
- * @abstract
- */
-define('event',[
-    'utils/event',
-    'utils/helpers'
-], function (
-    Event,
-    Helpers
-) {
-    'use strict';
-
-    function EventEmitter(options) {
-
-        /**
-         * Параметры, собирающиеся из defaultOptions и переданных в аргументе
-         *
-         * @type {Object}
-         */
-        this.options = Helpers.extend(true, {}, this.defaultOptions, options);
-
-        /**
-         * Объект, реализующий работу с событиями
-         *
-         * @type {Event}
-         * @protected
-         */
-        this._event = new Event();
-
-        this
-            .initVars()
-            .generateAccessors();
-
-        return this;
-    }
-
-    EventEmitter.prototype = {
-
-        /**
-         * Список свойств для автоматической генерации геттеров и сеттеров
-         *
-         * @type {Object}
-         */
-        accessors: {
-            get: [],
-            set: []
-        },
-
-        /**
-         * Ининциализация
-         *
-         * @returns {EventEmitter}
-         */
-        init: function () {
-            return this;
-        },
-
-        /**
-         * Уничтожение
-         *
-         * @returns {EventEmitter}
-         */
-        destroy: function () {
-            if (!this.isDestroyed) {
-                this.trigger('destroy');
-                this.off();
-
-                delete this.options;
-                delete this._event;
-
-                this.isDestroyed = true;
-            }
-
-            return this;
-        },
-
-        /**
-         * Подписка на событие
-         *
-         * @param {String} name название события
-         * @param {Function} handler обработчик события
-         * @returns {EventEmitter}
-         */
-        on: function () {
-            if (this._event) {
-                this._event.on.apply(this._event, arguments);
-            }
-
-            return this;
-        },
-
-        /**
-         * Отписка от события
-         *
-         * @param {String} name название события
-         * @param {Function} handler обработчик события
-         * @returns {EventEmitter}
-         */
-        off: function () {
-            if (this._event) {
-                this._event.off.apply(this._event, arguments);
-            }
-
-            return this;
-        },
-
-        /**
-         * Генерирование события
-         *
-         * @param {String} name название события
-         * @param {*} data данные, передаваемые в обработчик
-         * @returns {EventEmitter}
-         */
-        trigger: function () {
-            if (this._event) {
-                this._event.trigger.apply(this._event, arguments);
-            }
-            return this;
-        },
-
-        /**
-         * Подгрузка модуля
-         *
-         * @param {String | Array.<String>} module название модуля
-         * @param {Function} [callback] функция, в которую будет передан объект модуля
-         * @returns {Promise}
-         */
-        require: function (module, callback) {
-            var promises = [],
-                modules = {},
-                promise;
-
-            if (!Helpers.isArray(module)) {
-                promise = new Promise(function (resolve, reject) {
-                    window.requirejs([this.deferred[module] || module], function () {
-                        if (!this.isDestroyed) {
-                            if (Helpers.isFunction(callback)) {
-                                callback.apply(this, arguments);
-                            }
-                            resolve.apply(this, arguments);
-                        }
-                    }.bind(this), reject);
-                }.bind(this));
-            } else {
-                module.forEach(function (item) {
-                    var moduleName;
-
-                    promises.push(new Promise(function (resolve, reject) {
-                        moduleName = this.deferred[item] || item;
-                        window.requirejs([moduleName], function (Module) {
-                            modules[moduleName] = Module;
-                            resolve();
-                        }, reject);
-                    }.bind(this)));
-                }.bind(this));
-
-                promise = new Promise(function (resolve, reject) {
-                    Promise.all(promises).then(function () {
-                        var deps = [];
-
-                        module.forEach(function (item) {
-                            var moduleName = this.deferred[item] || item;
-
-                            deps.push(modules[moduleName]);
-                        }.bind(this));
-
-                        if (!this.isDestroyed) {
-                            resolve.apply(this, deps);
-                            if (Helpers.isFunction(callback)) {
-                                callback.apply(this, deps);
-                            }
-                        }
-                    }.bind(this)).catch(reject);
-                }.bind(this));
-            }
-
-            return promise;
-        },
-
-        /**
-         * Инициализация перменных
-         */
-        initVars: function () {
-            if (Helpers.isPlainObject(this.vars)) {
-                Object.keys(this.vars).forEach(function (varName) {
-                    this[varName] = this.vars[varName];
-                }.bind(this));
-            }
-
-            return this;
-        },
-
-        /**
-         * Генерирование геттеров и сеттеров
-         */
-        generateAccessors: function () {
-            if (Helpers.isArray(this.accessors.get)) {
-                this.accessors.get.forEach(function (item) {
-                    this['get' + Helpers.capitalize(item)] = function () {
-                        return this[item];
-                    };
-                }.bind(this));
-            }
-
-            if (Helpers.isArray(this.accessors.set)) {
-                this.accessors.set.forEach(function (item) {
-                    this['set' + Helpers.capitalize(item)] = function (value) {
-                        this[item] = value;
-
-                        return this;
-                    };
-                }.bind(this));
-            }
-
-            return this;
-        }
-    };
-
-    EventEmitter.extend = function (proto) {
-        var Parent = this,
-            Child,
-            Surrogate,
-            props,
-            publicMethods,
-            protectedMethods,
-            staticMethods;
-
-        Child = function () {
-            Parent.apply(this, arguments);
-
-            if (Helpers.isFunction(proto.create)) {
-                proto.create.apply(this, arguments);
-            }
-
-            if (proto.autoInit && !Child.instance) {
-                this.autoInit = proto.autoInit;
-
-                if (!this._inited && !this.isDestroyed) {
-                    this.init();
-                    this._inited = true;
+        }, {
+            key: "abort",
+            value: function abort() {
+                if (this.fetchXHR) {
+                    this.fetchXHR.abort();
+                    this.trigger('aborted');
                 }
-            }
-
-            if (proto.singleton === true && !Child.instance) {
-                Child.instance = this;
-            }
-
-            return Child.instance || this;
-        };
-
-        Helpers.extend(Child, Parent);
-
-        Surrogate = function () {
-            this.constructor = Child;
-            this.__super__ = Parent.prototype;
-        };
-        Surrogate.prototype = Parent.prototype;
-        Child.prototype = new Surrogate();
-        Child.__super__ = Parent.prototype;
-
-        publicMethods = proto.public || {};
-        protectedMethods = proto.protected || {};
-        staticMethods = proto.static || {};
-
-        props = proto.props || {};
-
-        props.defaultOptions = Helpers.extend(true, {}, Parent.prototype.defaultOptions, props.defaultOptions);
-        props.deferred = Helpers.extend(true, {}, Parent.prototype.deferred, props.deferred);
-        props.events = Helpers.extend(true, {}, Parent.prototype.events, props.events);
-        props.defaults = Helpers.extend(true, {}, Parent.prototype.defaults, props.defaults);
-        props.templates = Helpers.extend(true, {}, Parent.prototype.templates, props.templates);
-        props.elements = Helpers.extend(true, {}, Parent.prototype.elements, props.elements);
-        props.vars = Helpers.extend(true, {}, Parent.prototype.vars, props.vars);
-
-        if (props.accessors) {
-            if (Helpers.isArray(props.accessors.get)) {
-                props.accessors.get = props.accessors.get.concat(Parent.prototype.accessors.get);
-            }
-            if (Helpers.isArray(props.accessors.set)) {
-                props.accessors.set = props.accessors.set.concat(Parent.prototype.accessors.set);
-            }
-        }
-
-        Helpers.extend(Child.prototype, Helpers.extend(true, {}, publicMethods, protectedMethods, props));
-        Helpers.extend(true, Child, staticMethods);
-
-        return Child;
-    };
-
-    return EventEmitter;
-});
-
-define('utils/ajax',[
-    'jquery'
-], function ($) {
-    'use strict';
-
-    var Ajax = {
-
-        send: function (options) {
-            var xhr = $.ajax(options);
-
-            return {
-
-                success: function (callback) {
-                    return xhr.success(callback);
-                },
-
-                error: function (callback) {
-                    return xhr.error(callback);
-                },
-
-                abort: function () {
-                    return xhr.abort();
-                }
-
-            };
-        }
-
-    };
-
-    return Ajax;
-});
-/*
- * Cookies.js - 1.2.2
- * https://github.com/ScottHamper/Cookies
- *
- * This is free and unencumbered software released into the public domain.
- */
-(function (global, undefined) {
-    'use strict';
-
-    var factory = function (window) {
-        if (typeof window.document !== 'object') {
-            throw new Error('Cookies.js requires a `window` with a `document` object');
-        }
-
-        var Cookies = function (key, value, options) {
-            return arguments.length === 1 ?
-                Cookies.get(key) : Cookies.set(key, value, options);
-        };
-
-        // Allows for setter injection in unit tests
-        Cookies._document = window.document;
-
-        // Used to ensure cookie keys do not collide with
-        // built-in `Object` properties
-        Cookies._cacheKeyPrefix = 'cookey.'; // Hurr hurr, :)
-        
-        Cookies._maxExpireDate = new Date('Fri, 31 Dec 9999 23:59:59 UTC');
-
-        Cookies.defaults = {
-            path: '/',
-            secure: false
-        };
-
-        Cookies.get = function (key) {
-            if (Cookies._cachedDocumentCookie !== Cookies._document.cookie) {
-                Cookies._renewCache();
-            }
-            
-            var value = Cookies._cache[Cookies._cacheKeyPrefix + key];
-
-            return value === undefined ? undefined : decodeURIComponent(value);
-        };
-
-        Cookies.set = function (key, value, options) {
-            options = Cookies._getExtendedOptions(options);
-            options.expires = Cookies._getExpiresDate(value === undefined ? -1 : options.expires);
-
-            Cookies._document.cookie = Cookies._generateCookieString(key, value, options);
-
-            return Cookies;
-        };
-
-        Cookies.expire = function (key, options) {
-            return Cookies.set(key, undefined, options);
-        };
-
-        Cookies._getExtendedOptions = function (options) {
-            return {
-                path: options && options.path || Cookies.defaults.path,
-                domain: options && options.domain || Cookies.defaults.domain,
-                expires: options && options.expires || Cookies.defaults.expires,
-                secure: options && options.secure !== undefined ?  options.secure : Cookies.defaults.secure
-            };
-        };
-
-        Cookies._isValidDate = function (date) {
-            return Object.prototype.toString.call(date) === '[object Date]' && !isNaN(date.getTime());
-        };
-
-        Cookies._getExpiresDate = function (expires, now) {
-            now = now || new Date();
-
-            if (typeof expires === 'number') {
-                expires = expires === Infinity ?
-                    Cookies._maxExpireDate : new Date(now.getTime() + expires * 1000);
-            } else if (typeof expires === 'string') {
-                expires = new Date(expires);
-            }
-
-            if (expires && !Cookies._isValidDate(expires)) {
-                throw new Error('`expires` parameter cannot be converted to a valid Date instance');
-            }
-
-            return expires;
-        };
-
-        Cookies._generateCookieString = function (key, value, options) {
-            key = key.replace(/[^#$&+\^`|]/g, encodeURIComponent);
-            key = key.replace(/\(/g, '%28').replace(/\)/g, '%29');
-            value = (value + '').replace(/[^!#$&-+\--:<-\[\]-~]/g, encodeURIComponent);
-            options = options || {};
-
-            var cookieString = key + '=' + value;
-            cookieString += options.path ? ';path=' + options.path : '';
-            cookieString += options.domain ? ';domain=' + options.domain : '';
-            cookieString += options.expires ? ';expires=' + options.expires.toUTCString() : '';
-            cookieString += options.secure ? ';secure' : '';
-
-            return cookieString;
-        };
-
-        Cookies._getCacheFromString = function (documentCookie) {
-            var cookieCache = {};
-            var cookiesArray = documentCookie ? documentCookie.split('; ') : [];
-
-            for (var i = 0; i < cookiesArray.length; i++) {
-                var cookieKvp = Cookies._getKeyValuePairFromCookieString(cookiesArray[i]);
-
-                if (cookieCache[Cookies._cacheKeyPrefix + cookieKvp.key] === undefined) {
-                    cookieCache[Cookies._cacheKeyPrefix + cookieKvp.key] = cookieKvp.value;
-                }
-            }
-
-            return cookieCache;
-        };
-
-        Cookies._getKeyValuePairFromCookieString = function (cookieString) {
-            // "=" is a valid character in a cookie value according to RFC6265, so cannot `split('=')`
-            var separatorIndex = cookieString.indexOf('=');
-
-            // IE omits the "=" when the cookie value is an empty string
-            separatorIndex = separatorIndex < 0 ? cookieString.length : separatorIndex;
-
-            var key = cookieString.substr(0, separatorIndex);
-            var decodedKey;
-            try {
-                decodedKey = decodeURIComponent(key);
-            } catch (e) {
-                if (console && typeof console.error === 'function') {
-                    console.error('Could not decode cookie with key "' + key + '"', e);
-                }
-            }
-            
-            return {
-                key: decodedKey,
-                value: cookieString.substr(separatorIndex + 1) // Defer decoding value until accessed
-            };
-        };
-
-        Cookies._renewCache = function () {
-            Cookies._cache = Cookies._getCacheFromString(Cookies._document.cookie);
-            Cookies._cachedDocumentCookie = Cookies._document.cookie;
-        };
-
-        Cookies._areEnabled = function () {
-            var testKey = 'cookies.js';
-            var areEnabled = Cookies.set(testKey, 1).get(testKey) === '1';
-            Cookies.expire(testKey);
-            return areEnabled;
-        };
-
-        Cookies.enabled = Cookies._areEnabled();
-
-        return Cookies;
-    };
-
-    var cookiesExport = typeof global.document === 'object' ? factory(global) : factory;
-
-    // AMD support
-    if (typeof define === 'function' && define.amd) {
-        define('components/Cookies/dist/cookies',[],function () { return cookiesExport; });
-    // CommonJS/Node.js support
-    } else if (typeof exports === 'object') {
-        // Support Node.js specific `module.exports` (which can be a function)
-        if (typeof module === 'object' && typeof module.exports === 'object') {
-            exports = module.exports = cookiesExport;
-        }
-        // But always support CommonJS module 1.1.1 spec (`exports` cannot be a function)
-        exports.Cookies = cookiesExport;
-    } else {
-        global.Cookies = cookiesExport;
-    }
-})(typeof window === 'undefined' ? this : window);
-define('utils/cookie',[
-    'components/Cookies/dist/cookies'
-], function (Cookies) {
-    'use strict';
-
-    return Cookies;
-});
-/*jslint nomen:true*/
-
-/**
- * Модуль модели
- *
- * @class
- * @name Model
- * @abstract
- * @augments EventEmitter
- */
-
-define('model',[
-    'event',
-    'utils/ajax',
-    'utils/helpers',
-    'utils/cookie'
-], function (
-    EventEmitter,
-    Ajax,
-    Helpers,
-    Cookie
-) {
-
-    'use strict';
-
-    var counter = 0,
-        Model;
-
-    Model = EventEmitter.extend(
-        /** @lends Model.prototype */
-        {
-
-            /**
-             * Создание
-             *
-             * @param {Object} attr атрибуты
-             * @param {Object} options опции
-             * @returns {Model}
-             */
-            create: function (attr, options) {
-
-                /**
-                 * Атрибуты
-                 *
-                 * @type {Object}
-                 * @protected
-                 */
-                this._attr = Helpers.extend(true, {}, this.defaults, attr);
-
-                /**
-                 * Параметры, собирающиеся из defaultOptions и переданных в аргументе
-                 *
-                 * @type {Object}
-                 */
-                this.options = Helpers.extend(true, {}, this.defaultOptions, options);
-
-                /**
-                 * Идентификатор сущности
-                 *
-                 * @type {Number | String}
-                 */
-                this.id = this._attr.id;
-
-                /**
-                 * Клиентский идентификатор сущности
-                 *
-                 * @type {Number}
-                 */
-                this.cid = counter++;
-
-                /**
-                 * Ошибки, связанные с валидацией
-                 *
-                 * @type {Array}
-                 */
-                this.errors = [];
-
-                /**
-                 * Получены ли данные с сервера
-                 * @type {Boolean}
-                 */
-                this.isFetchedState = false;
-
-                /**
-                 * Удалена ли модель
-                 * @type {Boolean}
-                 */
-                this.isRemovedState = false;
-
-                this.delegateEvents();
-                this.init();
-
                 return this;
-            },
+            }
+        }, {
+            key: "isPending",
+            value: function isPending() {
+                return this.fetchXHR && this.fetchXHR.state() === 'pending';
+            }
+        }, {
+            key: "setResponse",
+            value: function setResponse(response) {
+                var _this3 = this;
 
-            /** @lends Model.prototype */
-            props: {
-                /**
-                 * URL получения данных
-                 *
-                 * @type {String}
-                 */
-                url: '',
-
-                /**
-                 * URL сохранения
-                 *
-                 * @type {String}
-                 */
-                urlSave: '',
-
-                /**
-                 * URL создания
-                 *
-                 * @type {String}
-                 */
-                urlCreate: '',
-
-                /**
-                 * URL удаления
-                 *
-                 * @type {String}
-                 */
-                urlRemove: '',
-
-                /**
-                 * Правила валидации
-                 *
-                 * @type {Array}
-                 */
-                validation: []
-            },
-
-            /** @lends Model.prototype */
-            public: {
-
-                /**
-                 * Уничтожение
-                 *
-                 * @returns {Model}
-                 */
-                destroy: function () {
-                    delete this._attr;
-                    delete this.id;
-                    delete this.cid;
-                    delete this.errors;
-
-                    Model.__super__.destroy.call(this);
-
-                    return this;
-                },
-
-                /**
-                 * Получение значения атрибута
-                 *
-                 * @param {String} key название атрибута
-                 * @returns {*}
-                 */
-                getSingle: function (key) {
-                    var arIds = key.split('.'),
-                        iteration = 0,
-                        attrItem = this._attr;
-
-                    while (attrItem && iteration < arIds.length) {
-                        if (attrItem[arIds[iteration]] !== undefined) {
-                            attrItem = attrItem[arIds[iteration]];
-                        } else {
-                            attrItem = undefined;
-                        }
-
-                        iteration++;
+                var model,
+                    models = [],
+                    data = this.adapter(response);
+                if (!helpers_1.Helpers.isArray(data.items)) {
+                    return models;
+                }
+                data.items.forEach(function (item) {
+                    model = new _this3.model();
+                    model.set(item);
+                    _this3.add(model);
+                    models.push(model);
+                });
+                return models;
+            }
+        }, {
+            key: "adapter",
+            value: function adapter(data) {
+                return data;
+            }
+        }, {
+            key: "getByAttr",
+            value: function getByAttr(attrKey, attrValue) {
+                var model = null;
+                this.items.forEach(function (item) {
+                    if (!isNaN(Number(item.get(attrKey))) && Number(item.get(attrKey)) === Number(attrValue) || String(item.get(attrKey)) === String(attrValue)) {
+                        model = item;
                     }
-
-                    return attrItem;
-                },
-
-                /**
-                 * Установка значения атрибута
-                 *
-                 * @param {String} key название атрибута
-                 * @param {*} value значение атрибута
-                 * @param {Boolean} [options.silent = false]
-                 * @returns {Boolean} изменился ли атрибут
-                 */
-                setSingle: function (key, value, options) {
-                    var isChanged = false;
-
-                    options = options || {};
-
-                    if (this._attr[key] !== value) {
-                        if (Helpers.isString(value)) {
-                            value = String(value).trim();
-                        }
-                        this._attr[key] = value;
-
-
-                        if (key === 'id') {
-                            this.id = value;
-                        }
-
-                        if (!options.silent && !options.isNotChangeTrigger) {
-                            this.trigger('change.' + key);
-                            this.trigger('change');
-                        }
-
-                        isChanged = true;
+                });
+                return model;
+            }
+        }, {
+            key: "getArrayByAttr",
+            value: function getArrayByAttr(attrKey, attrValue) {
+                var models = [];
+                this.items.forEach(function (item) {
+                    if (!isNaN(Number(item.get(attrKey))) && Number(item.get(attrKey)) === Number(attrValue) || String(item.get(attrKey)) === String(attrValue)) {
+                        models.push(item);
                     }
-
-                    return isChanged;
-                },
-
-                /**
-                 * Получение значения атрибута или атрибутов
-                 *
-                 * @param {String | Array.<String>} key названия атрибутов
-                 * @returns {* | Object}
-                 */
-                get: function (key) {
-                    var result = null;
-
-                    if (Helpers.isString(key)) {
-                        result = this.getSingle(key);
+                });
+                return models;
+            }
+        }, {
+            key: "getById",
+            value: function getById(id) {
+                return this.getByAttr('id', id);
+            }
+        }, {
+            key: "getByClientId",
+            value: function getByClientId(cid) {
+                var result = null;
+                this.items.forEach(function (item, index) {
+                    if (item.cid === cid) {
+                        result = item;
                     }
+                });
+                return result;
+            }
+        }, {
+            key: "getItems",
+            value: function getItems() {
+                return this.items;
+            }
+        }, {
+            key: "getByIndex",
+            value: function getByIndex(index) {
+                return this.items[index];
+            }
+        }, {
+            key: "add",
+            value: function add(model) {
+                this.items.push(model);
+                this.trigger('add');
+                this.trigger('change');
+                return this;
+            }
+        }, {
+            key: "remove",
+            value: function remove(id) {
+                var _this4 = this;
 
-                    if (Helpers.isArray(key)) {
-                        result = {};
-                        key.forEach(function (item) {
-                            result[item] = this.getSingle(item);
-                        }.bind(this));
+                this.items.forEach(function (item, index) {
+                    if (item.get('id') === id) {
+                        _this4.items.splice(index, 1);
+                        _this4.trigger('remove', {
+                            id: item.id,
+                            cid: item.cid
+                        });
+                        _this4.trigger('change');
                     }
+                });
+                return this;
+            }
+        }, {
+            key: "removeByClientId",
+            value: function removeByClientId(cid) {
+                var _this5 = this;
 
-                    return result;
-                },
-
-                /**
-                 * Установка значения атрибута или атрибутов
-                 *
-                 * @param {String | Object} key название атрибутов или объект с атрибутами
-                 * @param {*} [value] значение (для установки одного атрибута)
-                 * @param {Boolean} [options.silent = false]
-                 */
-                set: function (key, value, options) {
-                    var changedAttrs = [];
-
-                    if (Helpers.isString(key)) {
-                        if (this.setSingle(key, value, Helpers.extend({}, options, {isNotChangeTrigger: true}))) {
-                            this.trigger('change.' + key);
+                this.items.forEach(function (item, index) {
+                    if (item.cid === cid) {
+                        _this5.items.splice(index, 1);
+                        _this5.trigger('remove', {
+                            id: item.id,
+                            cid: item.cid
+                        });
+                        _this5.trigger('change');
+                    }
+                });
+                return this;
+            }
+        }, {
+            key: "forEach",
+            value: function forEach(iterator) {
+                this.items.forEach(iterator);
+                return this;
+            }
+        }, {
+            key: "map",
+            value: function map(iterator) {
+                return this.items.map(iterator);
+            }
+        }, {
+            key: "forEachAsync",
+            value: function forEachAsync(iterator, callback) {
+                var step = function step(iterator, index) {
+                    if (this.getLength(true) > index) {
+                        iterator(this.items[index], index, step.bind(this, iterator, index + 1));
+                    } else {
+                        if (helpers_1.Helpers.isFunction(callback)) {
+                            callback();
                         }
                     }
+                };
+                if (this.getLength(true)) {
+                    iterator(this.items[0], 0, step.bind(this, iterator, 1));
+                }
+                return this;
+            }
+        }, {
+            key: "filter",
+            value: function filter(condition) {
+                return this.items.filter(condition);
+            }
+        }, {
+            key: "clear",
+            value: function clear(options) {
+                options = helpers_1.Helpers.extend({
+                    destroy: true
+                }, options);
+                if (options.destroy) {
+                    this.forEach(function (item) {
+                        item.destroy();
+                    });
+                }
+                this.items = [];
+                return this;
+            }
+        }, {
+            key: "getLength",
+            value: function getLength(isAll) {
+                var items = void 0;
+                if (isAll) {
+                    items = this.items;
+                } else {
+                    items = this.items.filter(function (item) {
+                        return !item.isRemoved();
+                    });
+                }
+                return items.length;
+            }
+        }, {
+            key: "toJSON",
+            value: function toJSON() {
+                var json = [];
+                this.forEach(function (model) {
+                    return json.push(model.toJSON());
+                });
+                return json;
+            }
+        }, {
+            key: "getUrl",
+            value: function getUrl() {
+                return this.options.url;
+            }
+        }, {
+            key: "getFetchParams",
+            value: function getFetchParams() {
+                return {};
+            }
+        }, {
+            key: "getFetchSettings",
+            value: function getFetchSettings() {
+                return helpers_1.Helpers.extend({
+                    url: this.getUrl()
+                });
+            }
+        }]);
 
-                    if (Helpers.isObject(key)) {
-                        options = value;
+        return Collection;
+    }(event_1.EventEmitter);
 
-                        Object.keys(key).forEach(function (item) {
-                            if (this.setSingle(item, key[item], Helpers.extend({}, options, {isNotChangeTrigger: true}))) {
-                                changedAttrs.push(item);
+    exports.Collection = Collection;
+});
+//# sourceMappingURL=collection.js.map;
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+define('element',["require", "exports"], function (require, exports) {
+    "use strict";
+
+    Object.defineProperty(exports, "__esModule", { value: true });
+
+    var DomElement = function () {
+        function DomElement(el) {
+            _classCallCheck(this, DomElement);
+
+            this.el = el;
+        }
+
+        _createClass(DomElement, [{
+            key: "getElement",
+            value: function getElement() {
+                return this.el;
+            }
+        }, {
+            key: "is",
+            value: function is(selector) {
+                var _this = this;
+
+                var isEqual = false;
+                if (typeof selector === 'string') {
+                    if (this.el.parentElement) {
+                        Array.prototype.forEach.call(this.el.parentElement.querySelectorAll(selector), function (item) {
+                            if (item === _this.el) {
+                                isEqual = true;
                             }
-                        }.bind(this));
-
-                        if (!options || !options.silent) {
-                            changedAttrs.forEach(function (item) {
-                                this.trigger('change.' + item);
-                            }.bind(this));
-                        }
+                        });
                     }
+                } else {
+                    isEqual = this.el === selector;
+                }
+                return isEqual;
+            }
+        }, {
+            key: "closest",
+            value: function closest(selector) {
+                var el = void 0,
+                    elInstance = void 0,
+                    els = [];
+                if (this.is(selector)) {
+                    els.push(this);
+                }
+                if (this.el.parentNode) {
+                    el = this.el.parentElement;
+                    while (el) {
+                        elInstance = new DomElement(el);
+                        if (elInstance.is(selector)) {
+                            els.push(elInstance);
+                        }
+                        el = el.parentElement;
+                    }
+                }
+                return els;
+            }
+        }, {
+            key: "find",
+            value: function find(selector) {
+                return Array.prototype.map.call(this.el.querySelectorAll(selector), function (el) {
+                    return new DomElement(el);
+                });
+            }
+        }, {
+            key: "hasClass",
+            value: function hasClass(className) {
+                var classList = this.el.className.split(' ').map(function (className) {
+                    return className.trim();
+                });
+                return classList.indexOf(className) !== -1;
+            }
+        }, {
+            key: "attr",
+            value: function attr(attrName) {
+                return this.el.getAttribute(attrName);
+            }
+        }, {
+            key: "on",
+            value: function on(event, handler) {
+                this.el.addEventListener(event, handler);
+            }
+        }, {
+            key: "off",
+            value: function off(event, handler) {
+                this.el.removeEventListener(event, handler);
+            }
+        }, {
+            key: "empty",
+            value: function empty() {
+                this.el.innerHTML = '';
+            }
+        }, {
+            key: "appendTo",
+            value: function appendTo($el) {
+                $el.getElement().appendChild(this.el);
+            }
+        }, {
+            key: "addClass",
+            value: function addClass(className) {
+                this.el.classList.add(className);
+            }
+        }, {
+            key: "removeClass",
+            value: function removeClass(className) {
+                this.el.classList.remove(className);
+            }
+        }]);
 
-                    if (!options || !options.silent) {
+        return DomElement;
+    }();
+
+    exports.DomElement = DomElement;
+});
+//# sourceMappingURL=element.js.map;
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+define('model',["require", "exports", "./event", "./utils/helpers", "./utils/http"], function (require, exports, event_1, helpers_1, http_1) {
+    "use strict";
+
+    Object.defineProperty(exports, "__esModule", { value: true });
+
+    var Model = function (_event_1$EventEmitter) {
+        _inherits(Model, _event_1$EventEmitter);
+
+        function Model(attr, options) {
+            var _ret;
+
+            _classCallCheck(this, Model);
+
+            var _this = _possibleConstructorReturn(this, (Model.__proto__ || Object.getPrototypeOf(Model)).call(this, options));
+
+            _this.uniqueKey = 'id';
+            _this._attr = helpers_1.Helpers.extend({}, _this.defaults, attr);
+            _this.options = helpers_1.Helpers.extend({}, _this.defaultOptions, options);
+            _this.id = _this._attr.id;
+            _this.cid = Model.counter++;
+            _this.errors = [];
+            _this.isFetchedState = false;
+            _this.isRemovedState = false;
+            _this.delegateEvents();
+            return _ret = _this, _possibleConstructorReturn(_this, _ret);
+        }
+
+        _createClass(Model, [{
+            key: "destroy",
+            value: function destroy() {
+                delete this._attr;
+                delete this.id;
+                delete this.cid;
+                delete this.errors;
+                _get(Model.prototype.__proto__ || Object.getPrototypeOf(Model.prototype), "destroy", this).call(this);
+                return this;
+            }
+        }, {
+            key: "getSingle",
+            value: function getSingle(key) {
+                var arIds = key.split('.'),
+                    iteration = 0,
+                    attrItem = this._attr;
+                while (attrItem && iteration < arIds.length) {
+                    if (attrItem[arIds[iteration]] !== undefined) {
+                        attrItem = attrItem[arIds[iteration]];
+                    } else {
+                        attrItem = undefined;
+                    }
+                    iteration++;
+                }
+                return attrItem;
+            }
+        }, {
+            key: "setSingle",
+            value: function setSingle(key, value, options) {
+                var isChanged = false;
+                options = options || {};
+                if (this._attr[key] !== value) {
+                    if (helpers_1.Helpers.isString(value)) {
+                        value = String(value).trim();
+                    }
+                    this._attr[key] = value;
+                    if (key === 'id') {
+                        this.id = value;
+                    }
+                    if (!options.silent && !options.isNotChangeTrigger) {
+                        this.trigger('change.' + key);
                         this.trigger('change');
                     }
+                    isChanged = true;
+                }
+                return isChanged;
+            }
+        }, {
+            key: "get",
+            value: function get(key) {
+                var result = null;
+                if (helpers_1.Helpers.isString(key)) {
+                    result = this.getSingle(key);
+                }
+                if (helpers_1.Helpers.isArray(key)) {
+                    result = {};
+                    key.forEach(function (item) {
+                        result[item] = this.getSingle(item);
+                    }.bind(this));
+                }
+                return result;
+            }
+        }, {
+            key: "set",
+            value: function set(key, value, options) {
+                var _this2 = this;
 
-                    return this;
-                },
-
-                /**
-                 * Валидация атрибутов
-                 *
-                 * @returns {Boolean}
-                 */
-                validate: function (options) {
-                    this.errors = [];
-
-                    this.validation.forEach(function (item) {
-                        var value;
-
-                        if (String(item.value).indexOf('@') === 0) {
-                            value = this.get(item.value.slice(1));
-                        } else {
-                            value = item.value;
+                var changedAttrs = [];
+                if (helpers_1.Helpers.isString(key)) {
+                    if (this.setSingle(key, value, helpers_1.Helpers.extend({}, options, { isNotChangeTrigger: true }))) {
+                        this.trigger('change.' + key);
+                    }
+                }
+                if (helpers_1.Helpers.isObject(key)) {
+                    options = value;
+                    Object.keys(key).forEach(function (item) {
+                        if (_this2.setSingle(item, key[item], helpers_1.Helpers.extend({}, options, { isNotChangeTrigger: true }))) {
+                            changedAttrs.push(item);
                         }
+                    });
+                    if (!options || !options.silent) {
+                        changedAttrs.forEach(function (item) {
+                            _this2.trigger('change.' + item);
+                        });
+                    }
+                }
+                if (!options || !options.silent) {
+                    this.trigger('change');
+                }
+                return this;
+            }
+        }, {
+            key: "validate",
+            value: function validate(options) {
+                var _this3 = this;
 
-                        if (!Helpers.isFunction(item.condition) || item.condition.call(this, options)) {
-                            switch (item.type) {
+                this.errors = [];
+                this.validation.forEach(function (item) {
+                    var value;
+                    if (String(item.value).indexOf('@') === 0) {
+                        value = _this3.get(item.value.slice(1));
+                    } else {
+                        value = item.value;
+                    }
+                    if (!helpers_1.Helpers.isFunction(item.condition) || item.condition.call(_this3, options)) {
+                        switch (item.type) {
                             case 'eq':
                                 item.attr.forEach(function (attr1) {
                                     item.attr.forEach(function (attr2) {
                                         if (item.byLength) {
-                                            if (String(this.get(attr1)).length === String(this.get(attr2)).length) {
-                                                this.errors.push(item.errorCode);
+                                            if (String(_this3.get(attr1)).length === String(_this3.get(attr2)).length) {
+                                                _this3.errors.push(item.errorCode);
                                             }
                                         } else {
-                                            if (this.get(attr1) !== this.get(attr2)) {
-                                                this.errors.push(item.errorCode);
+                                            if (_this3.get(attr1) !== _this3.get(attr2)) {
+                                                _this3.errors.push(item.errorCode);
                                             }
                                         }
-                                    }.bind(this));
-                                }.bind(this));
+                                    });
+                                });
                                 break;
                             case 'lt':
                                 item.attr.forEach(function (attr) {
                                     var length,
-                                        attrValue = this.get(attr);
-
+                                        attrValue = _this3.get(attr);
                                     if (item.byLength) {
-                                        if (Helpers.isArray(attrValue)) {
+                                        if (helpers_1.Helpers.isArray(attrValue)) {
                                             length = attrValue.length;
                                         } else {
                                             length = String(attrValue).length;
                                         }
-
-                                        if ((item.strict && length > value) || (!item.strict && length >= value)) {
-                                            this.errors.push(item.errorCode);
+                                        if (item.strict && length > value || !item.strict && length >= value) {
+                                            _this3.errors.push(item.errorCode);
                                         }
                                     } else {
-                                        if ((item.strict && attrValue > value) || (!item.strict && attrValue >= value)) {
-                                            this.errors.push(item.errorCode);
+                                        if (item.strict && attrValue > value || !item.strict && attrValue >= value) {
+                                            _this3.errors.push(item.errorCode);
                                         }
                                     }
-                                }.bind(this));
+                                });
                                 break;
                             case 'gt':
                                 item.attr.forEach(function (attr) {
-                                    var length,
-                                        attrValue = this.get(attr);
-
+                                    var length = void 0,
+                                        attrValue = _this3.get(attr);
                                     if (item.byLength) {
-                                        if (Helpers.isArray(attrValue)) {
+                                        if (helpers_1.Helpers.isArray(attrValue)) {
                                             length = attrValue.length;
                                         } else {
                                             length = String(attrValue).length;
                                         }
-
-                                        if ((item.strict && length < value) || (!item.strict && length <= value)) {
-                                            this.errors.push(item.errorCode);
+                                        if (item.strict && length < value || !item.strict && length <= value) {
+                                            _this3.errors.push(item.errorCode);
                                         }
                                     } else {
-                                        if ((item.strict && attrValue < value) || (!item.strict && attrValue <= value)) {
-                                            this.errors.push(item.errorCode);
+                                        if (item.strict && attrValue < value || !item.strict && attrValue <= value) {
+                                            _this3.errors.push(item.errorCode);
                                         }
                                     }
-                                }.bind(this));
+                                });
                                 break;
                             case 'required':
                                 item.attr.forEach(function (attr) {
-                                    var attrValue = this.get(attr),
-                                        isError = (Helpers.isArray(attrValue) && attrValue.length === 0) || !attrValue;
-
+                                    var attrValue = _this3.get(attr),
+                                        isError = helpers_1.Helpers.isArray(attrValue) && attrValue.length === 0 || !attrValue;
                                     if (isError) {
-                                        this.errors.push(item.errorCode);
+                                        _this3.errors.push(item.errorCode);
                                     }
-                                }.bind(this));
+                                });
                                 break;
                             case 'regexp':
                                 item.attr.forEach(function (attr) {
-                                    if (!value.test(this.get(attr))) {
-                                        this.errors.push(item.errorCode);
+                                    if (!value.test(_this3.get(attr))) {
+                                        _this3.errors.push(item.errorCode);
                                     }
-                                }.bind(this));
+                                });
                                 break;
-                            }
                         }
-                    }.bind(this));
-
-                    return this.errors.length === 0;
-                },
-
-                /**
-                 * Преобразование атрибутов в объект
-                 *
-                 * @returns {Object}
-                 */
-                toJSON: function () {
-                    return Helpers.extend(true, {}, this._attr);
-                },
-
-                /**
-                 * Получение данных с сервера
-                 *
-                 * @returns {Promise}
-                 */
-                fetch: function () {
-                    return new Promise(function (resolve, reject) {
-                        this.fetchXHR = Ajax.send(Helpers.extend(this.getFetchSettings(), {
-                            url: this.url,
-                            data: this.getFetchParams()
-                        }));
-
-                        this.fetchXHR
-                            .success(function (response, textStatus, xhr) {
-                                var responseObj = this.getResponeObjectByXhr(xhr);
-
-                                if (!this.isDestroyed) {
-                                    if (Helpers.isString(response)) {
-                                        response = JSON.parse(response);
-                                    }
-
-                                    this.set(this.adapter(response));
-
-                                    this.isFetchedState = true;
-                                    if (Helpers.isFunction(this.onFetched)) {
-                                        this.onFetched(response);
-                                    }
-                                    this.trigger('fetched', responseObj);
-
-                                    resolve(response, responseObj);
-                                }
-                            }.bind(this))
-
-                            .error(function (xhr) {
-                                var responseObj = this.getResponeObjectByXhr(xhr);
-
-                                this.trigger('fetched', responseObj);
-                                reject(responseObj);
-                            }.bind(this));
-
-                    }.bind(this));
-                },
-
-                /**
-                 * Отправление запроса на сохранение
-                 *
-                 * @returns {Promise}
-                 */
-                save: function () {
-                    this.trigger('beforeSave');
-
-                    return new Promise(function (resolve, reject) {
-                        var validateOptions = {
-                            mode: 'save'
-                        };
-
-                        if (this.validate(validateOptions)) {
-                            Ajax.send(Helpers.extend(this.getSaveSettings(), {
-                                url: this.urlSave,
-                                data: this.getSaveParams()
-                            }))
-                                .success(function (response) {
-                                    if (Helpers.isString(response)) {
-                                        response = JSON.parse(response);
-                                    }
-
-                                    this.trigger('saved');
-                                    resolve(response);
-                                }.bind(this))
-                                .error(reject);
-                        } else {
-                            reject();
-                        }
-
-                    }.bind(this));
-                },
-
-                /**
-                 * Отправление запроса на создание
-                 *
-                 * @returns {Promise}
-                 */
-                create: function () {
-                    this.trigger('beforeCreate');
-
-                    return new Promise(function (resolve, reject) {
-                        var validateOptions = {
-                            mode: 'create'
-                        };
-
-                        if (this.validate(validateOptions)) {
-                            Ajax.send(Helpers.extend(this.getCreateSettings(), {
-                                url: this.urlCreate,
-                                data: this.getCreateParams()
-                            }))
-                                .success(function (response) {
-                                    if (Helpers.isString(response)) {
-                                        response = JSON.parse(response);
-                                    }
-
-                                    this.trigger('created');
-                                    resolve(response);
-                                }.bind(this))
-                                .error(reject);
-                        } else {
-                            reject();
-                        }
-
-                    }.bind(this));
-                },
-
-                /**
-                 * Отправление запроса на удаление
-                 *
-                 * @returns {Promise}
-                 */
-                remove: function () {
-                    this.trigger('beforeRemove');
-                    this.isRemovedState = true;
-
-                    return new Promise(function (resolve, reject) {
-
-                        if (this.isRemoveReady()) {
-                            Ajax.send(Helpers.extend(this.getRemoveSettings(), {
-                                url: this.urlRemove,
-                                data: this.getRemoveParams()
-                            }))
-                                .success(function (response) {
-                                    if (Helpers.isString(response)) {
-                                        response = JSON.parse(response);
-                                    }
-
-                                    this.trigger('removed');
-                                    resolve(response);
-                                }.bind(this))
-                                .error(reject);
-                        } else {
-                            this.trigger('removed');
-                            reject();
-                        }
-
-                    }.bind(this));
-                },
-
-                /**
-                 * Отмена текущей загрузки
-                 *
-                 * @returns {Model}
-                 */
-                abort: function () {
-                    if (this.fetchXHR) {
-                        this.fetchXHR.abort();
-                        this.trigger('aborted');
                     }
-
-                    return this;
-                },
-
-                /**
-                 * Метод, позволяющий выполнить некторое действие только после того, как данные с сервера будут получены
-                 *
-                 * @returns {Promise}
-                 */
-                fetched: function () {
-                    return new Promise(function (resolve) {
-                        if (this.isFetched()) {
-                            resolve();
-                        } else {
-                            this.on('fetched', function () {
-                                resolve();
-                            });
-                        }
-                    }.bind(this));
-                },
-
-                /**
-                 * Метод добавляющий свойста в модель после получения от сервера
-                 *
-                 * @returns {Model}
-                 */
-                setResponse: function (response) {
-                    this.set(this.adapter(response));
-
-                    return this;
-                },
-
-                /**
-                 * Проверка на то, были ли получены данные с сервера
-                 *
-                 * @returns {Boolean}
-                 */
-                isFetched: function () {
-                    return this.isFetchedState;
-                },
-
-                /**
-                 * Проверка на то, что модель была удалена
-                 *
-                 * @returns {Boolean}
-                 */
-                isRemoved: function () {
-                    return this.isRemovedState;
-                },
-
-                /**
-                 * Проверка готовности удаления
-                 *
-                 * @returns {Boolean}
-                 */
-                isRemoveReady: function () {
-                    return !!this.get(this.uniqueKey);
-                },
-
-                /**
-                 * Проверка состояния текущей загрузки
-                 *
-                 * @returns {Boolean}
-                 */
-                isPending: function () {
-                    return this.fetchXHR && this.fetchXHR.state() === 'pending';
-                }
-            },
-
-            /** @lends Model.prototype */
-            protected: {
-
-                /**
-                 * Уникальный ключ для модели
-                 *
-                 * @protected
-                 * @type {String}
-                 */
-                uniqueKey: 'id',
-
-                /**
-                 * Назначение обработчиков событий
-                 *
-                 * @protected
-                 * @returns {Model}
-                 */
-                delegateEvents: function () {
-                    if (this.events) {
-                        Object.keys(this.events).forEach(function (eventItem) {
-                            this.on(eventItem, this[this.events[eventItem]].bind(this));
-                        }.bind(this));
-                    }
-
-                    return this;
-                },
-
-                /**
-                 * Адаптирование данных, приходящих от сервера
-                 *
-                 * @protected
-                 * @param {Object} srcAttr данные, пришедшие от сервера
-                 * @returns {Object}
-                 */
-                adapter: function (srcAttr) {
-                    return srcAttr;
-                },
-
-                /**
-                 * Получение URL для AJAX запросов на сервер
-                 *
-                 * @protected
-                 * @returns {String}
-                 */
-                getUrl: function () {
-                    return (Cookie.get('_sp_model') || '') + this.url;
-                },
-
-                /**
-                 * Получение данных, отправляемых на сервер при получении данных
-                 *
-                 * @protected
-                 * @returns {Object}
-                 */
-                getFetchParams: function () {
-                    var params = {};
-                    params[this.uniqueKey] = this.get(this.uniqueKey);
-
-                    return params;
-                },
-
-                /**
-                 * Получение данных, отправляемых на сервер при сохраненнии
-                 *
-                 * @protected
-                 * @returns {Object}
-                 */
-                getSaveParams: function () {
-                    return Helpers.extend(true, {}, this.toJSON());
-                },
-
-                /**
-                 * Получение данных, отправляемых на сервер при создании
-                 *
-                 * @protected
-                 * @returns {Object}
-                 */
-                getCreateParams: function () {
-                    return Helpers.extend(true, {}, this.toJSON());
-                },
-
-                /**
-                 * Получение данных, отправляемых на сервер при удалении
-                 *
-                 * @protected
-                 * @returns {Object}
-                 */
-                getRemoveParams: function () {
-                    return Helpers.extend(true, {}, {
-                        id: this.get('id')
-                    });
-                },
-
-                /**
-                 * Получение настроек AJAX запроса при получении данных
-                 *
-                 * @protected
-                 * @returns {Object}
-                 */
-                getFetchSettings: function () {
-                    return {
-                        url: this.getUrl()
-                    };
-                },
-
-                /**
-                 * Получение настроек AJAX запроса при сохранении
-                 *
-                 * @protected
-                 * @returns {Object}
-                 */
-                getSaveSettings: function () {
-                    return {
-                        url: this.getUrl(),
-                        type: 'post'
-                    };
-                },
-
-                /**
-                 * Получение настроек AJAX запроса при создании
-                 *
-                 * @protected
-                 * @returns {Object}
-                 */
-                getCreateSettings: function () {
-                    return {
-                        url: this.getUrl(),
-                        type: 'post',
-                        abortCaptcha: function () {
-                            this.trigger('abortCaptcha');
-                        }.bind(this)
-                    };
-                },
-
-                /**
-                 * Получение настроек AJAX запроса при удалении
-                 *
-                 * @protected
-                 * @returns {Object}
-                 */
-                getRemoveSettings: function () {
-                    return {
-                        url: this.getUrl(),
-                        type: 'post'
-                    };
-                },
-
-                /**
-                 * Получение объекта "ответа" от сервера по xhr объекту
-                 *
-                 * @protected
-                 * @param {jqXHR} xhr
-                 * @returns {Object}
-                 */
-                getResponeObjectByXhr: function (xhr) {
-                    var status,
-                        response;
-
-                    xhr = xhr || {};
-
-                    if (Helpers.isFunction(xhr.statusCode)) {
-                        status = xhr.statusCode().status;
-                    }
-
-                    try {
-                        response = JSON.parse(xhr.responseText);
-                    } catch (err) {
-                        response = xhr.responseText;
-                    }
-
-                    return {
-                        status: status,
-                        response: response
-                    };
-                }
-
+                });
+                return this.errors.length === 0;
             }
-        }
-    );
+        }, {
+            key: "toJSON",
+            value: function toJSON() {
+                return helpers_1.Helpers.extend({}, this._attr);
+            }
+        }, {
+            key: "fetch",
+            value: function fetch() {
+                var _this4 = this;
 
-    return Model;
+                return new Promise(function (resolve, reject) {
+                    var settings = _this4.getFetchSettings();
+                    _this4.fetchXHR = http_1.Http.get(settings.url, {
+                        params: _this4.getFetchParams()
+                    }).then(function (response) {
+                        if (!_this4.isDestroyed) {
+                            if (helpers_1.Helpers.isString(response.data)) {
+                                response = JSON.parse(response.data);
+                            }
+                            _this4.set(_this4.adapter(response.data));
+                            _this4.isFetchedState = true;
+                            _this4.trigger('fetched', response.data);
+                            resolve(response, response.data);
+                        }
+                    });
+                });
+            }
+        }, {
+            key: "save",
+            value: function save() {
+                var _this5 = this;
+
+                this.trigger('beforeSave');
+                return new Promise(function (resolve, reject) {
+                    var validateOptions = {
+                        mode: 'save'
+                    };
+                    if (_this5.validate(validateOptions)) {
+                        var settings = _this5.getSaveSettings();
+                        http_1.Http.post(settings.url, {
+                            params: _this5.getSaveParams()
+                        }).then(function (response) {
+                            if (helpers_1.Helpers.isString(response.data)) {
+                                response = JSON.parse(response.data);
+                            }
+                            _this5.trigger('saved');
+                            resolve(response.data);
+                        });
+                    } else {
+                        reject();
+                    }
+                });
+            }
+        }, {
+            key: "create",
+            value: function create() {
+                var _this6 = this;
+
+                this.trigger('beforeCreate');
+                return new Promise(function (resolve, reject) {
+                    var validateOptions = {
+                        mode: 'create'
+                    };
+                    if (_this6.validate(validateOptions)) {
+                        var settings = _this6.getCreateSettings();
+                        http_1.Http.put(settings.url, {
+                            params: _this6.getCreateParams()
+                        }).then(function (response) {
+                            if (helpers_1.Helpers.isString(response.data)) {
+                                response = JSON.parse(response.data);
+                            }
+                            _this6.trigger('created');
+                            resolve(response.data);
+                        });
+                    } else {
+                        reject();
+                    }
+                });
+            }
+        }, {
+            key: "remove",
+            value: function remove() {
+                var _this7 = this;
+
+                this.trigger('beforeRemove');
+                this.isRemovedState = true;
+                return new Promise(function (resolve, reject) {
+                    if (_this7.isRemoveReady()) {
+                        var settings = _this7.getRemoveSettings();
+                        http_1.Http.delete(settings.url, {
+                            params: _this7.getRemoveParams()
+                        }).then(function (response) {
+                            if (helpers_1.Helpers.isString(response.data)) {
+                                response = JSON.parse(response.data);
+                            }
+                            _this7.trigger('removed');
+                            resolve(response.data);
+                        });
+                    } else {
+                        _this7.trigger('removed');
+                        reject();
+                    }
+                });
+            }
+        }, {
+            key: "abort",
+            value: function abort() {
+                if (this.fetchXHR) {
+                    this.fetchXHR.abort();
+                    this.trigger('aborted');
+                }
+                return this;
+            }
+        }, {
+            key: "fetched",
+            value: function fetched() {
+                var _this8 = this;
+
+                return new Promise(function (resolve) {
+                    if (_this8.isFetched()) {
+                        resolve();
+                    } else {
+                        _this8.on('fetched', function () {
+                            resolve();
+                        });
+                    }
+                });
+            }
+        }, {
+            key: "setResponse",
+            value: function setResponse(response) {
+                this.set(this.adapter(response));
+                return this;
+            }
+        }, {
+            key: "isFetched",
+            value: function isFetched() {
+                return this.isFetchedState;
+            }
+        }, {
+            key: "isRemoved",
+            value: function isRemoved() {
+                return this.isRemovedState;
+            }
+        }, {
+            key: "isRemoveReady",
+            value: function isRemoveReady() {
+                return !!this.get(this.uniqueKey);
+            }
+        }, {
+            key: "isPending",
+            value: function isPending() {
+                return this.fetchXHR && this.fetchXHR.state() === 'pending';
+            }
+        }, {
+            key: "delegateEvents",
+            value: function delegateEvents() {
+                var _this9 = this;
+
+                if (this.events) {
+                    Object.keys(this.events).forEach(function (eventItem) {
+                        _this9.on(eventItem, _this9[_this9.events[eventItem]].bind(_this9));
+                    });
+                }
+                return this;
+            }
+        }, {
+            key: "adapter",
+            value: function adapter(srcAttr) {
+                return srcAttr;
+            }
+        }, {
+            key: "getUrl",
+            value: function getUrl() {
+                return this.url;
+            }
+        }, {
+            key: "getFetchParams",
+            value: function getFetchParams() {
+                var params = {};
+                params[this.uniqueKey] = this.get(this.uniqueKey);
+                return params;
+            }
+        }, {
+            key: "getSaveParams",
+            value: function getSaveParams() {
+                return helpers_1.Helpers.extend({}, this.toJSON());
+            }
+        }, {
+            key: "getCreateParams",
+            value: function getCreateParams() {
+                return helpers_1.Helpers.extend({}, this.toJSON());
+            }
+        }, {
+            key: "getRemoveParams",
+            value: function getRemoveParams() {
+                return helpers_1.Helpers.extend({}, {
+                    id: this.get('id')
+                });
+            }
+        }, {
+            key: "getFetchSettings",
+            value: function getFetchSettings() {
+                return {
+                    url: this.getUrl()
+                };
+            }
+        }, {
+            key: "getSaveSettings",
+            value: function getSaveSettings() {
+                return {
+                    url: this.getUrl(),
+                    type: 'post'
+                };
+            }
+        }, {
+            key: "getCreateSettings",
+            value: function getCreateSettings() {
+                return {
+                    url: this.getUrl(),
+                    type: 'post',
+                    abortCaptcha: function () {
+                        this.trigger('abortCaptcha');
+                    }.bind(this)
+                };
+            }
+        }, {
+            key: "getRemoveSettings",
+            value: function getRemoveSettings() {
+                return {
+                    url: this.getUrl(),
+                    type: 'post'
+                };
+            }
+        }]);
+
+        return Model;
+    }(event_1.EventEmitter);
+
+    Model.counter = 0;
+    exports.Model = Model;
 });
+//# sourceMappingURL=model.js.map;
 
-/*global requirejs*/
-/*jslint nomen: true */
 
-/**
- * Модуль представления
- *
- * @class
- * @name View
- * @abstract
- * @augments Event
- */
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-define('view',[
-    'jquery',
-    'event',
-    'utils/helpers'
-], function (
-    $,
-    EventEmitter,
-    Helpers
-) {
-    'use strict';
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-    var View,
-        cachedTemplates = {};
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-    View = EventEmitter.extend({
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-        create: function () {
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-            /**
-             * Модель, связанная с представлением
-             *
-             * @type {Model}
-             * @memberOf View
-             */
-            this.model = this.options.model;
+define('view',["require", "exports", "./event", "./element", "./utils/helpers"], function (require, exports, event_1, element_1, helpers_1) {
+    "use strict";
 
-            /**
-             * Корневой jQuery элемент
-             *
-             * @type {jQuery}
-             * @memberOf View
-             */
-            this.$el = $();
+    Object.defineProperty(exports, "__esModule", { value: true });
 
-            /**
-             * jQuery элементы созданные при рендеринге
-             *
-             * @type {jQuery}
-             * @memberOf View
-             */
-            this.$els = $();
+    var View = function (_event_1$EventEmitter) {
+        _inherits(View, _event_1$EventEmitter);
 
-            /**
-             * Корневой Dom элемент
-             *
-             * @type {Element}
-             * @memberOf View
-             */
-            this.el = null;
+        function View(options) {
+            var _ret;
 
-            /**
-             * Обработчики событий на Dom элементах
-             *
-             * @type {Object}
-             * @private
-             * @memberOf View
-             */
-            this._domEventHandlers = {};
+            _classCallCheck(this, View);
 
-            /**
-             * Обещание рендеринга
-             *
-             * @type {Promise}
-             * @private
-             * @memberOf View
-             */
-            this.promiseRender = new Promise(function (resolve) {
-                this.on('render', resolve);
-            }.bind(this));
+            var _this = _possibleConstructorReturn(this, (View.__proto__ || Object.getPrototypeOf(View)).call(this, options));
 
-            /**
-             * Обещание загрузки css
-             *
-             * @type {Promise}
-             * @private
-             * @memberOf View
-             */
-            this.promiseCss = new Promise(function (resolve) {
-                this.on('cssLoad', resolve);
-            }.bind(this));
+            _this._isReady = false;
+            _this._isRendered = false;
+            _this.events = {};
+            _this.elements = {};
+            _this.css = [];
+            _this.optionsSelector = 'script[type="text/plain"]';
+            _this.model = _this.options.model;
+            _this.$el = null;
+            _this._domEventHandlers = {};
+            _this.promiseRender = new Promise(function (resolve, reject) {
+                _this.on('render', resolve);
+            });
+            _this.promiseCss = new Promise(function (resolve, reject) {
+                _this.on('cssLoad', resolve);
+            });
+            Promise.all([_this.promiseRender, _this.promiseCss]).then(_this.onViewReady.bind(_this));
+            _this.loadCss();
+            return _ret = _this, _possibleConstructorReturn(_this, _ret);
+        }
 
-            Promise.all([this.promiseRender, this.promiseCss]).then(this.onViewReady.bind(this));
-
-            this.loadCss();
-
-            return this;
-        },
-
-        props: {
-
-            /**
-             * Массив подключаемых css файлов
-             *
-             * @type {Array.<String>}
-             * @memberOf View
-             */
-            css: [],
-
-            /**
-             * События, назначающиеся Dom элементам
-             *
-             * @type {Object}
-             * @memberOf View
-             */
-            events: {},
-
-            /**
-             * Кеширующиеся Dom элементы
-             *
-             * @type {Object}
-             * @memberOf View
-             */
-            elements: {},
-
-            /**
-             * Селектор элемента, в котором находится JSON с опциями
-             *
-             * @type {String}
-             * @memberOf View
-             */
-            optionsSelector: 'script[type="text/plain"]',
-
-            /**
-             * Автоматически удалять DOM-элемент при уничтожении
-             *
-             * @type {Boolean}
-             * @memberOf View
-             */
-            autoRemove: true
-
-        },
-
-        public: {
-
-            /**
-             * Уничтожение
-             *
-             * @returns {View}
-             * @memberOf View
-             */
-            destroy: function () {
+        _createClass(View, [{
+            key: "init",
+            value: function init() {
+                return this;
+            }
+        }, {
+            key: "destroy",
+            value: function destroy() {
                 if (!this.isDestroyed) {
                     this.unDelegateEvents();
-
-                    if (Helpers.isjQueryObject(this.$el)) {
+                    if (helpers_1.Helpers.isjQueryObject(this.$el)) {
                         this.$el.off();
-
-                        if (this.autoInit && this.autoRemove) {
-                            this.$el.remove();
-                        }
                     }
-                    if (Helpers.isjQueryObject(this.$els)) {
-                        this.$els.off();
-
-                        if (this.autoInit && this.autoRemove) {
-                            this.$els.remove();
-                        }
-                    }
-
                     delete this.$el;
-                    delete this.el;
                     delete this.model;
                     delete this._domEventHandlers;
                 }
-
-                View.__super__.destroy.call(this);
-
+                _get(View.prototype.__proto__ || Object.getPrototypeOf(View.prototype), "destroy", this).call(this);
                 return this;
-            },
-
-            /**
-             * Получение корневого элемента
-             *
-             * @returns {jQuery}
-             * @memberOf View
-             */
-            getElement: function () {
-                return this.$el;
-            },
-
-            /**
-             * Добавление обрабочика готовности
-             *
-             * @param {Function} callback обработчик
-             * @returns {Promise}
-             * @memberOf View
-             */
-            ready: function (callback) {
-                return new Promise(function (resolve) {
-                    if (this._isReady) {
-                        resolve();
-                        if (Helpers.isFunction(callback)) {
-                            callback();
-                        }
-                    } else {
-                        if (Helpers.isFunction(callback)) {
-                            this.on('ready', callback);
-                        }
-                        this.on('ready', resolve);
-                    }
-                }.bind(this));
-            },
-
-            /**
-             * Рендеринг шаблона
-             *
-             * @param {String} [options.template = 'main'] идентификатор шаблона или путь к нему
-             * @param {String} [options.data] данные, передаваемые в шаблон
-             * @param {String} options.type тип рендеринга (при значении 'plain' выполняется только непосредственно рендеринг и возвращается строка с html)
-             * @param {Function} callback функция, в которую будет передан созданный jQuery элемент
-             * @returns {Promise}
-             * @memberOf View
-             */
-            render: function (options, callback) {
-                var args = arguments;
-
-                webConsole.time('before render');
-                return new Promise(function (resolve) {
-                    var templateId,
-                        modelData,
-                        data,
-                        templatePath;
-
-                    options = options || {};
-
-                    if (Helpers.isFunction(options)) {
-                        callback = options;
-                        options = {};
-                    }
-
-                    if (Helpers.isPlainObject(options) && !options.template) {
-                        options = {
-                            data: options
-                        };
-                    }
-
-                    if (Helpers.isString(options)) {
-                        options = {
-                            template: options
-                        };
-                        if (Helpers.isPlainObject(callback)) {
-                            options.data = callback;
-                            callback = args[2];
-                        }
-                    }
-
-                    if (this.model) {
-                        modelData = this.model.toJSON();
-                    }
-
-
-                    data = Helpers.extend(true, {}, modelData, options.data, {
-                        locales: (this.options && this.options.locales) || options.locales,
-                        options: this.options
-                    });
-
-                    templateId = options.template || 'main';
-
-                    if (this.templates[templateId]) {
-                        templatePath = this.templates[templateId];
-                    } else {
-                        templatePath = templateId;
-                    }
-
-                    webConsole.timeEnd('before render', '/logs/render');
-                    if (templatePath) {
-                        webConsole.time('require template');
-                        this.constructor.getTemplate(templatePath, function (template) {
-                            var html,
-                                $html;
-
-                            webConsole.timeEnd('require template', '/logs/render');
-                            if (!this.isDestroyed) {
-                                webConsole.time('handlebars');
-                                html = template(data).trim();
-                                webConsole.timeEnd('handlebars', '/logs/render');
-
-                                if (options.type === 'plain') {
-                                    resolve(html);
-                                    if (Helpers.isFunction(callback)) {
-                                        callback(html);
-                                    }
-                                } else {
-                                    webConsole.time('after render');
-
-                                    $html = html.string ? $(html.string) : $(html);
-
-                                    if (templateId === 'main') {
-                                        this.setElement($html);
-                                    } else {
-                                        if (this.options.isCollectElements) {
-                                            this.$els = this.$els.add($html);
-                                        }
-                                        this.updateElements();
-                                    }
-
-                                    this._isRendered = true;
-                                    this.delegateEvents();
-
-                                    if (Helpers.isFunction(this.onRender) && templateId === 'main') {
-                                        this.onRender();
-                                    }
-                                    webConsole.timeEnd('after render', '/logs/render');
-                                    this.trigger('render', {
-                                        templateId: templateId
-                                    });
-
-                                    resolve($html);
-                                    if (Helpers.isFunction(callback)) {
-                                        callback($html);
-                                    }
-                                }
-                            }
-                        }.bind(this));
-                    }
-                }.bind(this));
-            },
-
-            /**
-             * Проверка отрендерен ли шаблон
-             *
-             * @returns {Boolean}
-             * @memberOf View
-             */
-            isRendered: function () {
-                return this._isRendered;
-            },
-
-            /**
-             * Выполнение функции после рендеринга
-             *
-             * @param {Function} callback
-             * @param {Boolean} [isSingle = false] выполнить обработчик только один раз
-             * @memberOf View
-             */
-            rendered: function (callback, isSingle) {
-                return new Promise(function (resolve) {
-                    if (this.isRendered()) {
-                        resolve();
-                        if (Helpers.isFunction(callback)) {
-                            callback();
-                        }
-                    } else {
-                        if (Helpers.isFunction(callback)) {
-                            this.on('render', callback, isSingle);
-                        }
-                        this.on('render', resolve);
-                    }
-                }.bind(this));
-            },
-
-            /**
-             * Удаление отрендеренного Dom элемента
-             *
-             * @param {jQuery} $el Dom элемент для удаления
-             * @memberOf View
-             */
-            remove: function ($el) {
-                if (Helpers.isNode($el)) {
-                    $el = $($el);
-                }
-                this.$els.each(function (index, el) {
-                    if (el === $el.get(0)) {
-                        this.$els.splice(index, 1);
-                    }
-                }.bind(this));
             }
+        }, {
+            key: "getElement",
+            value: function getElement() {
+                return this.$el;
+            }
+        }, {
+            key: "ready",
+            value: function ready(callback) {
+                var _this2 = this;
 
-        },
+                return new Promise(function (resolve, reject) {
+                    if (_this2._isReady) {
+                        resolve();
+                        if (helpers_1.Helpers.isFunction(callback)) {
+                            callback();
+                        }
+                    } else {
+                        if (helpers_1.Helpers.isFunction(callback)) {
+                            _this2.on('ready', callback);
+                        }
+                        _this2.on('ready', resolve);
+                    }
+                });
+            }
+        }, {
+            key: "getTemplatePath",
+            value: function getTemplatePath() {
+                return this.template;
+            }
+        }, {
+            key: "render",
+            value: function render(vars) {
+                var _this3 = this;
 
-        protected: {
+                vars = vars || {};
+                return new Promise(function (resolve, reject) {
+                    var modelData = void 0,
+                        data = void 0;
+                    if (_this3.model) {
+                        modelData = _this3.model.toJSON();
+                    }
+                    data = helpers_1.Helpers.extend({}, modelData, vars, {
+                        locales: _this3.options && _this3.options.locales || vars.locales || {},
+                        options: _this3.options
+                    });
+                    window.requirejs([_this3.getTemplatePath()], function (template) {
+                        var html = void 0,
+                            $html = void 0,
+                            element = document.createElement('div');
+                        if (!_this3.isDestroyed) {
+                            html = template(data).trim();
+                            element.innerHTML = html;
+                            $html = new element_1.DomElement(element.firstElementChild);
+                            _this3.setElement($html);
+                            _this3._isRendered = true;
+                            _this3.delegateEvents();
+                            _this3.trigger('render');
+                            resolve($html);
+                        }
+                    });
+                });
+            }
+        }, {
+            key: "isRendered",
+            value: function isRendered() {
+                return this._isRendered;
+            }
+        }, {
+            key: "rendered",
+            value: function rendered(callback, isSingle) {
+                var _this4 = this;
 
-            /**
-             * Установка корневого Dom элемента
-             *
-             * @param {jQuery} $el элемент
-             * @returns {View}
-             * @private
-             * @memberOf View
-             */
-            setElement: function ($el) {
-                if (Helpers.isjQueryObject($el)) {
-                    this.$el = $el;
-                    this.el = this.$el.get(0);
-                } else if (Helpers.isNode($el)) {
-                    this.$el = $($el);
-                    this.el = $el;
-                }
-
+                return new Promise(function (resolve, reject) {
+                    if (_this4.isRendered()) {
+                        resolve();
+                        if (helpers_1.Helpers.isFunction(callback)) {
+                            callback();
+                        }
+                    } else {
+                        if (helpers_1.Helpers.isFunction(callback)) {
+                            _this4.on('render', callback, isSingle);
+                        }
+                        _this4.on('render', resolve);
+                    }
+                });
+            }
+        }, {
+            key: "setElement",
+            value: function setElement($el) {
+                this.$el = $el;
                 this.updateElements();
-
                 return this;
-            },
+            }
+        }, {
+            key: "delegateEvents",
+            value: function delegateEvents() {
+                var _this5 = this;
 
-            /**
-             * Назначение обработчиков событий
-             *
-             * @returns {View}
-             * @private
-             * @memberOf View
-             */
-            delegateEvents: function () {
                 if (!this.isDestroyed) {
                     this.unDelegateEvents();
-
                     Object.keys(this.events).forEach(function (eventItem) {
                         var eventData = eventItem.match(/^(\S+)(?: ([\w\W]*))?/),
-                            eventHandlerData = this.events[eventItem],
+                            eventHandlerData = _this5.events[eventItem],
                             isDelegate = true,
                             isThrottled = false,
                             isPreventDefault = false,
@@ -4142,39 +5038,31 @@ define('view',[
                             eventType = eventData[1],
                             eventSelector = eventData[2],
                             $delegator;
-
-                        if (Helpers.isString(eventHandlerData)) {
-                            handler = this[eventHandlerData];
-                        } else if (Helpers.isObject(eventHandlerData)) {
-                            handler = this[eventHandlerData.method];
+                        if (helpers_1.Helpers.isString(eventHandlerData)) {
+                            handler = _this5[eventHandlerData];
+                        } else if (helpers_1.Helpers.isObject(eventHandlerData)) {
+                            handler = _this5[eventHandlerData.method];
                             isDelegate = eventHandlerData.delegate !== false;
                             throttling = eventHandlerData.throttling;
                             isPreventDefault = eventHandlerData.preventDefault || false;
                             isStopPropagation = eventHandlerData.stopPropagation || false;
                         }
-
-                        if (Helpers.isFunction(handler)) {
-                            this._domEventHandlers[eventItem] = function (event, data) {
-                                var $target;
-
+                        if (helpers_1.Helpers.isFunction(handler)) {
+                            _this5._domEventHandlers[eventItem] = function (event, data) {
+                                var $target = new element_1.DomElement(event.target);
                                 if (isPreventDefault) {
                                     event.preventDefault();
                                 }
-
                                 if (isStopPropagation) {
                                     event.stopPropagation();
                                 }
-
                                 if (eventSelector) {
-                                    if ($(event.target).is(eventSelector)) {
-                                        $target = $(event.target);
-                                    } else {
-                                        $target = $(event.target).closest(eventSelector);
+                                    if (!$target.is(eventSelector)) {
+                                        $target = $target.closest(eventSelector)[0];
                                     }
                                 } else {
                                     $target = this.$el;
                                 }
-
                                 if (throttling) {
                                     if (!isThrottled) {
                                         isThrottled = true;
@@ -4186,378 +5074,175 @@ define('view',[
                                 } else {
                                     handler.call(this, $target, event, data);
                                 }
-
-                            }.bind(this);
-
-                            if (eventType === 'input' && $.browser.msie && $.browser.version <= 11) {
-                                eventType = 'keyup';
-                            }
-
-                            if (this.options.isCollectElements) {
-                                $delegator = this.$el.add(this.$els);
-                            } else {
-                                $delegator = this.$el;
-                            }
-
+                            }.bind(_this5);
                             if (eventSelector) {
-                                if (isDelegate) {
-                                    $delegator.on(eventType, eventSelector, this._domEventHandlers[eventItem]);
-                                } else {
-                                    $delegator.find(eventSelector).on(eventType, this._domEventHandlers[eventItem]);
-                                }
+                                _this5.$el.find(eventSelector).forEach(function ($el) {
+                                    $el.on(eventType, _this5._domEventHandlers[eventItem]);
+                                });
                             } else {
-                                $delegator.on(eventType, this._domEventHandlers[eventItem]);
+                                _this5.$el.on(eventType, _this5._domEventHandlers[eventItem]);
                             }
                         }
-                    }.bind(this));
+                    });
                 }
-
                 return this;
-            },
+            }
+        }, {
+            key: "unDelegateEvents",
+            value: function unDelegateEvents() {
+                var _this6 = this;
 
-            /**
-             * Удаление обработчиков событий
-             *
-             * @returns {View}
-             * @private
-             * @memberOf View
-             */
-            unDelegateEvents: function () {
                 if (!this.isDestroyed) {
                     Object.keys(this.events).forEach(function (eventItem) {
                         var eventData = eventItem.match(/^(\S+)(?: ([\w\W]*))?/),
-                            eventType = eventData[1],
-                            eventSelector = eventData[2];
-
-                        if (this._domEventHandlers && Helpers.isFunction(this._domEventHandlers[eventItem]) && Helpers.isjQueryObject(this.$el)) {
-                            if (eventSelector) {
-                                this.$el.add(this.$els).off(eventType, eventSelector, this._domEventHandlers[eventItem]);
-                            } else {
-                                this.$el.add(this.$els).off(eventType, this._domEventHandlers[eventItem]);
-                            }
+                            eventType = eventData[1];
+                        if (_this6._domEventHandlers && helpers_1.Helpers.isFunction(_this6._domEventHandlers[eventItem]) && helpers_1.Helpers.isjQueryObject(_this6.$el)) {
+                            _this6.$el.off(eventType, _this6._domEventHandlers[eventItem]);
                         }
-                    }.bind(this));
+                    });
                 }
-
                 return this;
-            },
+            }
+        }, {
+            key: "updateElements",
+            value: function updateElements() {
+                var _this7 = this;
 
-            /**
-             * Обновление закешированных Dom элементов
-             *
-             * @private
-             * @memberOf View
-             */
-            updateElements: function () {
-                if (Helpers.isjQueryObject(this.$el)) {
+                if (this.$el) {
                     Object.keys(this.elements).forEach(function (item) {
-                        var selector = this.elements[item],
+                        var selector = _this7.elements[item],
                             $el,
-                            $filter;
-
-                        if (this.options.isCollectElements) {
-                            $el = this.$el.add(this.$els).find(selector).add(this.$els.filter(selector));
-
-                            if ($el.size() === 0) {
-                                $filter = this.$el.filter(selector);
-                                if ($filter.size() !== 0) {
-                                    $el = $filter;
-                                }
-                            }
-                            if ($el.size() === 0) {
-                                this.$els.each(function (index, el) {
-                                    if ($(el).is(selector)) {
-                                        $el = $(el);
-                                    }
-                                });
-                            }
+                            $find;
+                        $find = _this7.$el.find(selector);
+                        if ($find.length === 1) {
+                            $el = $find[0];
                         } else {
-                            $el = this.$el.find(selector);
+                            $el = $find;
                         }
-
-                        this['$' + item] = $el;
-                    }.bind(this));
+                        _this7['$' + item] = $el;
+                    });
                 }
-
                 return this;
-            },
-
-            /**
-             * Сброс отрендеренных элементов
-             */
-            clearEls: function () {
-                this.$els = $();
-                return this;
-            },
-
-            /**
-             * Парсинг опций
-             *
-             * @private
-             * @memberOf View
-             */
-            parseOptions: function () {
+            }
+        }, {
+            key: "parseOptions",
+            value: function parseOptions() {
                 var options;
                 try {
                     options = JSON.parse(this.$el.find(this.optionsSelector).html().replace(/\r|\n|\t|\s{2,}/g, ''));
                 } catch (err) {
                     options = {};
                 }
-
-                this.options = Helpers.extend(true, {}, this.defaultOptions, this.options, options);
-            },
-
-            /**
-             * Загрузка css файлов
-             *
-             * @private
-             * @memberOf View
-             */
-            loadCss: function () {
+                this.options = helpers_1.Helpers.extend({}, this.defaultOptions, this.options, options);
+            }
+        }, {
+            key: "loadCss",
+            value: function loadCss() {
                 var promises = [];
-
                 this.css.forEach(function (item) {
-                    promises.push(new Promise(function (resolve) {
+                    promises.push(new Promise(function (resolve, reject) {
                         window.requirejs(['util/css-manager'], function (CssManager) {
                             CssManager.require(item, resolve);
                         });
                     }));
                 });
                 Promise.all(promises).then(this.trigger.bind(this, 'cssLoad'));
-            },
-
-            /**
-             * Обработчик готовности
-             *
-             * @private
-             * @memberOf View
-             */
-            onViewReady: function () {
+            }
+        }, {
+            key: "onViewReady",
+            value: function onViewReady() {
                 this.trigger('ready');
                 this._isReady = true;
             }
-
-        },
-
-        static: {
-
-            create: function (options) {
-                var self = new this(options);
-
-                return {
-                    onLoad: function ($el, isNotCallInit) {
-                        self.setElement($el);
-                        self.loadCss();
-                        self.parseOptions();
-                        self.delegateEvents();
-                        if (!isNotCallInit) {
-                            self.init();
-                        }
-
-                        return self;
-                    },
-
-                    onUnload: function () {
-                        self.destroy();
-
-                        return self;
-                    }
-                };
-            },
-
-            createRunTime: function (options, $el, isNotCallInit) {
-                if (Helpers.isjQueryObject(options)) {
+        }], [{
+            key: "createRunTime",
+            value: function createRunTime(options, $el) {
+                var module = void 0;
+                if (helpers_1.Helpers.isNode(options)) {
                     $el = options;
                     options = {};
                 }
-                if (Helpers.isNode(options)) {
-                    $el = $(options);
-                    options = {};
-                }
-
-                if (!Helpers.isjQueryObject($el) && Helpers.isNode($el)) {
-                    $el = $($el);
-                }
-
-                return this.create(options).onLoad($el, isNotCallInit);
-            },
-
-
-            /**
-             * Получение откомпилированного шаблона
-             *
-             * @param {String} templatePath путь к шаблону
-             * @param callback функция, в которую будет передана функция-шаблон
-             */
-            getTemplate: function (templatePath, callback) {
-                if (Helpers.isFunction(callback)) {
-                    if (cachedTemplates[templatePath]) {
-                        callback(cachedTemplates[templatePath]);
-                    } else {
-                        requirejs([templatePath], function (template) {
-                            cachedTemplates[templatePath] = template;
-                            callback(template);
-                        });
-                    }
-                }
-            },
-
-            renderListPlain: function (options) {
-                return new Promise(function (resolve) {
-                    var promises;
-
-                    promises = options.data.map(function (item) {
-                        return this.prototype.render({
-                            template: options.template,
-                            locales: options.locales,
-                            data: item,
-                            type: 'plain'
-                        });
-                    }.bind(this));
-
-                    Promise.all(promises).then(function (results) {
-                        var html = results.join('');
-
-                        if (Helpers.isFunction(options.callback)) {
-                            options.callback(html);
-                        }
-
-                        resolve(html);
-                    }.bind(this));
-                }.bind(this));
-            },
-
-            renderList: function (options) {
-                return new Promise(function (resolve) {
-                    this.renderListPlain({
-                        template: options.template || 'main',
-                        data: options.data,
-                        locales: options.locales
-                    }).then(function (html) {
-                        var element,
-                            views = [],
-                            result = {
-                                html: html
-                            },
-                            viewOptions = options.viewOptions || {},
-                            i = 0;
-
-                        if (options.$container) {
-                            element = options.$container.get(0).lastChild;
-                            options.$container.append(html);
-
-                            if (Helpers.isFunction(options.callback)) {
-                                options.callback(result);
-                            }
-                            resolve(result);
-
-                            if (!options.isNoCreateViews) {
-                                if (!element) {
-                                    element = options.$container.get(0).firstChild;
-                                } else {
-                                    element = element.nextSibling;
-                                }
-
-                                while (element) {
-                                    if (options.models) {
-                                        viewOptions.model = options.models[i];
-                                    }
-
-                                    views.push(this.createRunTime(Helpers.isArray(viewOptions) ? viewOptions[i] : viewOptions, element));
-                                    element = element.nextSibling;
-                                    i++;
-                                }
-
-                                if (Helpers.isFunction(options.onViewsCreated)) {
-                                    options.onViewsCreated(views);
-                                }
-                            }
-                        }
-                    }.bind(this));
-                }.bind(this));
+                module = new this(options).setElement(new element_1.DomElement($el));
+                module.init();
+                return module;
             }
+        }]);
 
-        }
-    });
+        return View;
+    }(event_1.EventEmitter);
 
-    return View;
+    exports.View = View;
 });
+//# sourceMappingURL=view.js.map;
 
-/**
- * Модуль маршрутизатора
- *
- * @class
- * @name Router
- * @augments Event
- */
 
-define('router',[
-    'jquery',
-    'event',
-    'utils/helpers'
-], function (
-    $,
-    EventEmitter,
-    Helpers
-) {
-    'use strict';
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-    var Router = EventEmitter.extend({
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-        autoInit: true,
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-        props: {
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-            defaultOptions: {
-                linkSelector: '.js-router-link,.sp-music-booster,[type="booster"]',
+define('router',["require", "exports", "./event", "./element", "./utils/helpers"], function (require, exports, event_1, element_1, helpers_1) {
+    "use strict";
+
+    Object.defineProperty(exports, "__esModule", { value: true });
+
+    var Router = function (_event_1$EventEmitter) {
+        _inherits(Router, _event_1$EventEmitter);
+
+        function Router(options) {
+            _classCallCheck(this, Router);
+
+            var _this = _possibleConstructorReturn(this, (Router.__proto__ || Object.getPrototypeOf(Router)).call(this, options));
+
+            _this.options = helpers_1.Helpers.extend({
+                linkSelector: '[routeLink]',
                 activeSelector: 'js-router-link_active',
                 routes: {}
-            }
+            }, _this.options);
+            _this.routes = {};
+            Object.keys(_this.options.routes).forEach(function (route) {
+                return _this.route(route, _this.options.routes[route]);
+            });
+            window.addEventListener('popstate', function () {
+                return _this.checkRoutes(window.history.state, true);
+            });
+            document.body.addEventListener('click', function (event) {
+                if (new element_1.DomElement(event.target).closest(_this.options.linkSelector)) {
+                    _this.onLinkClick(event);
+                }
+            });
+            return _this;
+        }
 
-        },
-
-        create: function () {
-            this.routes = {};
-
-            Object.keys(this.options.routes).forEach(function (route) {
-                this.route(route, this.options.routes[route]);
-            }.bind(this));
-
-            $(window).on('popstate', function () {
-                return this.checkRoutes(window.history.state, true);
-            }.bind(this));
-
-            $(document.body).on('click', this.options.linkSelector, this.onLinkClick.bind(this));
-        },
-
-        public: {
-
-            init: function (url) {
+        _createClass(Router, [{
+            key: "init",
+            value: function init(url) {
                 this.checkRoutes({
                     url: url
                 }, false);
-            },
-
-            route: function (routeUrl, callback) {
-                var route,
-                    namedParams;
-
-                if (Helpers.isFunction(callback)) {
+            }
+        }, {
+            key: "route",
+            value: function route(routeUrl, callback) {
+                var route, namedParams;
+                if (helpers_1.Helpers.isFunction(callback)) {
                     route = {
                         callback: callback
                     };
-                } else if (Helpers.isString(callback)) {
+                } else if (helpers_1.Helpers.isString(callback)) {
                     route = {
                         module: callback
                     };
-                } else if (Helpers.isPlainObject(callback)) {
+                } else if (helpers_1.Helpers.isPlainObject(callback)) {
                     route = {
                         module: callback.module,
                         callback: callback.callback,
                         reload: callback.reload
                     };
                 }
-
                 if (route) {
                     route.params = [];
                     namedParams = routeUrl.match(/:\w+/g);
@@ -4566,1277 +5251,444 @@ define('router',[
                             route.params.push(param.slice(1));
                         });
                     }
-                    routeUrl = routeUrl
-                        .replace(/:\w+/g, '([^\/]+)')
-                        .replace(/\*\w+/g, '(.*?)');
-
+                    routeUrl = routeUrl.replace(/:\w+/g, '([^\/]+)').replace(/\*\w+/g, '(.*?)');
                     if (['default', 'error404', 'error500'].indexOf(routeUrl) === -1) {
                         routeUrl = '^' + routeUrl + '$';
                     }
-
                     this.routes[routeUrl] = route;
                 }
-            },
+            }
+        }, {
+            key: "checkRoutes",
+            value: function checkRoutes(state, load, response) {
+                var _this2 = this;
 
-            checkRoutes: function (state, load, response) {
-                var url = (state && (state.url || state.hash)) || window.location.pathname,
-                    path = url
-                        .split('?')[0]
-                        .replace(/\/{2,}/g, '/'),
+                var url = state && (state.url || state.hash) || window.location.pathname,
+                    path = url.split('?')[0].replace(/\/{2,}/g, '/'),
                     query = {},
                     isFound = false;
-
                 if (url.indexOf('?') !== -1) {
                     url.split('?')[1].split('&').forEach(function (item) {
                         var queryItem = item.split('=');
-
                         query[queryItem[0]] = queryItem[1];
                     });
                 }
-
                 Object.keys(this.routes).forEach(function (routeUrl) {
                     var regex = new RegExp(routeUrl),
-                        route = this.routes[routeUrl],
+                        route = _this2.routes[routeUrl],
                         paramValues,
                         params = {};
-
                     if (regex.test(path)) {
                         paramValues = regex.exec(path).slice(1);
                         route.params.forEach(function (paramName, index) {
-                            params[paramName] = paramValues[index];
+                            return params[paramName] = paramValues[index];
                         });
-
-                        if (load && (route.reload || (this.currentRoute && this.currentRoute.reload))) {
+                        if (load && (route.reload || _this2.currentRoute && _this2.currentRoute.reload)) {
                             location.reload();
                         } else {
-                            this.proccessingRoute(route, params, query, load, response);
+                            _this2.proccessingRoute(route, params, query, load, response);
                         }
-
-                        this.currentRoute = route;
-
+                        _this2.currentRoute = route;
                         isFound = true;
                     }
-                }.bind(this));
-
+                });
                 if (!isFound && this.routes.default) {
                     this.proccessingRoute(this.routes.default, {}, query, load, response);
                 }
-            },
-
-            error404: function (load, response) {
+            }
+        }, {
+            key: "error404",
+            value: function error404(load, response) {
                 this.proccessingRoute(this.routes.error404, {}, {}, load, response);
-            },
+            }
+        }, {
+            key: "proccessingRoute",
+            value: function proccessingRoute(route, params, query, load, response) {
+                var _this3 = this;
 
-            proccessingRoute: function (route, params, query, load, response) {
-                if (Helpers.isFunction(route.callback)) {
+                if (helpers_1.Helpers.isFunction(route.callback)) {
                     route.callback(load, params);
                 }
-                if (Helpers.isString(route.module)) {
-                    this.require(route.module, function (Page) {
-                        var oldPage = this.currentPage;
-
+                if (helpers_1.Helpers.isString(route.module)) {
+                    this.require(route.module, function (PageClass) {
+                        var oldPage = _this3.currentPage;
                         if (load) {
                             if (oldPage && oldPage.isPending()) {
                                 oldPage.abort();
                             }
-
-                            this.currentPage = new Page({
+                            _this3.currentPage = new PageClass({
                                 isRunTimeCreated: true,
                                 request: {
+                                    url: location.pathname,
                                     params: params,
                                     query: query
                                 }
                             });
-
-                            this.trigger('route', {
-                                page: this.currentPage
+                            _this3.trigger('route', {
+                                page: _this3.currentPage
                             });
-
-                            if (this.currentPage.isNeedLoad()) {
+                            if (_this3.currentPage.isNeedLoad()) {
                                 if (!response) {
-                                    this.currentPage.load();
+                                    _this3.currentPage.load();
                                 } else {
-                                    this.currentPage.setResponse(response);
-                                    this.currentPage.onLoadSuccess();
+                                    _this3.currentPage.setResponse(response);
+                                    _this3.currentPage.onLoadSuccess();
                                 }
                             } else {
-                                this.currentPage.onLoadSuccess();
+                                _this3.currentPage.onLoadSuccess();
                             }
-
-                            this.currentPage.on('render', function () {
+                            _this3.currentPage.on('render', function () {
                                 if (oldPage) {
                                     oldPage.destroy();
                                 }
                                 setTimeout(function () {
                                     this.currentPage.initPage();
-                                    this.currentPage.afterInitPage();
                                 }.bind(this));
-                            }.bind(this));
+                            }.bind(_this3));
                         } else {
-                            this.currentPage = Page.createRunTime(
-                                {
-                                    isRunTimeCreated: false,
-                                    request: {
-                                        params: params,
-                                        query: query
-                                    }
-                                },
-                                $('[data-routing-page="' + route.module + '"]'),
-                                true
-                            );
-
-                            this.trigger('route', {
-                                page: this.currentPage
+                            _this3.currentPage = PageClass.createRunTime({
+                                isRunTimeCreated: false,
+                                request: {
+                                    params: params,
+                                    query: query
+                                }
+                            }, document.querySelector('[data-routing-page="' + route.module + '"]'));
+                            _this3.trigger('route', {
+                                page: _this3.currentPage
                             });
-                            this.currentPage.initPage();
-                            this.currentPage.afterInitPage();
+                            _this3.currentPage.initPage();
                         }
-                    }.bind(this));
+                    });
                 }
-            },
-
-            go: function (url) {
+            }
+        }, {
+            key: "go",
+            value: function go(url) {
                 window.history.pushState({
-                    url : url
+                    url: url
                 }, null, url);
-
                 this.checkRoutes({
                     url: url
                 }, true);
-            },
-
-            navigate: function (url) {
-                this.go(url);
-            },
-
-            update: function () {
+            }
+        }, {
+            key: "update",
+            value: function update() {
                 var url = window.location.pathname + window.location.search;
-
                 this.go(url);
             }
-
-        },
-
-        protected: {
-
-            onLinkClick: function (event) {
-                var $target = $(event.target),
-                    $link = $target.closest(this.options.linkSelector);
-
-                if (!$link.size()) {
+        }, {
+            key: "onLinkClick",
+            value: function onLinkClick(event) {
+                var $target = new element_1.DomElement(event.target),
+                    $links = $target.closest(this.options.linkSelector),
+                    $link = void 0;
+                if (!$links.length) {
                     $link = $target;
+                } else {
+                    $link = $links[0];
                 }
-
-                webConsole.time('full processing page');
-
                 if (event.ctrlKey || event.shiftKey || event.metaKey) {
                     return true;
                 }
                 event.preventDefault();
                 event.stopPropagation();
                 event.cancelBubble = true;
-
                 if (!$link.hasClass(this.options.activeSelector)) {
-                    this.go($link.attr('href').replace(/^http[s]?:\/\/[\w\d\._\-]+/, ''));
+                    var href = $link.attr('href');
+                    if (href) {
+                        this.go(href.replace(/^http[s]?:\/\/[\w\d\._\-]+/, ''));
+                    }
                 }
-
                 return false;
             }
-
-        },
-
-        static: {
-
-            instance: null,
-
-            init: function (url) {
+        }], [{
+            key: "init",
+            value: function init(url) {
                 if (!this.instance) {
                     this.instance = new this();
                 }
-
                 this.instance.checkRoutes({
                     url: url
                 }, false);
-            },
-
-            on: function () {
+            }
+        }, {
+            key: "on",
+            value: function on(event, handler) {
                 if (!this.instance) {
                     this.instance = new this();
                 }
-
                 return this.instance.on.apply(this.instance, arguments);
-            },
-
-            off: function () {
+            }
+        }, {
+            key: "off",
+            value: function off(event, handler) {
                 if (!this.instance) {
                     this.instance = new this();
                 }
-
                 return this.instance.off.apply(this.instance, arguments);
-            },
-
-            setOptions: function (options) {
+            }
+        }, {
+            key: "setOptions",
+            value: function setOptions(options) {
                 if (!this.instance) {
                     this.instance = new this(options);
                 }
+                this.instance.options = helpers_1.Helpers.extend({}, this.instance.options, options);
+            }
+        }, {
+            key: "route",
+            value: function route(routes, options) {
+                var _this4 = this;
 
-                this.instance.options = Helpers.extend(true, {}, this.instance.options, options);
-            },
-
-            route: function (routes) {
                 if (!this.instance) {
-                    this.instance = new this();
+                    this.instance = new this(options);
                 }
-
                 Object.keys(routes).forEach(function (route) {
-                    this.instance.route(route, routes[route]);
-                }.bind(this));
-            },
-
-            default: function (defaultRoute) {
+                    return _this4.instance.route(route, routes[route]);
+                });
+            }
+        }, {
+            key: "go",
+            value: function go(url) {
                 if (!this.instance) {
                     this.instance = new this();
                 }
-
-                this.instance.default(defaultRoute);
-            },
-
-            go: function (url) {
-                if (!this.instance) {
-                    this.instance = new this();
-                }
-
                 this.instance.go(url);
-            },
-
-            checkRoutes: function (state, load, response) {
+            }
+        }, {
+            key: "checkRoutes",
+            value: function checkRoutes(state, load, response) {
                 if (!this.instance) {
                     this.instance = new this();
                 }
-
                 this.instance.checkRoutes(state, load, response);
-            },
-
-            error404: function (load, response) {
+            }
+        }, {
+            key: "error404",
+            value: function error404(load, response) {
                 if (!this.instance) {
                     this.instance = new this();
                 }
-
                 this.instance.error404(load, response);
-            },
-
-            update: function () {
+            }
+        }, {
+            key: "update",
+            value: function update() {
                 if (!this.instance) {
                     this.instance = new this();
                 }
-
                 this.instance.update();
-            },
-
-            getCurrentPage: function () {
+            }
+        }, {
+            key: "getCurrentPage",
+            value: function getCurrentPage() {
                 var page = null;
-
                 if (this.instance) {
                     page = this.instance.currentPage;
                 }
-
                 return page;
             }
+        }]);
 
+        return Router;
+    }(event_1.EventEmitter);
+
+    Router.instance = null;
+    exports.Router = Router;
+});
+//# sourceMappingURL=router.js.map;
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+define('page',["require", "exports", "./view", "./utils/helpers", "./utils/http", "./router"], function (require, exports, view_1, helpers_1, http_1, router_1) {
+    "use strict";
+
+    Object.defineProperty(exports, "__esModule", { value: true });
+
+    var Page = function (_view_1$View) {
+        _inherits(Page, _view_1$View);
+
+        function Page(options) {
+            _classCallCheck(this, Page);
+
+            var _this = _possibleConstructorReturn(this, (Page.__proto__ || Object.getPrototypeOf(Page)).call(this, options));
+
+            _this.isAbortedState = false;
+            _this.pageOptions = {};
+            _this.pageResponse = {};
+            _this.options = helpers_1.Helpers.extend({
+                isRunTimeCreated: false,
+                isNeedLoad: true,
+                loadDataType: 'json',
+                pageOptionsSelector: '.b-page-config'
+            }, options);
+            return _this;
         }
 
-    });
-
-    return Router;
-
-});
-/*jslint nomen:true*/
-
-/**
- * Модуль коллекции
- *
- * @class
- * @name Collection
- * @abstract
- * @augments Event
- */
-
-define('collection',[
-    'event',
-    'utils/ajax',
-    'utils/helpers',
-    'utils/cookie'
-], function (
-    EventEmitter,
-    Ajax,
-    Helpers,
-    Cookie
-) {
-
-    'use strict';
-
-    var Collection = EventEmitter.extend({
-
-        create: function () {
-            this.ajaxSettings = Helpers.extend(this.options.ajaxSettings, {
-                url: this.options.url
-            });
-            this.ajaxParams = Helpers.extend(true, {}, this.options.ajaxParams);
-            this.items = [];
-            this.offset = 0;
-            this.init();
-
-            return this;
-        },
-
-        props: {
-
-            /**
-             * URL для получения данных
-             *
-             * @type {String}
-             */
-            url: '',
-
-            /**
-             * Параметры по умолчанию для всех коллекций
-             *
-             * @type {Object}
-             * @property {Object} ajaxParams параметры отправляемые на сервер
-             * @property {number} [limit = 50] параметр, лимитирующий размер выдачи
-             * @property {String} [ajaxSettings.dataType = json] тип получаемых от сервера данных
-             * @property {String} [ajaxSettings.type = get] http метод запроса на сервер
-             * @private
-             */
-            defaultOptions: {
-                ajaxParams: {},
-                limit: 50,
-                ajaxSettings: {
-                    dataType : 'json',
-                    type: 'get'
+        _createClass(Page, [{
+            key: "initPage",
+            value: function initPage() {
+                var $config = this.$el.find(this.options.pageOptionsSelector);
+                if ($config.length) {
+                    this.pageOptions = JSON.parse($config.html().replace(/\r|\n|\t|\s{2,}/g, ''));
                 }
+                this.trigger('pageLoad', {
+                    page: this.getPageName()
+                });
+                return this;
             }
-        },
+        }, {
+            key: "load",
+            value: function load() {
+                var _this2 = this;
 
-        public: {
-
-            /**
-             * Уничтожение
-             *
-             * @returns {Collection}
-             */
-            destroy: function () {
-                Collection.__super__.destroy.call(this);
-                delete this.items;
-
-                if (this.fetchXHR) {
-                    this.fetchXHR.abort();
-                    delete this.fetchXHR;
-                }
-
-                return this;
-            },
-
-            /**
-             * Установка одного параметра
-             *
-             * @param {String} key название параметра
-             * @param {String} value значение фильтра
-             * @returns {Collection}
-             */
-            setParam: function (key, value) {
-                this.ajaxParams[key] = value;
-
-                return this;
-            },
-
-            /**
-             * Установка нескольких параметра
-             *
-             * @param {String} key название параметра
-             * @param {String} value значение фильтра
-             * @returns {Collection}
-             */
-            setParams: function (params) {
-                Object.keys(params).forEach(function (key) {
-                    this.setParam(key, params[key]);
-                }.bind(this));
-
-                return this;
-            },
-
-            /**
-             * Получение значения параметра
-             *
-             * @param {String} key название параметра
-             * @returns {String}
-             */
-            getParam: function (key) {
-                return this.ajaxParams[key];
-            },
-
-            /**
-             * Удаление параметра
-             *
-             * @param {String} key название параметра
-             * @returns {Collection}
-             */
-            removeParam: function (key) {
-                delete this.ajaxParams[key];
-
-                return this;
-            },
-
-            /**
-             * Удаление всех параметров
-             *
-             * @param {String} key название параметра
-             * @returns {Collection}
-             */
-            removeParams: function () {
-                Object.keys(this.ajaxParams).forEach(function (item) {
-                    this.removeParam(item);
-                }.bind(this));
-
-                return this;
-            },
-
-            /**
-             * Получение данных с сервера
-             *
-             * @returns {Promise}
-             */
-            fetch: function () {
-                return new Promise(function (resolve, reject) {
-                    var userParams = this.getFetchParamsWithOffset(),
-                        fetchSettings = this.getFetchSettings() || {},
-                        userSettings = Helpers.extend({}, fetchSettings, {
-                            url: this.getUrl(),
-
-                            success: function (response) {
-                                var items;
-
-                                if (this.isDestroyed) {
-                                    return;
-                                }
-
-                                if (Helpers.isString(response)) {
-                                    response = JSON.parse(response);
-                                } else if (!Helpers.isObject(response)) {
-                                    response = {};
-                                }
-
-                                if (Helpers.isFunction(fetchSettings.success)) {
-                                    fetchSettings.success(response);
-                                }
-
-                                items = this.setResponse(response);
-
-                                this.trigger('fetched', {
-                                    items: items,
-                                    response: response
-                                });
-
-                                if (items.length === 0) {
-                                    this.trigger('end');
-                                }
-
-                                resolve(items);
-                            }.bind(this),
-
-                            error: function (jqXHR, textStatus) {
-                                if (Helpers.isFunction(fetchSettings.error)) {
-                                    fetchSettings.error(jqXHR, textStatus);
-                                }
-
-                                this.trigger('fetched', {
-                                    status: textStatus
-                                });
-                                reject(textStatus);
-                            }.bind(this)
-                        });
-
-                    this.fetchXHR = Ajax.send(Helpers.extend(userSettings, {
-                        data: userParams
-                    }));
-                }.bind(this));
-            },
-
-            abort: function () {
-                if (this.fetchXHR) {
-                    this.fetchXHR.abort();
-                    this.trigger('aborted');
-                }
-
-                return this;
-            },
-
-            isPending: function () {
-                return this.fetchXHR && this.fetchXHR.state() === 'pending';
-            },
-
-            setResponse: function (response) {
-                var model,
-                    models = [],
-                    data = this.adapter(response),
-                    offset = this.getOffsetByResponse(response);
-
-                if (!Helpers.isArray(data.items)) {
-                    return models;
-                }
-
-                data.items.forEach(function (item) {
-                    model = new this.model();
-                    model.set(item);
-                    this.add(model);
-                    models.push(model);
-                }.bind(this));
-
-                if (offset) {
-                    this.offset = offset;
-                } else {
-                    this.offset += data.items.length;
-                }
-
-                return models;
-            },
-
-            getOffsetByResponse: function (response) {
-                return response ? response.offset : 0;
-            },
-
-            getOffset: function () {
-                return this.offset;
-            },
-
-            setOffset: function (offset) {
-                this.offset = offset;
-
-                return this;
-            },
-
-            /**
-             * Адаптирование данных, приходящих от сервера
-             *
-             * @param {Object} data данные, пришедшие от сервера
-             * @returns {Object}
-             */
-            adapter: function (data) {
-                return data;
-            },
-
-            /**
-             * Поиск модели по названию и значению атрибута
-             *
-             * @param {String} attrKey название атрибута
-             * @param {String} attrValue значение
-             * @returns {Model}
-             */
-            getByAttr: function (attrKey, attrValue) {
-                var model = null;
-
-                this.items.forEach(function (item) {
-                    if ((!isNaN(Number(item.get(attrKey))) && Number(item.get(attrKey)) === Number(attrValue)) || (String(item.get(attrKey)) === String(attrValue))) {
-                        model = item;
-                    }
-                });
-
-                return model;
-            },
-            getArrayByAttr: function (attrKey, attrValue) {
-                var models = [];
-
-                this.items.forEach(function (item) {
-                    if ((!isNaN(Number(item.get(attrKey))) && Number(item.get(attrKey)) === Number(attrValue)) || (String(item.get(attrKey)) === String(attrValue))) {
-                        models.push(item);
-                    }
-                });
-
-                return models;
-            },
-
-            /**
-             * Поиск по идентификатору модели
-             *
-             * @param {Numner | String} id идентификатор
-             * @returns {Model}
-             * @memberOf Collection
-             */
-            getById: function (id) {
-                return this.getByAttr('id', id);
-            },
-
-            /**
-             * Поиск по клиентскому идентификатору модели
-             *
-             * @param {Numner} cid клиентский идентификатор
-             * @returns {Model}
-             * @memberOf Collection
-             */
-            getByClientId: function (cid) {
-                var result = null;
-
-                this.items.forEach(function (item, index) {
-                    if (item.cid === cid) {
-                        result = item;
-                    }
-                }.bind(this));
-
-                return result;
-            },
-
-            /**
-             * Получение массива моделей
-             *
-             * @returns {Array}
-             * @memberOf Collection
-             */
-            getItems: function () {
-                return this.items;
-            },
-
-            /**
-             * Получение элемента по индексу
-             *
-             * @param {Number} index индекс
-             * @returns {Model}
-             * @memberOf Collection
-             */
-            getByIndex: function (index) {
-                return this.items[index];
-            },
-
-            /**
-             * Добавление модели в коллекцию
-             *
-             * @param {Model} model объект модели
-             * @memberOf Collection
-             */
-            add: function (model) {
-                this.items.push(model);
-
-                this.trigger('add');
-                this.trigger('change');
-
-                return this;
-            },
-
-            /**
-             * Удаление модели из коллекции
-             *
-             * @param {Number | String} id идентификатор модели
-             * @memberOf Collection
-             */
-            remove: function (id) {
-                this.items.forEach(function (item, index) {
-                    if (item.get('id') === id) {
-                        this.items.splice(index, 1);
-                        this.trigger('remove', {
-                            id: item.id,
-                            cid: item.cid
-                        });
-                        this.trigger('change');
-                    }
-                }.bind(this));
-
-                return this;
-            },
-
-            /**
-             * Удаление модели из коллекции по клиентскому идентификатору
-             *
-             * @param {Number | String} cid клиентский идентификатор модели
-             * @memberOf Collection
-             */
-            removeByClientId: function (cid) {
-                this.items.forEach(function (item, index) {
-                    if (item.cid === cid) {
-                        this.items.splice(index, 1);
-                        this.trigger('remove', {
-                            id: item.id,
-                            cid: item.cid
-                        });
-                        this.trigger('change');
-                    }
-                }.bind(this));
-
-                return this;
-            },
-
-            /**
-             * Обход коллеции заданным итератором
-             *
-             * @param {Function} iterator итератор
-             * @memberOf Collection
-             */
-            forEach: function (iterator) {
-                this.items.forEach(iterator);
-
-                return this;
-            },
-
-            /**
-             * Преобразование коллекции заданным итератором
-             *
-             * @param {Function} iterator итератор
-             * @returns {Array}
-             * @memberOf Collection
-             */
-            map: function (iterator) {
-                return this.items.map(iterator);
-            },
-
-            /**
-             * Асинхронный обход коллекции
-             *
-             * @param {Function} iterator функция итератор
-             * @param {Function} callback функция, которая будет вызвана просле обхода
-             * @memberOf Collection
-             */
-            forEachAsync: function (iterator, callback) {
-                var step = function (iterator, index) {
-                    if (this.getLength(true) > index) {
-                        iterator(this.items[index], index, step.bind(this, iterator, index + 1));
+                var settings = this.getLoadSettings();
+                this.xhr = http_1.Http.get(settings.url, {
+                    params: this.getLoadParams()
+                }).then(function (response) {
+                    if (response.data.isRedirect) {
+                        router_1.Router.go(response.data.location);
+                    } else if (response.data.request && response.data.request.path !== window.location.pathname) {
+                        router_1.Router.checkRoutes({
+                            url: response.data.request.path
+                        }, true, response.data);
                     } else {
-                        if (Helpers.isFunction(callback)) {
-                            callback();
-                        }
+                        _this2.onLoadSuccess(response.data);
                     }
+                }).catch(function () {
+                    return _this2.onLoadError();
+                });
+            }
+        }, {
+            key: "abort",
+            value: function abort() {
+                this.isAbortedState = true;
+                this.xhr.abort();
+                return this;
+            }
+        }, {
+            key: "isPending",
+            value: function isPending() {
+                return false;
+            }
+        }, {
+            key: "isAborted",
+            value: function isAborted() {
+                return this.isAbortedState;
+            }
+        }, {
+            key: "isRunTimeCreated",
+            value: function isRunTimeCreated() {
+                return this.options.isRunTimeCreated;
+            }
+        }, {
+            key: "isNeedLoad",
+            value: function isNeedLoad() {
+                return this.options.isNeedLoad;
+            }
+        }, {
+            key: "setApp",
+            value: function setApp(app) {
+                this.app = app;
+                return this;
+            }
+        }, {
+            key: "setPageName",
+            value: function setPageName(pageName) {
+                this.pageName = pageName;
+                return this;
+            }
+        }, {
+            key: "getPageName",
+            value: function getPageName() {
+                return this.pageName || false;
+            }
+        }, {
+            key: "getTitle",
+            value: function getTitle() {
+                return '';
+            }
+        }, {
+            key: "getResponse",
+            value: function getResponse() {
+                return this.pageResponse;
+            }
+        }, {
+            key: "setResponse",
+            value: function setResponse(response) {
+                this.pageResponse = helpers_1.Helpers.extend({}, true, this.pageResponse, response);
+                return this;
+            }
+        }, {
+            key: "onLoadSuccess",
+            value: function onLoadSuccess(response) {
+                this.setResponse(this.adapter(response));
+                this.setPageTitle();
+                this.render(this.getResponse());
+            }
+        }, {
+            key: "getUrl",
+            value: function getUrl() {
+                return this.url || this.options.request.url;
+            }
+        }, {
+            key: "adapter",
+            value: function adapter(response) {
+                return response;
+            }
+        }, {
+            key: "getLoadParams",
+            value: function getLoadParams() {
+                return {};
+            }
+        }, {
+            key: "getLoadSettings",
+            value: function getLoadSettings() {
+                return {
+                    url: this.getUrl(),
+                    dataType: this.options.loadDataType
                 };
-
-                if (this.getLength(true)) {
-                    iterator(this.items[0], 0, step.bind(this, iterator, 1));
-                }
-
-                return this;
-            },
-
-            /**
-             * Фильтрация коллекции
-             *
-             * @param {Function} condition функция с условием фильтрации
-             * @memberOf Collection
-             */
-            filter: function (condition) {
-                return this.items.filter(condition);
-            },
-
-            /**
-             * Очищение коллекции
-             *
-             * @param {Boolean} [options.destroy}
-             * @memberOf Collection
-             */
-            clear: function (options) {
-                options = Helpers.extend({
-                    destroy: true
-                }, options);
-
-                if (options.destroy) {
-                    this.forEach(function (item) {
-                        item.destroy();
-                    });
-                }
-
-                this.items = [];
-                this.offset = 0;
-
-                return this;
-            },
-
-            /**
-             * Получение количества элементов в коллекции
-             *
-             * @params {Boolean} [isAll = false] не исключать удаленные
-             * @return {Number}
-             * @memberOf Collection
-             */
-            getLength: function (isAll) {
-                var items;
-
-                if (isAll) {
-                    items = this.items;
-                } else {
-                    items = this.items.filter(function (item) {
-                        return !item.isRemoved();
-                    });
-                }
-
-                return items.length;
-            },
-
-            /**
-             * Получения ограничения загрузки
-             *
-             * @returns {Number}
-             * @memberOf Collection
-             */
-            getLimit: function () {
-                return this.limit || this.options.limit;
-            },
-
-            /**
-             * Установка ограничения загрузки
-             *
-             * @params {Number} limit количество загружаемых за раз элементов
-             * @memberOf Collection
-             */
-            setLimit: function (limit) {
-                this.limit = limit;
-
-                return this;
-            },
-
-            /**
-             * Получение элементов в виде массива объектов, состоящих из атрибутов моделей
-             *
-             * @returns {Array.<Object>}
-             * @memberOf Collection
-             */
-            toJSON: function () {
-                var json = [];
-
-                this.forEach(function (model) {
-                    json.push(model.toJSON());
-                });
-
-                return json;
             }
-
-        },
-
-        protected: {
-
-            /**
-             * Получение URL для AJAX запросов на сервер
-             *
-             * @returns {String}
-             * @protected
-             */
-            getUrl: function () {
-                return (Cookie.get('_sp_model') || '') + this.options.url;
-            },
-
-            /**
-             * Получение данных, отправляемых на сервер при получении данных
-             *
-             * @returns {Object}
-             */
-            getFetchParams: function () {
-                return this.ajaxParams;
-            },
-
-            /**
-             * Получение данных, отправляемых на сервер при получении данных с добавление offset
-             *
-             * @returns {Object}
-             */
-            getFetchParamsWithOffset: function () {
-                return Helpers.extend({}, this.ajaxParams, this.getFetchParams(), {
-                    offset: this.offset,
-                    limit: this.getLimit()
-                });
-            },
-
-            /**
-             * Получение настроек AJAX запроса при получении данных
-             *
-             * @returns {Object}
-             */
-            getFetchSettings: function () {
-                return Helpers.extend({
-                    url: this.getUrl()
-                }, this.ajaxSettings);
+        }, {
+            key: "setPageTitle",
+            value: function setPageTitle() {
+                document.title = this.getTitle();
             }
-        }
-
-    });
-
-    return Collection;
-
-});
-
-/**
- * Базовая View для страничных модулей
- *
- * @class
- * @name Page
- * @abstract
- * @augments View
- */
-
-define('page',[
-    'view',
-    'router',
-    'utils/ajax',
-    'utils/helpers',
-    'utils/cookie'
-], function (
-    View,
-    Router,
-    Ajax,
-    Helpers,
-    Cookie
-) {
-    'use strict';
-
-    var Page = View.extend(
-        {
-
-            /** @lends Page.prototype */
-            props: {
-
-                /**
-                 * URL загрузки страницы
-                 *
-                 * @type {String}
-                 */
-                url: '',
-
-                /**
-                 * Название страницы
-                 *
-                 * @type {String}
-                 */
-                pageName: '',
-
-                /**
-                 * Опции по умолчанию
-                 *
-                 * @type {Object}
-                 * @property {Boolean} [isRunTimeCreated = false] страница создана в режиме выполнения (аяксовый переход)
-                 * @property {Boolean} [isNoArgPrefix = true] не добавлять префикс arg_ к данным, передаваемым в ajax запросе за данными
-                 * @property {String} [pageOptionsSelector = '.b-page-config'] селектор элемента, из которого парсятся опции страницы
-                 */
-                defaultOptions: {
-                    isRunTimeCreated: false,
-                    isNeedLoad: true,
-                    loadDataType: 'json',
-                    pageOptionsSelector: '.b-page-config'
-                },
-
-                /** @lends Page.prototype */
-                vars: {
-
-                    /**
-                     * Состояние отменены запроса данных с сервера
-                     *
-                     * @type {Boolean}
-                     */
-                    isAbortedState: false,
-
-                    /**
-                     * Адаптированные данные, полученные от сервера
-                     * 
-                     * @type {Object}
-                     */
-                    pageResponse: {}
-                }
-
-            },
-
-            /** @lends Page.prototype */
-            public: {
-
-                /**
-                 * Инициализация страницы после загрузки и рендера
-                 *
-                 * @returns {Page}
-                 */
-                initPage: function () {
-                    var $config = this.$el.find(this.options.pageOptionsSelector);
-
-                    if ($config.length) {
-                        this.pageOptions = JSON.parse($config.html().replace(/\r|\n|\t|\s{2,}/g, ''));
-                    }
-
-                    this.trigger('pageLoad', {
-                        page: this.getPageName()
-                    });
-
-                    return this;
-                },
-
-                /**
-                 * Установка опций (совмещение с текущими)
-                 *
-                 * @param {Object} options
-                 * @returns {Page}
-                 */
-                setOptions: function (options) {
-                    if (Helpers.isPlainObject(options)) {
-                        Helpers.extend(true, this.options, options);
-                    }
-
-                    return this;
-                },
-
-                /**
-                 * Ajax загрука страницы
-                 */
-                load: function () {
-                    var settings = this.getLoadSettings();
-
-                    this.xhr = Ajax.send(Helpers.extend(settings), {
-                        data: this.getLoadParams()
-                    })
-                        .success(function (response) {
-                            if (response.isRedirect) {
-                                Router.go(response.location);
-                            } else if (response.request && response.request.path !== window.location.pathname) {
-                                Router.checkRoutes({
-                                    url: response.request.path
-                                }, true, response);
-                            } else {
-                                this.onLoadSuccess(response);
-                            }
-                        }.bind(this))
-                        .error(function () {
-                            this.onLoadError();
-                        }.bind(this));
-                },
-
-                /**
-                 * Отмена загрузки страницы
-                 *
-                 * @returns {Page}
-                 */
-                abort: function () {
-                    this.isAbortedState = true;
-                    this.xhr.abort();
-
-                    return this;
-                },
-
-                /**
-                 * Возвращает состояние текущей загрузки данных от сервера (true - загрузка выполняется, false - не выполняется)
-                 *
-                 * @returns {Boolean}
-                 */
-                isPending: function () {
-                    return this.xhr && this.xhr.state() === 'pending';
-                },
-
-                /**
-                 * Возвращает состояние отмены запроса данных с сервера
-                 *
-                 * @returns {boolean}
-                 */
-                isAborted: function () {
-                    return this.isAbortedState;
-                },
-
-                /**
-                 * Возвращает true, если страница создана в режиме выполнения (аяксовый переход) и false, если страница загружена первоначально (точка входа)
-                 *
-                 * @returns {Boolean}
-                 */
-                isRunTimeCreated: function () {
-                    return this.options.isRunTimeCreated;
-                },
-
-                /**
-                 * Возращает true, если для страницы необходимо загружать данные с сервера и false, если нет такой необходимости (для статических страниц)
-                 * 
-                 * @returns {Boolean}
-                 */
-                isNeedLoad: function () {
-                    return this.options.isNeedLoad;
-                },
-
-                /**
-                 * Устанавливает объект приложения
-                 * 
-                 * @param {App} app объект приложения
-                 * @returns {Page}
-                 */
-                setApp: function (app) {
-                    this.app = app;
-
-                    return this;
-                },
-
-                /**
-                 * Устанавливает название страницы
-                 * 
-                 * @param {String} pageName новое название
-                 * @returns {Page}
-                 */
-                setPageName: function (pageName) {
-                    this.pageName = pageName;
-
-                    return this;
-                },
-
-                /**
-                 * Возвращает название страницы
-                 * 
-                 * @returns {Boolean}
-                 */
-                getPageName: function () {
-                    return this.pageName || false;
-                },
-
-                /**
-                 * Получение заголовка
-                 * 
-                 * @returns {String}
-                 */
-                getTitle: function () {
-                    return '';
-                }
-            },
-
-            /** @lends Page.prototype */
-            protected: {
-
-                /**
-                 * Получение URL для загрузки данных с сервера
-                 * 
-                 * @protected
-                 * @returns {String}
-                 */
-                getUrl: function () {
-                    return (Cookie.get('_sp_pages') || '') + this.url;
-                },
-
-                /**
-                 * Адаптирование данных, полученных с сервера
-                 *
-                 * @protected
-                 * @param {Object} response данные, полученные от сервера
-                 * @returns {Object} адаптированные данные
-                 */
-                adapter: function (response) {
-                    return response;
-                },
-
-                /**
-                 * Получение адаптированных данных, полученных от сервера
-                 * 
-                 * @protected
-                 * @returns {Object}
-                 */
-                getResponse: function () {
-                    return this.pageResponse;
-                },
-
-                /**
-                 * Установка адаптированных данных, полученных от сервера
-                 * 
-                 * @protected
-                 * @param {Object} response адаптированные данные
-                 * @returns {Page}
-                 */
-                setResponse: function (response) {
-                    this.pageResponse = Helpers.extend({}, true, this.pageResponse, response);
-
-                    return this;
-                },
-
-                /**
-                 * Получение данных, отправляемых на сервер при загрузке страницы
-                 *
-                 * @protected
-                 * @returns {Object}
-                 */
-                getLoadParams: function () {
-                    return {};
-                },
-
-                /**
-                 * Получение настроек AJAX запроса при загрузке страницы
-                 *
-                 * @protected
-                 * @returns {Object}
-                 */
-                getLoadSettings: function () {
-                    return {
-                        url: this.getUrl(),
-                        dataType: this.options.loadDataType
-                    };
-                },
-
-                /**
-                 * Установка заголовка страницы
-                 *
-                 * @protected
-                 */
-                setPageTitle: function () {
-                    document.title = this.getTitle();
-                },
-
-                /**
-                 * Обработчик успешной загрузке AJAX страницы
-                 * 
-                 * @protected
-                 * @param {Object} response данные, полученные от сервера
-                 */
-                onLoadSuccess: function (response) {
-                    this.setResponse(this.adapter(response));
-                    this.setPageTitle();
-
-                    this.render('main', this.getResponse());
-                },
-
-                /**
-                 * Обработчик ошибки при загрузке AJAX страницы
-                 *
-                 * @protected
-                 */
-                onLoadError: function () {
-                    this.trigger('error');
-                }
-
+        }, {
+            key: "onLoadError",
+            value: function onLoadError() {
+                this.trigger('error');
             }
-        }
-    );
+        }]);
 
-    return Page;
+        return Page;
+    }(view_1.View);
 
+    exports.Page = Page;
 });
-define('config',[], function () {
-    'use strict';
+//# sourceMappingURL=page.js.map;
 
-    return {
-        env: 'prod'
-    };
+
+define('nerve',["require", "exports", "./utils/helpers", "./utils/http", "./collection", "./element", "./event", "./model", "./page", "./router", "./view"], function (require, exports, helpers_1, http_1, collection_1, element_1, event_1, model_1, page_1, router_1, view_1) {
+    "use strict";
+
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Helpers = helpers_1.Helpers;
+    exports.Http = http_1.Http;
+    exports.Collection = collection_1.Collection;
+    exports.DomElement = element_1.DomElement;
+    exports.EventEmitter = event_1.EventEmitter;
+    exports.Model = model_1.Model;
+    exports.Page = page_1.Page;
+    exports.Router = router_1.Router;
+    exports.View = view_1.View;
 });
-define('main',[
-    'event',
-    'model',
-    'view',
-    'router',
-    'collection',
-    'page',
-    'config'
-], function (
-    Event,
-    Model,
-    View,
-    Router,
-    Collection,
-    Page,
-    CONFIG
-) {
-    'use strict';
-
-    return {
-        Event: Event,
-        Model: Model,
-        View: View,
-        Router: Router,
-        Collection: Collection,
-        Page: Page,
-        CONFIG: CONFIG
-    };
-});
-(function () {
-    'use strict';
-
-    define('nerve', [
-        'main'
-    ], function (Nerve) {
-        return Nerve;
-    });
-}());
+//# sourceMappingURL=nerve.js.map;

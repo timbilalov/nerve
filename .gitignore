@@ -1,3 +1,5 @@
-.idea
-node_modules
-components
+/.idea
+/node_modules
+/components
+/tmp
+/package-lock.json
