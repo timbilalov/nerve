@@ -149,7 +149,8 @@ export class Router extends EventEmitter {
                     });
 
                     this.trigger('route', {
-                        page: this.currentPage
+                        page: this.currentPage,
+                        isLoad: load
                     });
 
                     if (this.currentPage.isNeedLoad()) {
@@ -184,7 +185,8 @@ export class Router extends EventEmitter {
                     );
 
                     this.trigger('route', {
-                        page: this.currentPage
+                        page: this.currentPage,
+                        isLoad: load
                     });
                     this.currentPage.initPage();
                 }

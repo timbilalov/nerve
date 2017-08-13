@@ -124,16 +124,6 @@ export class Collection extends EventEmitter {
     // },
 
     /**
-     * Адаптирование данных, приходящих от сервера
-     *
-     * @param {Object} data данные, пришедшие от сервера
-     * @returns {Object}
-     */
-    adapter(data: any): any {
-        return data;
-    }
-
-    /**
      * Поиск модели по названию и значению атрибута
      *
      * @param {String} attrKey название атрибута
@@ -417,7 +407,17 @@ export class Collection extends EventEmitter {
      * @protected
      */
     protected getUrl(): string {
-        return this.options.url;
+        return this.options.url || this.url;
+    }
+
+    /**
+     * Адаптирование данных, приходящих от сервера
+     *
+     * @param {Object} data данные, пришедшие от сервера
+     * @returns {Object}
+     */
+    protected adapter(data: any): any {
+        return data;
     }
 
     /**

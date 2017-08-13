@@ -2,6 +2,7 @@ import {View} from './view';
 import {Helpers} from './utils/helpers';
 import {Http} from './utils/http';
 import {Router} from './router';
+import {AxiosResponse} from 'axios';
 
 export class Page extends View {
 
@@ -78,7 +79,7 @@ export class Page extends View {
         this.xhr = Http.get(settings.url, {
             params: this.getLoadParams()
         })
-            .then((response) => {
+            .then((response: AxiosResponse) => {
                 if (response.data.isRedirect) {
                     Router.go(response.data.location);
                 } else if (response.data.request && response.data.request.path !== window.location.pathname) {

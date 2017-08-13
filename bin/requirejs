@@ -4,7 +4,7 @@ const requirejs = require('requirejs');
 
 const config = {
     baseUrl: 'tmp/js/es5',
-    name: 'nerve',
+    name: 'nervejs',
     optimize: 'none',
     out: 'dist/nerve.js',
     wrap: {

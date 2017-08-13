@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+if [ ! -d ./dist/typings ]; then
+	mkdir -p ./dist/typings
+fi
+
+find ./tmp/js/es2015 -name "*.d.ts" | while read file; do
+	DST_PATH="${file/.\/tmp\/js\/es2015/dist/typings}";
+	DST_DIR=$(dirname $DST_PATH);
+
+	if [ ! -d $DST_DIR ]; then
+		mkdir -p $DST_DIR;
+	fi
+
+	echo "$file => $DST_PATH";
+	cp $file $DST_PATH;
+done
