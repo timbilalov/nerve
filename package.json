@@ -9,7 +9,7 @@
 		"ts": "./node_modules/.bin/tsc",
 		"babel": "./node_modules/.bin/babel ./tmp/js/es2015 -d ./tmp/js/es5",
 		"uglify": "./node_modules/.bin/uglifyjs --compress --mangle -o ./dist/nerve.min.js -- ./dist/nerve.js",
-		"build": "npm run clean && npm run ts && npm run babel && ./bin/requirejs && npm run uglify && ./bin/copy-typings && rm -rf ./tmp"
+		"build": "npm run clean && npm run ts && npm run babel && ./bin/requirejs && ./bin/copy-typings && rm -rf ./tmp"
 	},
 	"repository": {
 		"type": "git",
