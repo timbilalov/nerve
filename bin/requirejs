@@ -6,7 +6,7 @@ const fs = require('fs');
 let pathToRequirejs = './node_modules/requirejs/require.js';
 
 if (!fs.existsSync(pathToRequirejs)) {
-    pathToRequirejs = '.' + pathToRequirejs;
+    pathToRequirejs = '../requirejs/require.js';
 }
 
 const config = {
