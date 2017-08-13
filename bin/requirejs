@@ -23,7 +23,7 @@ const config = {
         startFile: pathToRequirejs
     },
     paths: {
-        axios: '../../../node_modules/axios/dist/axios'
+        axios: pathToAxios
     }
 };
 
