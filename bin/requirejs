@@ -4,9 +4,14 @@ const requirejs = require('requirejs');
 const fs = require('fs');
 
 let pathToRequirejs = './node_modules/requirejs/require.js';
+let pathToAxios = '../../../node_modules/axios/dist/axios';
 
 if (!fs.existsSync(pathToRequirejs)) {
     pathToRequirejs = '../requirejs/require.js';
+}
+
+if (!fs.existsSync(pathToAxios)) {
+    pathToAxios = '../../../../axios/dist/axios';
 }
 
 const config = {
