@@ -1,6 +1,13 @@
 #!/usr/bin/env node
 
 const requirejs = require('requirejs');
+const fs = require('fs');
+
+let pathToRequirejs = './node_modules/requirejs/require.js';
+
+if (!fs.existsSync(pathToRequirejs)) {
+    pathToRequirejs = '.' + pathToRequirejs;
+}
 
 const config = {
     baseUrl: 'tmp/js/es5',
@@ -8,7 +15,7 @@ const config = {
     optimize: 'none',
     out: 'dist/nerve.js',
     wrap: {
-        startFile: './node_modules/requirejs/require.js'
+        startFile: pathToRequirejs
     },
     paths: {
         axios: '../../../node_modules/axios/dist/axios'
