@@ -67,6 +67,14 @@ export class DomElement {
         return this.el.getAttribute(attrName);
     }
 
+    html(html?: string): string {
+        if (html) {
+            this.el.innerHTML = html;
+        }
+
+        return this.el.innerHTML;
+    }
+
     on(event: string, handler: EventListenerOrEventListenerObject) {
         this.el.addEventListener(event, handler);
     }

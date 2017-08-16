@@ -2,6 +2,7 @@
 
 const requirejs = require('requirejs');
 const fs = require('fs');
+const path = require('path');
 
 let pathToRequirejs = './node_modules/requirejs/require.js';
 let pathToAxios = '../../../node_modules/axios/dist/axios';
@@ -10,7 +11,7 @@ if (!fs.existsSync(pathToRequirejs)) {
     pathToRequirejs = '../requirejs/require.js';
 }
 
-if (!fs.existsSync(pathToAxios)) {
+if (!fs.existsSync(path.resolve('./tmp/js/es5', pathToAxios + '.js'))) {
     pathToAxios = '../../../../axios/dist/axios';
 }
 

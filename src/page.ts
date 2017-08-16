@@ -3,6 +3,7 @@ import {Helpers} from './utils/helpers';
 import {Http} from './utils/http';
 import {Router} from './router';
 import {AxiosResponse} from 'axios';
+import {DomElement} from './element';
 
 export class Page extends View {
 
@@ -57,10 +58,10 @@ export class Page extends View {
      * @returns {Page}
      */
     initPage() {
-        var $config = this.$el.find(this.options.pageOptionsSelector);
+        const $config: DomElement[] = this.$el.find(this.options.pageOptionsSelector);
 
         if ($config.length) {
-            this.pageOptions = JSON.parse($config.html().replace(/\r|\n|\t|\s{2,}/g, ''));
+            this.pageOptions = JSON.parse($config[0].html().replace(/\r|\n|\t|\s{2,}/g, ''));
         }
 
         this.trigger('pageLoad', {
