@@ -10,6 +10,10 @@ export class DomElement {
         return this.el;
     }
 
+    val(): string {
+        return (<HTMLInputElement>this.el).value;
+    }
+
     is(selector: string) {
         let isEqual = false;
 
