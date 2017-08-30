@@ -27,7 +27,7 @@ export class Router extends EventEmitter {
         window.addEventListener('popstate', () => this.checkRoutes(window.history.state, true));
 
         document.body.addEventListener('click', (event) => {
-            if (new DomElement(<Element> event.target).closest(this.options.linkSelector)) {
+            if (new DomElement(<Element> event.target).closest(this.options.linkSelector).length) {
                 this.onLinkClick(event);
             }
         });
