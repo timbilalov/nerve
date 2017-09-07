@@ -412,7 +412,7 @@ export class Model extends EventEmitter {
             if (this.validate(validateOptions)) {
                 const settings = this.getSaveSettings();
 
-                Http.post(settings.url, {
+                Http.put(settings.url, {
                     params: this.getSaveParams()
                 })
                     .then((response: AxiosResponse) => {
@@ -446,7 +446,7 @@ export class Model extends EventEmitter {
             if (this.validate(validateOptions)) {
                 const settings = this.getCreateSettings();
 
-                Http.put(settings.url, {
+                Http.post(settings.url, {
                     params: this.getCreateParams()
                 })
                     .then((response: AxiosResponse) => {
