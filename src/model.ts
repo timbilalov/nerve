@@ -412,7 +412,8 @@ export class Model extends EventEmitter {
             if (this.validate(validateOptions)) {
                 const settings = this.getSaveSettings();
 
-                Http.put(settings.url, {
+                Http.request({
+                    method: 'put',
                     url: settings.url,
                     headers: { 'Content-Type' : 'application/x-www-form-urlencoded' },
                     data: this.getSaveParams(),
@@ -449,7 +450,8 @@ export class Model extends EventEmitter {
             if (this.validate(validateOptions)) {
                 const settings = this.getCreateSettings();
 
-                Http.post(settings.url, {
+                Http.request({
+                    method: 'post',
                     url: settings.url,
                     headers: { 'Content-Type' : 'application/x-www-form-urlencoded' },
                     data: this.getCreateParams(),
