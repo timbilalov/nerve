@@ -411,12 +411,11 @@ export class Model extends EventEmitter {
 
             if (this.validate(validateOptions)) {
                 const settings = this.getSaveSettings();
-                let data = this.getSaveParams();
                 Http.request({
                     method: 'put',
                     url: settings.url,
                     headers: { 'Content-Type' : 'application/x-www-form-urlencoded' },
-                    data: data,
+                    data: this.getSaveParams(),
                     withCredentials: true
                 })
                     .then((response: AxiosResponse) => {
