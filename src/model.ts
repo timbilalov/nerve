@@ -412,8 +412,11 @@ export class Model extends EventEmitter {
             if (this.validate(validateOptions)) {
                 const settings = this.getSaveSettings();
 
-                Http.put(settings.url, {
-                    params: this.getSaveParams()
+                Http.put({
+                    url: settings.url,
+                    headers: { 'Content-Type' : 'application/x-www-form-urlencoded' },
+                    data: this.getSaveParams(),
+                    withCredentials: true
                 })
                     .then((response: AxiosResponse) => {
                         if (Helpers.isString(response.data)) {
@@ -446,8 +449,11 @@ export class Model extends EventEmitter {
             if (this.validate(validateOptions)) {
                 const settings = this.getCreateSettings();
 
-                Http.post(settings.url, {
-                    params: this.getCreateParams()
+                Http.post({
+                    url: settings.url,
+                    headers: { 'Content-Type' : 'application/x-www-form-urlencoded' },
+                    data: this.getCreateParams(),
+                    withCredentials: true
                 })
                     .then((response: AxiosResponse) => {
                         if (Helpers.isString(response.data)) {
