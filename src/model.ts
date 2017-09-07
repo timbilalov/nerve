@@ -415,7 +415,7 @@ export class Model extends EventEmitter {
                 Http.request({
                     method: 'put',
                     url: settings.url,
-                    headers: { 'Content-Type' : 'application/x-www-form-urlencoded' },
+                    // headers: { 'Content-Type' : 'application/x-www-form-urlencoded' },
                     data: this.getSaveParams(),
                     withCredentials: true
                 })
@@ -453,7 +453,7 @@ export class Model extends EventEmitter {
                 Http.request({
                     method: 'post',
                     url: settings.url,
-                    headers: { 'Content-Type' : 'application/x-www-form-urlencoded' },
+                    // headers: { 'Content-Type' : 'application/x-www-form-urlencoded' },
                     data: this.getCreateParams(),
                     withCredentials: true
                 })
