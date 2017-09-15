@@ -485,8 +485,12 @@ export class Model extends EventEmitter {
             if (this.isRemoveReady()) {
                 const settings = this.getRemoveSettings();
 
-                Http.delete(settings.url, {
-                    params: this.getRemoveParams()
+                Http.request({
+                    method: 'delete',
+                    url: settings.url,
+                    headers: settings.headers,
+                    params: this.getRemoveParams(),
+                    withCredentials: true
                 })
                     .then((response: AxiosResponse) => {
                         if (Helpers.isString(response.data)) {
