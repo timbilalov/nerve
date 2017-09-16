@@ -132,7 +132,7 @@ export class Router extends EventEmitter {
         }
         if (Helpers.isString(route.module)) {
             this.require(route.module, (PageClass: typeof Page) => {
-                var oldPage = this.currentPage;
+                const oldPage = this.currentPage;
 
                 if (load) {
                     if (oldPage && oldPage.isPending()) {
@@ -172,6 +172,8 @@ export class Router extends EventEmitter {
                         setTimeout(function () {
                             this.currentPage.initPage();
                         }.bind(this));
+
+                        window.scrollTo(0, 0);
                     }.bind(this));
                 } else {
                     this.currentPage = <Page> PageClass.createRunTime(
