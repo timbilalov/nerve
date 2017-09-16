@@ -79,6 +79,10 @@ export class DomElement {
         return this.el.innerHTML;
     }
 
+    scrollTo(x: number, y: number) {
+        this.el.scrollTo(x, y);
+    }
+
     on(event: string, handler: EventListenerOrEventListenerObject) {
         this.el.addEventListener(event, handler);
     }
