@@ -150,6 +150,7 @@ export class Router extends EventEmitter {
 
                     this.trigger('route', {
                         page: this.currentPage,
+                        route: route,
                         isLoad: load
                     });
 
@@ -186,6 +187,7 @@ export class Router extends EventEmitter {
 
                     this.trigger('route', {
                         page: this.currentPage,
+                        route: route,
                         isLoad: load
                     });
                     this.currentPage.initPage();
