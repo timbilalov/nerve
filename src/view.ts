@@ -136,8 +136,12 @@ export class View extends EventEmitter {
         });
     }
 
-    getTemplatePath(): string {
+    getTemplateUrl(): string {
         return this.template;
+    }
+
+    setTemplateUrl(url: string) {
+        this.template = url;
     }
 
     /**
@@ -160,7 +164,7 @@ export class View extends EventEmitter {
                 options: this.options
             });
 
-            (<any> window).requirejs([this.getTemplatePath()], (template: Function) => {
+            (<any> window).requirejs([this.getTemplateUrl()], (template: Function) => {
                 let html,
                     $html,
                     element: Element = document.createElement('div');
