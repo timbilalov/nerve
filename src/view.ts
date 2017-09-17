@@ -440,6 +440,10 @@ export class View extends EventEmitter {
             options = {};
         }
 
+        if ($el instanceof DomElement) {
+            $el = $el.getElement();
+        }
+
         module = new this(options);
         module.setElement(new DomElement($el));
         module.parseOptions();
