@@ -427,7 +427,7 @@ export class View extends EventEmitter {
         this._isReady = true;
     }
 
-    static createRunTime(options: any, $el?: DomElement) {
+    static createRunTime(options: any, $el?: any) {
         let module;
 
         if (Helpers.isNode(options)) {
