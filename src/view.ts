@@ -147,7 +147,7 @@ export class View extends EventEmitter {
     /**
      * Рендеринг шаблона
      */
-    render(vars: any) {
+    async render(vars?: any) {
         vars = vars || {};
 
         return new Promise((resolve: Function, reject: Function) => {
