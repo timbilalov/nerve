@@ -411,9 +411,12 @@ export class Model extends EventEmitter {
 
             if (this.validate(validateOptions)) {
                 const settings = this.getSaveSettings();
-
-                Http.post(settings.url, {
-                    params: this.getSaveParams()
+                Http.request({
+                    method: 'put',
+                    url: settings.url,
+                    headers: Helpers.extend({}, settings.headers),
+                    data: this.getSaveParams(),
+                    withCredentials: true
                 })
                     .then((response: AxiosResponse) => {
                         if (Helpers.isString(response.data)) {
@@ -446,8 +449,12 @@ export class Model extends EventEmitter {
             if (this.validate(validateOptions)) {
                 const settings = this.getCreateSettings();
 
-                Http.put(settings.url, {
-                    params: this.getCreateParams()
+                Http.request({
+                    method: 'post',
+                    url: settings.url,
+                    headers: Helpers.extend({}, settings.headers),
+                    data: this.getCreateParams(),
+                    withCredentials: true
                 })
                     .then((response: AxiosResponse) => {
                         if (Helpers.isString(response.data)) {
@@ -478,8 +485,12 @@ export class Model extends EventEmitter {
             if (this.isRemoveReady()) {
                 const settings = this.getRemoveSettings();
 
-                Http.delete(settings.url, {
-                    params: this.getRemoveParams()
+                Http.request({
+                    method: 'delete',
+                    url: settings.url,
+                    headers: settings.headers,
+                    params: this.getRemoveParams(),
+                    withCredentials: true
                 })
                     .then((response: AxiosResponse) => {
                         if (Helpers.isString(response.data)) {
@@ -679,7 +690,10 @@ export class Model extends EventEmitter {
     protected getSaveSettings(): any {
         return {
             url: this.getUrl(),
-            type: 'post'
+            type: 'post',
+            headers: {
+                'Content-Type' : 'application/x-www-form-urlencoded'
+            }
         };
     }
 
@@ -695,7 +709,10 @@ export class Model extends EventEmitter {
             type: 'post',
             abortCaptcha: function () {
                 this.trigger('abortCaptcha');
-            }.bind(this)
+            }.bind(this),
+            headers: {
+                'Content-Type' : 'application/x-www-form-urlencoded'
+            }
         };
     }
 
