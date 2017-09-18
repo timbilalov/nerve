@@ -73,7 +73,7 @@ export class EventEmitter {
      * @param {Function} handler обработчик события
      * @returns {EventEmitter}
      */
-    off() {
+    off(name?: string, handler?: Function) {
         if (this._event) {
             this._event.off.apply(this._event, arguments);
         }
