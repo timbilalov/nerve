@@ -72,7 +72,7 @@ export class DomElement {
     }
 
     html(html?: string): string {
-        if (html) {
+        if (html != undefined) {
             this.el.innerHTML = html;
         }
 
