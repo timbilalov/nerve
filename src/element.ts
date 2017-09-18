@@ -80,7 +80,8 @@ export class DomElement {
     }
 
     scrollTo(x: number, y: number) {
-        this.el.scrollTo(x, y);
+        this.el.scrollTop = x;
+        this.el.scrollLeft = y;
     }
 
     on(event: string, handler: EventListenerOrEventListenerObject) {
