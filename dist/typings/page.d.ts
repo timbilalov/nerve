@@ -1,0 +1,31 @@
+import { View } from './view';
+export declare class Page extends View {
+    protected url: string;
+    protected pageName: string;
+    protected isAbortedState: boolean;
+    protected pageOptions: any;
+    protected xhr: any;
+    protected app: any;
+    protected pageResponse: any;
+    constructor(options?: any);
+    initPage(): this;
+    load(): void;
+    abort(): this;
+    isPending(): boolean;
+    isAborted(): boolean;
+    isRunTimeCreated(): any;
+    isNeedLoad(): any;
+    setApp(app: any): this;
+    setPageName(pageName: string): this;
+    getPageName(): string | false;
+    getTitle(): string;
+    getResponse(): any;
+    setResponse(response: any): this;
+    onLoadSuccess(response?: any): void;
+    protected getUrl(): string;
+    protected adapter(response: any): any;
+    protected getLoadParams(): any;
+    protected getLoadSettings(): any;
+    protected setPageTitle(): void;
+    protected onLoadError(): void;
+}

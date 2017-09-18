@@ -1,0 +1,35 @@
+import { EventEmitter } from './event';
+import { Model } from './model';
+import { DomElement } from './element';
+export declare class View extends EventEmitter {
+    protected model: Model;
+    protected $el: DomElement;
+    protected _domEventHandlers: any;
+    protected promiseRender: Promise<any>;
+    protected promiseCss: Promise<any>;
+    protected _isReady: boolean;
+    protected _isRendered: boolean;
+    protected template: string;
+    protected events: any;
+    protected elements: any;
+    protected css: string[];
+    protected optionsSelector: string;
+    constructor(options?: any);
+    init(): this;
+    destroy(): this;
+    getElement(): DomElement;
+    ready(callback: Function): Promise<{}>;
+    getTemplateUrl(): string;
+    setTemplateUrl(url: string): void;
+    render(vars?: any): Promise<DomElement>;
+    isRendered(): boolean;
+    rendered(callback: Function, isSingle?: boolean): Promise<{}>;
+    setElement($el: DomElement): this;
+    protected delegateEvents(): this;
+    protected unDelegateEvents(): this;
+    protected updateElements(): this;
+    protected parseOptions(): void;
+    protected loadCss(): void;
+    protected onViewReady(): void;
+    static createRunTime(options: any, $el?: any): View;
+}
