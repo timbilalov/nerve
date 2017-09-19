@@ -148,7 +148,9 @@ export class View extends EventEmitter {
      * Рендеринг шаблона
      */
     render(vars?: any): Promise<DomElement> {
-        vars = vars || {};
+        let templateVars: any = this.getTemplateVars();
+
+        vars = Helpers.extend({}, templateVars, vars);
 
         return <Promise<DomElement>> new Promise((resolve: Function, reject: Function) => {
             let modelData,
@@ -425,6 +427,10 @@ export class View extends EventEmitter {
     protected onViewReady() {
         this.trigger('ready');
         this._isReady = true;
+    }
+
+    protected getTemplateVars(): any {
+        return {};
     }
 
     static createRunTime(options: any, $el?: any) {
