@@ -148,7 +148,7 @@ export class View extends EventEmitter {
      * Рендеринг шаблона
      */
     render(vars?: any): Promise<DomElement> {
-        let templateVars: any = this.getTemplateVars();
+        const templateVars: any = this.getTemplateVars();
 
         vars = Helpers.extend({}, templateVars, vars);
 
