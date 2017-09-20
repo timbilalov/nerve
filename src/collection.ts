@@ -134,7 +134,7 @@ export class Collection extends EventEmitter {
         var model: Model = null;
 
         this.items.forEach(function (item) {
-            if ((!isNaN(Number(item.get(attrKey))) && Number(item.get(attrKey)) === Number(attrValue)) || (String(item.get(attrKey)) === String(attrValue))) {
+            if ((!isNaN(Number(item._get(attrKey))) && Number(item._get(attrKey)) === Number(attrValue)) || (String(item._get(attrKey)) === String(attrValue))) {
                 model = item;
             }
         });
@@ -146,7 +146,7 @@ export class Collection extends EventEmitter {
         var models: Model[] = [];
 
         this.items.forEach(function (item) {
-            if ((!isNaN(Number(item.get(attrKey))) && Number(item.get(attrKey)) === Number(attrValue)) || (String(item.get(attrKey)) === String(attrValue))) {
+            if ((!isNaN(Number(item._get(attrKey))) && Number(item._get(attrKey)) === Number(attrValue)) || (String(item._get(attrKey)) === String(attrValue))) {
                 models.push(item);
             }
         });
@@ -228,7 +228,7 @@ export class Collection extends EventEmitter {
      */
     remove(id: any) {
         this.items.forEach((item: Model, index: number) => {
-            if (item.get('id') === id) {
+            if (item._get('id') === id) {
                 this.items.splice(index, 1);
                 this.trigger('remove', {
                     id: item.id,
