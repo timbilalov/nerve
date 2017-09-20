@@ -4,9 +4,9 @@ import {Model} from './model';
 import {Http} from './utils/http';
 import {AxiosResponse} from 'axios';
 
-export class Collection extends EventEmitter {
+export class Collection<T> extends EventEmitter {
 
-    protected items: Model[] = [];
+    protected items: Model<T>[] = [];
     protected url: string;
     protected fetchXHR: any;
     protected model: typeof Model;
@@ -85,9 +85,8 @@ export class Collection extends EventEmitter {
 
     setResponse(response: any) {
         var model,
-            models: Model[] = [],
-            data = this.adapter(response);//,
-            // offset = this.getOffsetByResponse(response);
+            models: Model<T>[] = [],
+            data = this.adapter(response);
 
         if (!Helpers.isArray(data.items)) {
             return models;
@@ -100,28 +99,8 @@ export class Collection extends EventEmitter {
             models.push(model);
         });
 
-        // if (offset) {
-        //     this.offset = offset;
-        // } else {
-        //     this.offset += data.items.length;
-        // }
-
         return models;
     }
-
-    // getOffsetByResponse(response) {
-    //     return response ? response.offset : 0;
-    // }
-    //
-    // getOffset: function () {
-    //     return this.offset;
-    // },
-    //
-    // setOffset: function (offset) {
-    //     this.offset = offset;
-    //
-    //     return this;
-    // },
 
     /**
      * Поиск модели по названию и значению атрибута
@@ -130,11 +109,11 @@ export class Collection extends EventEmitter {
      * @param {String} attrValue значение
      * @returns {Model}
      */
-    getByAttr(attrKey: string, attrValue: any): Model {
-        var model: Model = null;
+    getByAttr(attrKey: string, attrValue: any): Model<T> {
+        var model: Model<T> = null;
 
         this.items.forEach(function (item) {
-            if ((!isNaN(Number(item._get(attrKey))) && Number(item._get(attrKey)) === Number(attrValue)) || (String(item._get(attrKey)) === String(attrValue))) {
+            if ((!isNaN(Number((<any>item)[attrKey])) && Number((<any>item)[attrKey]) === Number(attrValue)) || (String((<any>item)[attrKey]) === String(attrValue))) {
                 model = item;
             }
         });
@@ -142,11 +121,11 @@ export class Collection extends EventEmitter {
         return model;
     }
 
-    getArrayByAttr(attrKey: string, attrValue: any): Model[] {
-        var models: Model[] = [];
+    getArrayByAttr(attrKey: string, attrValue: any): Model<T>[] {
+        var models: Model<T>[] = [];
 
         this.items.forEach(function (item) {
-            if ((!isNaN(Number(item._get(attrKey))) && Number(item._get(attrKey)) === Number(attrValue)) || (String(item._get(attrKey)) === String(attrValue))) {
+            if ((!isNaN(Number((<any> item)[attrKey])) && Number((<any> item)[attrKey]) === Number(attrValue)) || (String((<any> item)[attrKey])) === String(attrValue)) {
                 models.push(item);
             }
         });
@@ -161,7 +140,7 @@ export class Collection extends EventEmitter {
      * @returns {Model}
      * @memberOf Collection
      */
-    getById(id: any): Model {
+    getById(id: any): Model<T> {
         return this.getByAttr('id', id);
     }
 
@@ -172,10 +151,10 @@ export class Collection extends EventEmitter {
      * @returns {Model}
      * @memberOf Collection
      */
-    getByClientId(cid: number): Model {
+    getByClientId(cid: number): Model<T> {
         var result = null;
 
-        this.items.forEach((item: Model, index: number) => {
+        this.items.forEach((item: Model<T>, index: number) => {
             if (item.cid === cid) {
                 result = item;
             }
@@ -190,7 +169,7 @@ export class Collection extends EventEmitter {
      * @returns {Array}
      * @memberOf Collection
      */
-    getItems(): Model[] {
+    getItems(): Model<T>[] {
         return this.items;
     }
 
@@ -201,7 +180,7 @@ export class Collection extends EventEmitter {
      * @returns {Model}
      * @memberOf Collection
      */
-    getByIndex(index: number): Model {
+    getByIndex(index: number): Model<T> {
         return this.items[index];
     }
 
@@ -211,7 +190,7 @@ export class Collection extends EventEmitter {
      * @param {Model} model объект модели
      * @memberOf Collection
      */
-    add(model: Model) {
+    add(model: Model<T>) {
         this.items.push(model);
 
         this.trigger('add');
@@ -227,8 +206,8 @@ export class Collection extends EventEmitter {
      * @memberOf Collection
      */
     remove(id: any) {
-        this.items.forEach((item: Model, index: number) => {
-            if (item._get('id') === id) {
+        this.items.forEach((item: Model<T>, index: number) => {
+            if (item.id === id) {
                 this.items.splice(index, 1);
                 this.trigger('remove', {
                     id: item.id,
@@ -248,7 +227,7 @@ export class Collection extends EventEmitter {
      * @memberOf Collection
      */
     removeByClientId(cid: number) {
-        this.items.forEach((item: Model, index: number) => {
+        this.items.forEach((item: Model<T>, index: number) => {
             if (item.cid === cid) {
                 this.items.splice(index, 1);
                 this.trigger('remove', {
@@ -268,7 +247,7 @@ export class Collection extends EventEmitter {
      * @param {Function} iterator итератор
      * @memberOf Collection
      */
-    forEach(iterator: (item: Model, index?: number) => void) {
+    forEach(iterator: (item: Model<T>, index?: number) => void) {
         this.items.forEach(iterator);
 
         return this;
@@ -281,7 +260,7 @@ export class Collection extends EventEmitter {
      * @returns {Array}
      * @memberOf Collection
      */
-    map(iterator: (item: Model, index?: number) => void): any[] {
+    map(iterator: (item: Model<T>, index?: number) => void): any[] {
         return this.items.map(iterator);
     }
 
@@ -332,7 +311,7 @@ export class Collection extends EventEmitter {
         }, options);
 
         if (options.destroy) {
-            this.forEach((item: Model) => {
+            this.forEach((item: Model<T>) => {
                 item.destroy();
             });
         }

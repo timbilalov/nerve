@@ -5,7 +5,7 @@ import {Helpers} from './utils/helpers';
 
 export class View extends EventEmitter {
 
-    protected model: Model;
+    protected model: Model<any>;
     protected $el: DomElement;
     protected _domEventHandlers: any;
     protected promiseRender: Promise<any>;

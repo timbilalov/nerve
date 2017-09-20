@@ -364,7 +364,7 @@ export class Model<T> extends EventEmitter {
      *
      * @returns {Object}
      */
-    protected toJSON(): any {
+    toJSON(): any {
         return {};
     }
 
