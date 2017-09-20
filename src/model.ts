@@ -3,9 +3,9 @@ import {Helpers} from './utils/helpers';
 import {Http} from './utils/http';
 import {AxiosResponse} from 'axios';
 
-export class Model extends EventEmitter {
+export class Model<T> extends EventEmitter {
 
-    protected _attr: any;
+    protected _attr: T | any;
     protected defaults: any;
     protected events: any;
     protected errors: any[];
@@ -61,7 +61,7 @@ export class Model extends EventEmitter {
 
     protected static counter: number = 0;
 
-    constructor(attr: any, options?: any) {
+    constructor(attr: T, options?: any) {
         super(options);
 
         /**
