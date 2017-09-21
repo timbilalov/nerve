@@ -121,96 +121,13 @@ export class Model<T> extends EventEmitter {
     }
 
     /**
-     * Получение значения атрибута
-     *
-     * @param {String} key название атрибута
-     * @returns {*}
-     */
-    private _getSingle(key: string): any {
-        let arIds = key.split('.'),
-            iteration = 0,
-            attrItem = this._attr;
-
-        while (attrItem && iteration < arIds.length) {
-            if (attrItem[arIds[iteration]] !== undefined) {
-                attrItem = attrItem[arIds[iteration]];
-            } else {
-                attrItem = undefined;
-            }
-
-            iteration++;
-        }
-
-        return attrItem;
-    }
-
-    /**
-     * Установка значения атрибута
-     *
-     * @param {String} key название атрибута
-     * @param {*} value значение атрибута
-     * @param {Boolean} [options.silent = false]
-     * @returns {Boolean} изменился ли атрибут
-     */
-    private _setSingle(key: string, value: any, options?: any) {
-        let isChanged = false;
-
-        options = options || {};
-
-        if (this._attr[key] !== value) {
-            if (Helpers.isString(value)) {
-                value = String(value).trim();
-            }
-            this._attr[key] = value;
-
-
-            if (key === 'id') {
-                this.id = value;
-            }
-
-            if (!options.silent && !options.isNotChangeTrigger) {
-                this.trigger('change.' + key);
-                this.trigger('change');
-            }
-
-            isChanged = true;
-        }
-
-        return isChanged;
-    }
-
-    /**
-     * Получение значения атрибута или атрибутов
-     *
-     * @param {String | Array.<String>} key названия атрибутов
-     * @returns {* | Object}
-     */
-    private _get(key: string | string[]): any {
-        let result: any = null;
-
-        if (Helpers.isString(key)) {
-            result = this._getSingle(<string> key);
-        }
-
-        if (Helpers.isArray(key)) {
-            result = {};
-            (<string[]> key).forEach(function (item: string) {
-                result[item] = this._getSingle(item);
-            }.bind(this));
-        }
-
-        return result;
-    }
-
-
-    /**
-     * Установка значения атрибута или атрибутов
+     * Установка атрибутов
      *
      * @param {String | Object} key название атрибутов или объект с атрибутами
      * @param {*} [value] значение (для установки одного атрибута)
      * @param {Boolean} [options.silent = false]
      */
-    private set(data: T, silent = false) {
+    protected set(data: T, silent = false) {
         let changedAttrs: string[] = [];
 
         for (let key in <any> data) {
@@ -228,6 +145,7 @@ export class Model<T> extends EventEmitter {
         return this;
     }
 
+
     /**
      * Валидация атрибутов
      *
@@ -240,7 +158,7 @@ export class Model<T> extends EventEmitter {
             var value: any;
 
             if (String(item.value).indexOf('@') === 0) {
-                value = this._get(item.value.slice(1));
+                value = (<any> this)[item.value.slice(1)];
             } else {
                 value = item.value;
             }
@@ -251,11 +169,11 @@ export class Model<T> extends EventEmitter {
                     item.attr.forEach((attr1: string) => {
                         item.attr.forEach((attr2: string) => {
                             if (item.byLength) {
-                                if (String(this._get(attr1)).length === String(this._get(attr2)).length) {
+                                if (String((<any> this)[attr1]).length === String((<any> this)[attr2]).length) {
                                     this.errors.push(item.errorCode);
                                 }
                             } else {
-                                if (this._get(attr1) !== this._get(attr2)) {
+                                if ((<any> this)[attr1] !== (<any> this)[attr2]) {
                                     this.errors.push(item.errorCode);
                                 }
                             }
@@ -265,7 +183,7 @@ export class Model<T> extends EventEmitter {
                 case 'lt':
                     item.attr.forEach((attr: string) => {
                         var length,
-                            attrValue = this._get(attr);
+                            attrValue = (<any> this)[attr];
 
                         if (item.byLength) {
                             if (Helpers.isArray(attrValue)) {
@@ -287,7 +205,7 @@ export class Model<T> extends EventEmitter {
                 case 'gt':
                     item.attr.forEach((attr: string) => {
                         let length,
-                            attrValue = this._get(attr);
+                            attrValue = (<any> this)[attr];
 
                         if (item.byLength) {
                             if (Helpers.isArray(attrValue)) {
@@ -308,7 +226,7 @@ export class Model<T> extends EventEmitter {
                     break;
                 case 'required':
                     item.attr.forEach((attr: string) => {
-                        var attrValue = this._get(attr),
+                        var attrValue = (<any> this)[attr],
                             isError = (Helpers.isArray(attrValue) && attrValue.length === 0) || !attrValue;
 
                         if (isError) {
@@ -318,7 +236,7 @@ export class Model<T> extends EventEmitter {
                     break;
                 case 'regexp':
                     item.attr.forEach((attr: string) => {
-                        if (!value.test(this._get(attr))) {
+                        if (!value.test((<any> this)[attr])) {
                             this.errors.push(item.errorCode);
                         }
                     });
@@ -359,8 +277,6 @@ export class Model<T> extends EventEmitter {
                         if (Helpers.isString(response.data)) {
                             response = JSON.parse(response.data);
                         }
-
-                        // this._set(this.adapter(response.data));
 
                         for (let key in <any> attr) {
                             (<any> this)[key] = (<any> attr)[key];
@@ -525,7 +441,7 @@ export class Model<T> extends EventEmitter {
      * @returns {Model}
      */
     setResponse(response: any) {
-        this._set(this.adapter(response));
+        this.set(this.adapter(response));
 
         return this;
     }
@@ -554,7 +470,7 @@ export class Model<T> extends EventEmitter {
      * @returns {Boolean}
      */
     isRemoveReady(): boolean {
-        return !!this._get(this.uniqueKey);
+        return !!(<any> this)[this.uniqueKey];
     }
 
     /**
@@ -612,7 +528,7 @@ export class Model<T> extends EventEmitter {
     protected getFetchParams(): any {
         let params: any = {};
 
-        params[this.uniqueKey] = this._get(this.uniqueKey);
+        params[this.uniqueKey] = this.uniqueKey;
 
         return params;
     }
@@ -645,7 +561,7 @@ export class Model<T> extends EventEmitter {
      */
     protected getRemoveParams(): any {
         return Helpers.extend({}, {
-            id: this._get('id')
+            id: this.id
         });
     }
 
