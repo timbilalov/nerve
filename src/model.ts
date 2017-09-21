@@ -123,11 +123,10 @@ export class Model<T> extends EventEmitter {
     /**
      * Установка атрибутов
      *
-     * @param {String | Object} key название атрибутов или объект с атрибутами
-     * @param {*} [value] значение (для установки одного атрибута)
+     * @param {T} объект с атрибутами
      * @param {Boolean} [options.silent = false]
      */
-    protected set(data: T, silent = false) {
+    protected set(data: any, silent = false) {
         let changedAttrs: string[] = [];
 
         for (let key in <any> data) {
