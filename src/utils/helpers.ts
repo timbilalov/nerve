@@ -108,4 +108,32 @@ export class Helpers {
     static extend(...args: any[]) {
         return (<any> Object).assign(...args);
     }
+
+    /**
+     * Преобразование данных в x-www-form-urlencoded
+     * @param data
+     * @param {string} mainKey
+     * @returns {string}
+     */
+    static toFormData(data: any, mainKey: string = '') {
+        let form = '';
+
+        if (mainKey) {
+            mainKey += '.';
+        }
+
+        for (let key in data) {
+            if (form != '') {
+                form += '&';
+            }
+
+            if (Helpers.isObject(data[key])) {
+                form += Helpers.toFormData(data[key], mainKey + key);
+            } else {
+                form += mainKey + key + '=' + encodeURIComponent(data[key]);
+            }
+        }
+
+        return form;
+    }
 }
