@@ -83,13 +83,6 @@ export class Model<T> extends EventEmitter {
         this.options = Helpers.extend({}, this.defaultOptions, options);
 
         /**
-         * Идентификатор сущности
-         *
-         * @type {Number | String}
-         */
-        this.id = this._attr.id;
-
-        /**
          * Клиентский идентификатор сущности
          *
          * @type {Number}
