@@ -64,16 +64,7 @@ export class Model<T> extends EventEmitter {
     constructor(attr: any, options?: any) {
         super(options);
 
-        /**
-         * Атрибуты
-         *
-         * @type {Object}
-         * @protected
-         */
-
-        for (let key in <any> attr) {
-            (<any> this)[key] = (<any> attr)[key];
-        }
+        this.set(attr, true);
 
         /**
          * Параметры, собирающиеся из defaultOptions и переданных в аргументе
@@ -211,6 +202,7 @@ export class Model<T> extends EventEmitter {
         return result;
     }
 
+
     /**
      * Установка значения атрибута или атрибутов
      *
@@ -218,32 +210,18 @@ export class Model<T> extends EventEmitter {
      * @param {*} [value] значение (для установки одного атрибута)
      * @param {Boolean} [options.silent = false]
      */
-    private _set(key: any, value?: any, options?: any) {
+    private set(data: T, silent = false) {
         let changedAttrs: string[] = [];
 
-        if (Helpers.isString(key)) {
-            if (this._setSingle(key, value, Helpers.extend({}, options, {isNotChangeTrigger: true}))) {
-                this.trigger('change.' + key);
-            }
+        for (let key in <any> data) {
+            (<any> this)[key] = (<any> data)[key];
+            changedAttrs.push((<any> data)[key]);
         }
 
-        if (Helpers.isObject(key)) {
-            options = value;
-
-            Object.keys(key).forEach((item: string) => {
-                if (this._setSingle(item, key[item], Helpers.extend({}, options, {isNotChangeTrigger: true}))) {
-                    changedAttrs.push(item);
-                }
+        if (!silent) {
+            changedAttrs.forEach((item: string) =>{
+                this.trigger('change.' + item);
             });
-
-            if (!options || !options.silent) {
-                changedAttrs.forEach((item: string) =>{
-                    this.trigger('change.' + item);
-                });
-            }
-        }
-
-        if (!options || !options.silent) {
             this.trigger('change');
         }
 
