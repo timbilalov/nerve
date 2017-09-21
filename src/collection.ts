@@ -9,7 +9,7 @@ export class Collection<T> extends EventEmitter {
     protected items: T[] = [];
     protected url: string;
     protected fetchXHR: any;
-    protected model: T;
+    protected model: typeof Model;
 
     /**
      * Уничтожение

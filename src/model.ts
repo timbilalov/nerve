@@ -61,7 +61,7 @@ export class Model<T> extends EventEmitter {
 
     protected static counter: number = 0;
 
-    constructor(attr: T, options?: any) {
+    constructor(attr: any, options?: any) {
         super(options);
 
         /**
@@ -383,11 +383,17 @@ export class Model<T> extends EventEmitter {
                 .then((response: AxiosResponse) => {
                     // response.data
                     if (!this.isDestroyed) {
+                        const attr: T = this.adapter(response.data);
+
                         if (Helpers.isString(response.data)) {
                             response = JSON.parse(response.data);
                         }
 
-                        this._set(this.adapter(response.data));
+                        // this._set(this.adapter(response.data));
+
+                        for (let key in <any> attr) {
+                            (<any> this)[key] = (<any> attr)[key];
+                        }
 
                         this.isFetchedState = true;
                         this.trigger('fetched', response.data);
@@ -612,8 +618,8 @@ export class Model<T> extends EventEmitter {
      * @param {Object} srcAttr данные, пришедшие от сервера
      * @returns {Object}
      */
-    protected adapter(srcAttr: any): T {
-        return <T> srcAttr;
+    protected adapter(srcAttr: any) {
+        return srcAttr;
     }
 
     /**
