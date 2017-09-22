@@ -263,7 +263,7 @@ export class Model<T> extends EventEmitter {
                 modelData[key] = (<any> this)[key];
             }
         }
-        return {};
+        return modelData;
     }
 
     /**
