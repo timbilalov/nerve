@@ -253,6 +253,16 @@ export class Model<T> extends EventEmitter {
      * @returns {Object}
      */
     toJSON(): any {
+        let modelData: any = {},
+            properties: any = Object.getOwnPropertyNames(this);
+
+        for (let key of properties) {
+            if ((<any> this)[key] instanceof Model) {
+                modelData[key] = (<any> this)[key].toJSON();
+            } else {
+                modelData[key] = (<any> this)[key];
+            }
+        }
         return {};
     }
 
