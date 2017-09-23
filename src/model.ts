@@ -3,10 +3,10 @@ import {Helpers} from './utils/helpers';
 import {Http} from './utils/http';
 import {AxiosResponse} from 'axios';
 
-export class Model extends EventEmitter {
+export class Model<T> extends EventEmitter {
 
-    protected _attr: any;
-    protected defaults: any;
+    private _attr: any;
+
     protected events: any;
     protected errors: any[];
     protected isFetchedState: boolean;
@@ -64,13 +64,7 @@ export class Model extends EventEmitter {
     constructor(attr: any, options?: any) {
         super(options);
 
-        /**
-         * Атрибуты
-         *
-         * @type {Object}
-         * @protected
-         */
-        this._attr = Helpers.extend({}, this.defaults, attr);
+        this.set(attr, true);
 
         /**
          * Параметры, собирающиеся из defaultOptions и переданных в аргументе
@@ -78,13 +72,6 @@ export class Model extends EventEmitter {
          * @type {Object}
          */
         this.options = Helpers.extend({}, this.defaultOptions, options);
-
-        /**
-         * Идентификатор сущности
-         *
-         * @type {Number | String}
-         */
-        this.id = this._attr.id;
 
         /**
          * Клиентский идентификатор сущности
@@ -134,139 +121,43 @@ export class Model extends EventEmitter {
     }
 
     /**
-     * Получение значения атрибута
+     * Установка атрибутов
      *
-     * @param {String} key название атрибута
-     * @returns {*}
-     */
-    getSingle(key: string): any {
-        let arIds = key.split('.'),
-            iteration = 0,
-            attrItem = this._attr;
-
-        while (attrItem && iteration < arIds.length) {
-            if (attrItem[arIds[iteration]] !== undefined) {
-                attrItem = attrItem[arIds[iteration]];
-            } else {
-                attrItem = undefined;
-            }
-
-            iteration++;
-        }
-
-        return attrItem;
-    }
-
-    /**
-     * Установка значения атрибута
-     *
-     * @param {String} key название атрибута
-     * @param {*} value значение атрибута
-     * @param {Boolean} [options.silent = false]
-     * @returns {Boolean} изменился ли атрибут
-     */
-    setSingle(key: string, value: any, options?: any) {
-        let isChanged = false;
-
-        options = options || {};
-
-        if (this._attr[key] !== value) {
-            if (Helpers.isString(value)) {
-                value = String(value).trim();
-            }
-            this._attr[key] = value;
-
-
-            if (key === 'id') {
-                this.id = value;
-            }
-
-            if (!options.silent && !options.isNotChangeTrigger) {
-                this.trigger('change.' + key);
-                this.trigger('change');
-            }
-
-            isChanged = true;
-        }
-
-        return isChanged;
-    }
-
-    /**
-     * Получение значения атрибута или атрибутов
-     *
-     * @param {String | Array.<String>} key названия атрибутов
-     * @returns {* | Object}
-     */
-    get(key: string | string[]): any {
-        let result: any = null;
-
-        if (Helpers.isString(key)) {
-            result = this.getSingle(<string> key);
-        }
-
-        if (Helpers.isArray(key)) {
-            result = {};
-            (<string[]> key).forEach(function (item: string) {
-                result[item] = this.getSingle(item);
-            }.bind(this));
-        }
-
-        return result;
-    }
-
-    /**
-     * Установка значения атрибута или атрибутов
-     *
-     * @param {String | Object} key название атрибутов или объект с атрибутами
-     * @param {*} [value] значение (для установки одного атрибута)
+     * @param {T} объект с атрибутами
      * @param {Boolean} [options.silent = false]
      */
-    set(key: any, value?: any, options?: any) {
+    protected set(data: any, silent = false) {
         let changedAttrs: string[] = [];
 
-        if (Helpers.isString(key)) {
-            if (this.setSingle(key, value, Helpers.extend({}, options, {isNotChangeTrigger: true}))) {
-                this.trigger('change.' + key);
-            }
+        for (let key in <any> data) {
+            (<any> this)[key] = (<any> data)[key];
+            changedAttrs.push((<any> data)[key]);
         }
 
-        if (Helpers.isObject(key)) {
-            options = value;
-
-            Object.keys(key).forEach((item: string) => {
-                if (this.setSingle(item, key[item], Helpers.extend({}, options, {isNotChangeTrigger: true}))) {
-                    changedAttrs.push(item);
-                }
+        if (!silent) {
+            changedAttrs.forEach((item: string) =>{
+                this.trigger('change.' + item);
             });
-
-            if (!options || !options.silent) {
-                changedAttrs.forEach((item: string) =>{
-                    this.trigger('change.' + item);
-                });
-            }
-        }
-
-        if (!options || !options.silent) {
             this.trigger('change');
         }
 
         return this;
     }
 
+
     /**
      * Валидация атрибутов
      *
      * @returns {Boolean}
      */
-    validate(options: any): boolean {
+    private validate(options: any): boolean {
         this.errors = [];
 
         this.validation.forEach((item: any) => {
             var value: any;
 
             if (String(item.value).indexOf('@') === 0) {
-                value = this.get(item.value.slice(1));
+                value = (<any> this)[item.value.slice(1)];
             } else {
                 value = item.value;
             }
@@ -277,11 +168,11 @@ export class Model extends EventEmitter {
                     item.attr.forEach((attr1: string) => {
                         item.attr.forEach((attr2: string) => {
                             if (item.byLength) {
-                                if (String(this.get(attr1)).length === String(this.get(attr2)).length) {
+                                if (String((<any> this)[attr1]).length === String((<any> this)[attr2]).length) {
                                     this.errors.push(item.errorCode);
                                 }
                             } else {
-                                if (this.get(attr1) !== this.get(attr2)) {
+                                if ((<any> this)[attr1] !== (<any> this)[attr2]) {
                                     this.errors.push(item.errorCode);
                                 }
                             }
@@ -291,7 +182,7 @@ export class Model extends EventEmitter {
                 case 'lt':
                     item.attr.forEach((attr: string) => {
                         var length,
-                            attrValue = this.get(attr);
+                            attrValue = (<any> this)[attr];
 
                         if (item.byLength) {
                             if (Helpers.isArray(attrValue)) {
@@ -313,7 +204,7 @@ export class Model extends EventEmitter {
                 case 'gt':
                     item.attr.forEach((attr: string) => {
                         let length,
-                            attrValue = this.get(attr);
+                            attrValue = (<any> this)[attr];
 
                         if (item.byLength) {
                             if (Helpers.isArray(attrValue)) {
@@ -334,7 +225,7 @@ export class Model extends EventEmitter {
                     break;
                 case 'required':
                     item.attr.forEach((attr: string) => {
-                        var attrValue = this.get(attr),
+                        var attrValue = (<any> this)[attr],
                             isError = (Helpers.isArray(attrValue) && attrValue.length === 0) || !attrValue;
 
                         if (isError) {
@@ -344,7 +235,7 @@ export class Model extends EventEmitter {
                     break;
                 case 'regexp':
                     item.attr.forEach((attr: string) => {
-                        if (!value.test(this.get(attr))) {
+                        if (!value.test((<any> this)[attr])) {
                             this.errors.push(item.errorCode);
                         }
                     });
@@ -362,7 +253,18 @@ export class Model extends EventEmitter {
      * @returns {Object}
      */
     toJSON(): any {
-        return Helpers.extend({}, this._attr);
+        let modelData: any = {},
+            properties: any = Object.getOwnPropertyNames(this);
+
+        for (let key of properties) {
+            if ((<any> this)[key] instanceof Model) {
+                modelData[key] = (<any> this)[key].toJSON();
+            } else {
+                modelData[key] = (<any> this)[key];
+            }
+        }
+
+        return modelData;
     }
 
     /**
@@ -380,11 +282,15 @@ export class Model extends EventEmitter {
                 .then((response: AxiosResponse) => {
                     // response.data
                     if (!this.isDestroyed) {
+                        const attr: T = this.adapter(response.data);
+
                         if (Helpers.isString(response.data)) {
                             response = JSON.parse(response.data);
                         }
 
-                        this.set(this.adapter(response.data));
+                        for (let key in <any> attr) {
+                            (<any> this)[key] = (<any> attr)[key];
+                        }
 
                         this.isFetchedState = true;
                         this.trigger('fetched', response.data);
@@ -574,7 +480,7 @@ export class Model extends EventEmitter {
      * @returns {Boolean}
      */
     isRemoveReady(): boolean {
-        return !!this.get(this.uniqueKey);
+        return !!(<any> this)[this.uniqueKey];
     }
 
     /**
@@ -609,7 +515,7 @@ export class Model extends EventEmitter {
      * @param {Object} srcAttr данные, пришедшие от сервера
      * @returns {Object}
      */
-    protected adapter(srcAttr: any): any {
+    protected adapter(srcAttr: any) {
         return srcAttr;
     }
 
@@ -632,7 +538,7 @@ export class Model extends EventEmitter {
     protected getFetchParams(): any {
         let params: any = {};
 
-        params[this.uniqueKey] = this.get(this.uniqueKey);
+        params[this.uniqueKey] = this.uniqueKey;
 
         return params;
     }
@@ -665,7 +571,7 @@ export class Model extends EventEmitter {
      */
     protected getRemoveParams(): any {
         return Helpers.extend({}, {
-            id: this.get('id')
+            id: this.id
         });
     }
 
