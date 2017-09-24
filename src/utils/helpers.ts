@@ -128,10 +128,12 @@ export class Helpers {
                 form += '&';
             }
 
-            if (Helpers.isObject(data[key])) {
-                form += Helpers.toFormData(data[key], mainKey + key);
-            } else {
-                form += mainKey + key + '=' + encodeURIComponent(data[key]);
+            if (data[key] !== undefined) {
+                if (Helpers.isObject(data[key])) {
+                    form += Helpers.toFormData(data[key], mainKey + key);
+                } else {
+                    form += mainKey + key + '=' + encodeURIComponent(data[key]);
+                }
             }
         }
 
