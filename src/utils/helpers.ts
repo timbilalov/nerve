@@ -124,11 +124,11 @@ export class Helpers {
         }
 
         for (let key in data) {
-            if (form != '') {
-                form += '&';
-            }
-
             if (data[key] !== undefined) {
+                if (form != '') {
+                    form += '&';
+                }
+
                 if (Helpers.isObject(data[key])) {
                     form += Helpers.toFormData(data[key], mainKey + key);
                 } else {
