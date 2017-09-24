@@ -111,6 +111,7 @@ export class Helpers {
 
     /**
      * Преобразование данных в x-www-form-urlencoded
+     *
      * @param data
      * @param {string} mainKey
      * @returns {string}
@@ -135,5 +136,13 @@ export class Helpers {
         }
 
         return form;
+    }
+
+    static templateUrl(url: string, params: any): string {
+        Object.keys(params).forEach((key: string) => {
+            url = url.replace(`{${ key }}`, params[key]);
+        });
+
+        return url;
     }
 }

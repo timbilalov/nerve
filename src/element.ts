@@ -6,12 +6,12 @@ export class DomElement {
         this.el = el;
     }
 
-    getElement() {
+    getElement(): Element {
         return this.el;
     }
 
     val(): string {
-        return (<HTMLInputElement>this.el).value;
+        return (<HTMLInputElement> this.el).value;
     }
 
     is(selector: string) {
