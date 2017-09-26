@@ -39,7 +39,8 @@ export class Collection<T> extends EventEmitter {
             const settings = this.getFetchSettings();
 
             this.fetchXHR = Http.get(settings.url, {
-                params: this.getFetchParams()
+                params: this.getFetchParams(),
+                headers: Helpers.extend({}, settings.headers)
             })
                 .then((response: AxiosResponse) => {
                     let items;
