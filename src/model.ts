@@ -276,8 +276,12 @@ export class Model<T> extends EventEmitter {
         return new Promise((resolve: Function, reject: Function) => {
             const settings = this.getFetchSettings();
 
-            this.fetchXHR = Http.get(settings.url, {
-                params: this.getFetchParams()
+            this.fetchXHR = Http.request({
+                method: settings.method,
+                url: settings.url,
+                headers: Helpers.extend({}, settings.headers),
+                params: this.getFetchParams(),
+                withCredentials: true
             })
                 .then((response: AxiosResponse) => {
                     // response.data
@@ -538,7 +542,7 @@ export class Model<T> extends EventEmitter {
     protected getFetchParams(): any {
         let params: any = {};
 
-        params[this.uniqueKey] = this.uniqueKey;
+        params[this.uniqueKey] = (<any> this)[this.uniqueKey];
 
         return params;
     }
