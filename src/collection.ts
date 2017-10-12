@@ -334,7 +334,6 @@ export class Collection<T> extends EventEmitter {
 
         this.items = [];
         this.offset = 0;
-        this.filterParams = {};
 
         return this;
     }
