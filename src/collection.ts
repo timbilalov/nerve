@@ -13,7 +13,6 @@ export class Collection<T> extends EventEmitter {
 
     protected offset: number = 0;
     protected limit: number = 10;
-    protected filterParams: any = {};
 
     /**
      * Уничтожение
@@ -118,19 +117,6 @@ export class Collection<T> extends EventEmitter {
 
         return this;
     }
-
-    getFilter(): any {
-        return this.filterParams;
-    }
-
-    setFilter(key: string, value: string) {
-        this.filterParams[key] = value;
-    }
-
-    removeFilter(key: string) {
-        delete this.filterParams[key];
-    }
-
 
     /**
      * Поиск модели по названию и значению атрибута
