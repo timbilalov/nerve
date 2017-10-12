@@ -11,6 +11,9 @@ export class Collection<T> extends EventEmitter {
     protected fetchXHR: any;
     protected model: typeof Model;
 
+    protected offset: number = 0;
+    protected limit: number = 10;
+
     /**
      * Уничтожение
      *
@@ -100,29 +103,20 @@ export class Collection<T> extends EventEmitter {
             models.push(model);
         });
 
-        // if (offset) {
-        //     this.offset = offset;
-        // } else {
-        //     this.offset += data.items.length;
-        // }
+        this.offset += this.limit;
 
         return models;
     }
 
-    // getOffsetByResponse(response) {
-    //     return response ? response.offset : 0;
-    // }
-    //
-    // getOffset: function () {
-    //     return this.offset;
-    // },
-    //
-    // setOffset: function (offset) {
-    //     this.offset = offset;
-    //
-    //     return this;
-    // },
+    getOffset(): number {
+        return this.offset;
+    }
 
+    setOffset(offset: number): Collection<T> {
+        this.offset = offset;
+
+        return this;
+    }
 
     /**
      * Поиск модели по названию и значению атрибута
@@ -339,7 +333,7 @@ export class Collection<T> extends EventEmitter {
         }
 
         this.items = [];
-        // this.offset = 0;
+        this.offset = 0;
 
         return this;
     }
@@ -365,27 +359,27 @@ export class Collection<T> extends EventEmitter {
         return items.length;
     }
 
-    // /**
-    //  * Получения ограничения загрузки
-    //  *
-    //  * @returns {Number}
-    //  * @memberOf Collection
-    //  */
-    // getLimit() {
-    //     return this.limit || this.options.limit;
-    // }
-    //
-    // /**
-    //  * Установка ограничения загрузки
-    //  *
-    //  * @params {Number} limit количество загружаемых за раз элементов
-    //  * @memberOf Collection
-    //  */
-    // setLimit: function (limit) {
-    //     this.limit = limit;
-    //
-    //     return this;
-    // },
+    /**
+     * Получения ограничения загрузки
+     *
+     * @returns {Number}
+     * @memberOf Collection
+     */
+    getLimit() {
+        return this.limit || this.options.limit;
+    }
+
+    /**
+     * Установка ограничения загрузки
+     *
+     * @params {Number} limit количество загружаемых за раз элементов
+     * @memberOf Collection
+     */
+    setLimit(limit: number) {
+        this.limit = limit;
+
+        return this;
+    }
 
     /**
      * Получение элементов в виде массива объектов, состоящих из атрибутов моделей
